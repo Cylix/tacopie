@@ -1,0 +1,29 @@
+language: cpp
+
+compiler:
+  - clang
+  - gcc
+
+os:
+  - linux
+  - osx
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
+      - clang
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc48 --enable-cxx; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install llvm --with-clang; fi
+
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+  - ./install_deps.sh
+
+script: mkdir build && cd build && cmake .. -DBUILD_TESTS=true -DBUILD_EXAMPLES=true && make && ./bin/cpp_http_server_tests

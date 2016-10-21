@@ -1,0 +1,3 @@
+#pragma once
+
+#include <cpp_http_server/logger.hpp>

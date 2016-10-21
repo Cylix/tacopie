@@ -15,7 +15,6 @@
 
 # Fortran module files
 *.mod
-*.smod
 
 # Compiled Static libraries
 *.lai
@@ -23,7 +22,26 @@
 *.a
 *.lib
 
+build
+deps
+target
+
 # Executables
 *.exe
 *.out
 *.app
+*.sln
+*.vcxproj
+*.suo
+*.user
+*.filters
+*.VC.db
+*.opendb
+.gitignore
+.project
+cmake_install.cmake
+
+CMakeCache.txt
+CMakeFiles/
+Release/
+Debug/
