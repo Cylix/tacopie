@@ -77,6 +77,7 @@ private:
 
   //! process poll detected events
   void process_events(void);
+  void process_wake_up_event(void);
   void process_rd_event(const struct pollfd& poll_result, tracked_socket& socket);
   void process_wr_event(const struct pollfd& poll_result, tracked_socket& socket);
 

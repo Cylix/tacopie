@@ -83,6 +83,11 @@ io_service::process_events(void) {
   std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
   for (const auto& poll_result : m_poll_fds_info) {
+    if (poll_result.fd == m_notif_pipe_fds[0] and poll_result.revents & POLLIN) {
+      process_wake_up_event();
+      continue ;
+    }
+
     auto it = m_tracked_sockets.find(poll_result.fd);
 
     if (it == m_tracked_sockets.end())
@@ -96,6 +101,12 @@ io_service::process_events(void) {
     if (poll_result.revents & POLLOUT and socket.wr_callback and not socket.is_executing_wr_callback)
       { process_wr_event(poll_result, socket); }
   }
+}
+
+void
+io_service::process_wake_up_event(void) {
+  char buf[1024];
+  (void) read(m_notif_pipe_fds[0], buf, 1024);
 }
 
 void
@@ -164,6 +175,7 @@ io_service::init_poll_fds_info(void) {
     struct pollfd poll_fd_info;
     poll_fd_info.fd = fd;
     poll_fd_info.events = 0;
+    poll_fd_info.revents = 0;
 
     if (socket_info.rd_callback and not socket_info.is_executing_rd_callback)
       { poll_fd_info.events |= POLLIN; }
@@ -173,6 +185,8 @@ io_service::init_poll_fds_info(void) {
 
     m_poll_fds_info.push_back(std::move(poll_fd_info));
   }
+
+  m_poll_fds_info.push_back({ m_notif_pipe_fds[0], POLLIN, 0 });
 }
 
 //!
@@ -186,6 +200,8 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = rd_callback;
   track_info.wr_callback = wr_callback;
+
+  wake_up();
 }
 
 void
@@ -194,6 +210,8 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = event_callback;
+
+  wake_up();
 }
 
 void
@@ -202,6 +220,8 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.wr_callback = event_callback;
+
+  wake_up();
 }
 
 void
@@ -215,6 +235,8 @@ io_service::untrack(const tcp_socket& socket) {
   });
 
   m_tracked_sockets.erase(it);
+
+  wake_up();
 }
 
 //!
