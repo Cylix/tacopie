@@ -41,6 +41,9 @@ public:
   void set_wr_callback(const tcp_socket& socket, const event_callback_t& event_callback);
   void untrack(const tcp_socket& socket);
 
+  //! force poll to wake-up
+  void wake_up(void);
+
 private:
   //! struct tracked_socket
   //! contains information about what a current socket is tracking
@@ -95,6 +98,9 @@ private:
 
   //! data structure given to poll
   std::vector<struct pollfd> m_poll_fds_info;
+
+  //! fd associated to the pipe used to wake up the poll call
+  int m_notif_pipe_fds[2];
 };
 
 //! default io_service getter & setter

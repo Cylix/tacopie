@@ -29,6 +29,9 @@ public:
   void add_task(const task_t& task);
   thread_pool& operator<<(const task_t& task);
 
+  //! stop the thread pool and wait for workers completion
+  void stop(void);
+
 private:
   //! worker main loop
   void run(void);

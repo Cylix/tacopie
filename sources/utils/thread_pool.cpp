@@ -16,11 +16,7 @@ thread_pool::thread_pool(std::size_t nb_threads)
 }
 
 thread_pool::~thread_pool(void) {
-  m_should_stop = true;
-  m_tasks_condvar.notify_all();
-
-  for (auto& worker : m_workers)
-    { worker.join(); }
+  stop();
 }
 
 //!
@@ -35,6 +31,21 @@ thread_pool::run(void) {
     if (task)
       { task(); }
   }
+}
+
+//!
+//! stop the thread pool and wait for workers completion
+//!
+
+void
+thread_pool::stop(void) {
+  m_should_stop = true;
+  m_tasks_condvar.notify_all();
+
+  for (auto& worker : m_workers)
+    { worker.join(); }
+
+  m_workers.clear();
 }
 
 //!

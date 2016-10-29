@@ -1,4 +1,8 @@
 #include <cpp_http_server/network/io_service.hpp>
+#include <cpp_http_server/error.hpp>
+
+#include <fcntl.h>
+#include <unistd.h>
 
 namespace cpp_http_server {
 
@@ -32,11 +36,28 @@ io_service::io_service(void)
 : m_should_stop(false)
 , m_poll_worker(std::bind(&io_service::poll, this))
 , m_callback_workers(__CPP_HTTP_SERVER_IO_SERVICE_NB_WORKERS)
-{}
+, m_notif_pipe_fds{-1, -1}
+{
+  if (pipe(m_notif_pipe_fds) == -1)
+    { __CPP_HTTP_SERVER_THROW("io_service::io_service: pipe() failure"); }
+
+  int flags = fcntl(m_notif_pipe_fds[1], F_GETFL, 0);
+  if (flags == -1 || fcntl(m_notif_pipe_fds[1], F_SETFL, flags | O_NONBLOCK) == -1)
+    { __CPP_HTTP_SERVER_THROW("io_service::io_service: fcntl() failure"); }
+}
 
 io_service::~io_service(void) {
   m_should_stop = true;
+
+  wake_up();
   m_poll_worker.join();
+  m_callback_workers.stop();
+
+  if (m_notif_pipe_fds[0] != -1)
+    { close(m_notif_pipe_fds[0]); }
+
+  if (m_notif_pipe_fds[1] != -1)
+    { close(m_notif_pipe_fds[1]); }
 }
 
 //!
@@ -194,6 +215,15 @@ io_service::untrack(const tcp_socket& socket) {
   });
 
   m_tracked_sockets.erase(it);
+}
+
+//!
+//! force poll to wake-up
+//!
+
+void
+io_service::wake_up(void) {
+  (void) write(m_notif_pipe_fds[1], "a", 1);
 }
 
 } //! network
