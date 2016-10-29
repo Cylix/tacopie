@@ -67,31 +67,60 @@ io_service::process_events(void) {
     if (it == m_tracked_sockets.end())
       { continue ; }
 
+    auto& socket = it->second;
 
-    if (poll_result.revents & POLLIN and it->second.rd_callback) {
-      ++it->second.executing_callback;
+    if (poll_result.revents & POLLIN and socket.rd_callback and not socket.is_executing_rd_callback)
+      { process_rd_event(poll_result, socket); }
 
-      auto rd_callback = it->second.rd_callback;
-      m_callback_workers << [&, rd_callback] {
-        rd_callback(poll_result.fd);
-
-        --it->second.executing_callback;
-        it->second.executing_callback_condvar.notify_all();
-      };
-    }
-
-    if (poll_result.revents & POLLOUT and it->second.wr_callback) {
-      ++it->second.executing_callback;
-
-      auto wr_callback = it->second.wr_callback;
-      m_callback_workers << [&, wr_callback] {
-        wr_callback(poll_result.fd);
-
-        --it->second.executing_callback;
-        it->second.executing_callback_condvar.notify_all();
-      };
-    }
+    if (poll_result.revents & POLLOUT and socket.wr_callback and not socket.is_executing_wr_callback)
+      { process_wr_event(poll_result, socket); }
   }
+}
+
+void
+io_service::process_rd_event(const struct pollfd& poll_result, tracked_socket& socket) {
+  auto rd_callback = socket.rd_callback;
+  auto fd = poll_result.fd;
+
+  socket.is_executing_rd_callback = true;
+
+  m_callback_workers << [=] {
+    rd_callback(fd);
+
+    std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
+    auto it = m_tracked_sockets.find(fd);
+
+    if (it == m_tracked_sockets.end())
+      { return ; }
+
+    auto& socket = it->second;
+
+    socket.is_executing_rd_callback = false;
+    socket.executing_callback_condvar.notify_all();
+  };
+}
+
+void
+io_service::process_wr_event(const struct pollfd& poll_result, tracked_socket& socket) {
+  auto wr_callback = socket.wr_callback;
+  auto fd = poll_result.fd;
+
+  socket.is_executing_wr_callback = true;
+
+  m_callback_workers << [=] {
+    wr_callback(fd);
+
+    std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
+    auto it = m_tracked_sockets.find(fd);
+
+    if (it == m_tracked_sockets.end())
+      { return ; }
+
+    auto& socket = it->second;
+
+    socket.is_executing_wr_callback = false;
+    socket.executing_callback_condvar.notify_all();
+  };
 }
 
 //!
@@ -115,10 +144,10 @@ io_service::init_poll_fds_info(void) {
     poll_fd_info.fd = fd;
     poll_fd_info.events = 0;
 
-    if (socket_info.rd_callback)
+    if (socket_info.rd_callback and not socket_info.is_executing_rd_callback)
       { poll_fd_info.events |= POLLIN; }
 
-    if (socket_info.wr_callback)
+    if (socket_info.wr_callback and not socket_info.is_executing_wr_callback)
       { poll_fd_info.events |= POLLOUT; }
 
     m_poll_fds_info.push_back(std::move(poll_fd_info));
@@ -143,7 +172,6 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
   std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
-  wait_for_callback_completion(lock, track_info);
   track_info.rd_callback = event_callback;
 }
 
@@ -152,7 +180,6 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
   std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
-  wait_for_callback_completion(lock, track_info);
   track_info.wr_callback = event_callback;
 }
 
@@ -161,19 +188,12 @@ io_service::untrack(const tcp_socket& socket) {
   std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
 
   auto it = m_tracked_sockets.find(socket.get_fd());
-  wait_for_callback_completion(lock, it->second);
-  m_tracked_sockets.erase(it);
-}
 
-//!
-//! wait for callback completion
-//!
-
-void
-io_service::wait_for_callback_completion(std::unique_lock<std::mutex>& lock, tracked_socket& socket) {
-  socket.executing_callback_condvar.wait(lock, [&] {
-    return socket.executing_callback == 0;
+  it->second.executing_callback_condvar.wait(lock, [&] {
+    return not it->second.is_executing_rd_callback and not it->second.is_executing_wr_callback;
   });
+
+  m_tracked_sockets.erase(it);
 }
 
 } //! network

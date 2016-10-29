@@ -45,14 +45,23 @@ private:
   //! struct tracked_socket
   //! contains information about what a current socket is tracking
   struct tracked_socket {
+    //! ctor
+    tracked_socket(void)
+      : rd_callback(nullptr)
+      , is_executing_rd_callback(false)
+      , wr_callback(nullptr)
+      , is_executing_wr_callback(false)
+      {}
+
     //! rd event
-    event_callback_t rd_callback = nullptr;
+    event_callback_t rd_callback;
+    std::atomic_bool is_executing_rd_callback;
 
     //! wr event
-    event_callback_t wr_callback = nullptr;
+    event_callback_t wr_callback;
+    std::atomic_bool is_executing_wr_callback;
 
     //! is executing callback
-    std::size_t executing_callback = 0;
     std::condition_variable executing_callback_condvar;
   };
 
@@ -65,9 +74,8 @@ private:
 
   //! process poll detected events
   void process_events(void);
-
-  //! wait for callback completion
-  void wait_for_callback_completion(std::unique_lock<std::mutex>& lock, tracked_socket& socket);
+  void process_rd_event(const struct pollfd& poll_result, tracked_socket& socket);
+  void process_wr_event(const struct pollfd& poll_result, tracked_socket& socket);
 
 private:
   //! tracked sockets
