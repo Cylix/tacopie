@@ -33,8 +33,8 @@ public:
   tcp_socket(fd_t fd, const std::string& host, uint32_t port, type t);
 
   //! copy ctor & assignment operator
-  tcp_socket(const tcp_socket&) = delete;
-  tcp_socket& operator=(const tcp_socket&) = delete;
+  tcp_socket(const tcp_socket&) = default;
+  tcp_socket& operator=(const tcp_socket&) = default;
 
 public:
   //! client socket operations

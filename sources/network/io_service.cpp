@@ -53,11 +53,8 @@ io_service::~io_service(void) {
   m_poll_worker.join();
   m_callback_workers.stop();
 
-  if (m_notif_pipe_fds[0] != -1)
-    { close(m_notif_pipe_fds[0]); }
-
-  if (m_notif_pipe_fds[1] != -1)
-    { close(m_notif_pipe_fds[1]); }
+  close(m_notif_pipe_fds[0]);
+  close(m_notif_pipe_fds[1]);
 }
 
 //!
@@ -229,6 +226,9 @@ io_service::untrack(const tcp_socket& socket) {
   std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
 
   auto it = m_tracked_sockets.find(socket.get_fd());
+
+  if (it == m_tracked_sockets.end())
+    { return ; }
 
   it->second.executing_callback_condvar.wait(lock, [&] {
     return not it->second.is_executing_rd_callback and not it->second.is_executing_wr_callback;

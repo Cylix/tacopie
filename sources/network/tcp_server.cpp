@@ -11,6 +11,7 @@ namespace network {
 
 tcp_server::tcp_server(void)
 : m_io_service(network::get_default_io_service())
+, m_is_running(false)
 {}
 
 tcp_server::~tcp_server(void)
@@ -42,6 +43,10 @@ tcp_server::stop(void) {
   m_io_service->untrack(m_socket);
   m_socket.close();
 
+  for (auto& client : m_clients)
+    { client.disconnect(); }
+  m_clients.clear();
+
   m_is_running = false;
 }
 
@@ -52,7 +57,7 @@ tcp_server::stop(void) {
 void
 tcp_server::on_read_available(fd_t) {
   try {
-    m_socket.accept();
+    m_clients.emplace_back(m_socket.accept());
   }
   catch (const cpp_http_server::error&) {
     stop();

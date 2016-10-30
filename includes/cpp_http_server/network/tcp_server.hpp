@@ -2,9 +2,11 @@
 
 #include <atomic>
 #include <cstdint>
+#include <list>
 #include <string>
 
 #include <cpp_http_server/network/io_service.hpp>
+#include <cpp_http_server/network/tcp_client.hpp>
 #include <cpp_http_server/network/tcp_socket.hpp>
 #include <cpp_http_server/typedefs.hpp>
 
@@ -46,6 +48,9 @@ private:
 
   //! whether the server is currently running or not
   std::atomic_bool m_is_running;
+
+  //! clients
+  std::list<cpp_http_server::network::tcp_client> m_clients;
 };
 
 } //! network

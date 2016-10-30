@@ -14,7 +14,7 @@ namespace utils {
 class thread_pool {
 public:
   //! ctor & dtor
-  thread_pool(std::size_t nb_threads);
+  explicit thread_pool(std::size_t nb_threads);
   ~thread_pool(void);
 
   //! copy ctor & assignment operator
