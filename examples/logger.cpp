@@ -1,8 +1,8 @@
-#include <cpp_http_server/cpp_http_server>
+#include <tacopie/tacopie>
 
 #include <iostream>
 
-class my_logger : public cpp_http_server::logger_iface {
+class my_logger : public tacopie::logger_iface {
 public:
   //! ctor & dtor
   my_logger(void)  = default;
@@ -40,30 +40,30 @@ main(void) {
   //! By default, no logging
   //! Force logger call, just for the example (you will never have to do that by yourself)
   std::cout << "By default: no logging" << std::endl;
-  __CPP_HTTP_SERVER_LOG(debug, "This is a debug message");
-  __CPP_HTTP_SERVER_LOG(info, "This is an info message");
-  __CPP_HTTP_SERVER_LOG(warn, "This is a warn message");
-  __CPP_HTTP_SERVER_LOG(error, "This is an error message");
+  __TACOPIE_LOG(debug, "This is a debug message");
+  __TACOPIE_LOG(info, "This is an info message");
+  __TACOPIE_LOG(warn, "This is a warn message");
+  __TACOPIE_LOG(error, "This is an error message");
   std::cout << std::endl;
 
   //! Use the default logger, provided with the library
-  cpp_http_server::active_logger = std::unique_ptr<cpp_http_server::logger>(new cpp_http_server::logger(cpp_http_server::logger::log_level::debug));
+  tacopie::active_logger = std::unique_ptr<tacopie::logger>(new tacopie::logger(tacopie::logger::log_level::debug));
   //! Force logger call, just for the example (you will never have to do that by yourself)
   std::cout << "With the library provided logger" << std::endl;
-  __CPP_HTTP_SERVER_LOG(debug, "This is a debug message");
-  __CPP_HTTP_SERVER_LOG(info, "This is an info message");
-  __CPP_HTTP_SERVER_LOG(warn, "This is a warn message");
-  __CPP_HTTP_SERVER_LOG(error, "This is an error message");
+  __TACOPIE_LOG(debug, "This is a debug message");
+  __TACOPIE_LOG(info, "This is an info message");
+  __TACOPIE_LOG(warn, "This is a warn message");
+  __TACOPIE_LOG(error, "This is an error message");
   std::cout << std::endl;
 
   //! Use your custom logger
-  cpp_http_server::active_logger = std::unique_ptr<my_logger>(new my_logger);
+  tacopie::active_logger = std::unique_ptr<my_logger>(new my_logger);
   //! Force logger call, just for the example (you will never have to do that by yourself)
   std::cout << "With an example of custom logger" << std::endl;
-  __CPP_HTTP_SERVER_LOG(debug, "This is a debug message");
-  __CPP_HTTP_SERVER_LOG(info, "This is an info message");
-  __CPP_HTTP_SERVER_LOG(warn, "This is a warn message");
-  __CPP_HTTP_SERVER_LOG(error, "This is an error message");
+  __TACOPIE_LOG(debug, "This is a debug message");
+  __TACOPIE_LOG(info, "This is an info message");
+  __TACOPIE_LOG(warn, "This is a warn message");
+  __TACOPIE_LOG(error, "This is an error message");
   std::cout << std::endl;
 
   return 0;

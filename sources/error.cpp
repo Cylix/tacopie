@@ -1,6 +1,6 @@
-#include <cpp_http_server/error.hpp>
+#include <tacopie/error.hpp>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 //!
 //! ctor & dtor
@@ -26,4 +26,4 @@ error::get_line(void) const {
   return m_line;
 }
 
-} //! cpp_http_server
+} //! tacopie

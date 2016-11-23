@@ -5,14 +5,14 @@
 #include <list>
 #include <string>
 
-#include <cpp_http_server/network/io_service.hpp>
-#include <cpp_http_server/network/tcp_client.hpp>
-#include <cpp_http_server/network/tcp_socket.hpp>
-#include <cpp_http_server/typedefs.hpp>
+#include <tacopie/network/io_service.hpp>
+#include <tacopie/network/tcp_client.hpp>
+#include <tacopie/network/tcp_socket.hpp>
+#include <tacopie/typedefs.hpp>
 
-#define __CPP_HTTP_SERVER_CONNECTION_QUEUE_SIZE 1024
+#define __TACOPIE_CONNECTION_QUEUE_SIZE 1024
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -27,8 +27,11 @@ public:
   tcp_server& operator=(const tcp_server&) = delete;
 
 public:
+  //! convenience typedef
+  typedef std::function<bool(tcp_socket&)> on_new_connection_callback_t;
+
   //! start & stop the tcp server
-  void start(const std::string& addr, std::uint32_t port);
+  void start(const std::string& addr, std::uint32_t port, const on_new_connection_callback_t& callback = nullptr);
   void stop(void);
 
   //! returns whether the server is currently running or not
@@ -44,15 +47,18 @@ private:
   std::shared_ptr<io_service> m_io_service;
 
   //! server socket
-  cpp_http_server::network::tcp_socket m_socket;
+  tacopie::network::tcp_socket m_socket;
 
   //! whether the server is currently running or not
   std::atomic_bool m_is_running;
 
   //! clients
-  std::list<cpp_http_server::network::tcp_client> m_clients;
+  std::list<tacopie::network::tcp_client> m_clients;
+
+  //! on new connection callback
+  on_new_connection_callback_t m_on_new_connection_callback;
 };
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

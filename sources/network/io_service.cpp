@@ -1,10 +1,10 @@
-#include <cpp_http_server/network/io_service.hpp>
-#include <cpp_http_server/error.hpp>
+#include <tacopie/network/io_service.hpp>
+#include <tacopie/error.hpp>
 
 #include <fcntl.h>
 #include <unistd.h>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -35,15 +35,15 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 io_service::io_service(void)
 : m_should_stop(false)
 , m_poll_worker(std::bind(&io_service::poll, this))
-, m_callback_workers(__CPP_HTTP_SERVER_IO_SERVICE_NB_WORKERS)
+, m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS)
 , m_notif_pipe_fds{-1, -1}
 {
   if (pipe(m_notif_pipe_fds) == -1)
-    { __CPP_HTTP_SERVER_THROW("io_service::io_service: pipe() failure"); }
+    { __TACOPIE_THROW("io_service::io_service: pipe() failure"); }
 
   int flags = fcntl(m_notif_pipe_fds[1], F_GETFL, 0);
   if (flags == -1 || fcntl(m_notif_pipe_fds[1], F_SETFL, flags | O_NONBLOCK) == -1)
-    { __CPP_HTTP_SERVER_THROW("io_service::io_service: fcntl() failure"); }
+    { __TACOPIE_THROW("io_service::io_service: fcntl() failure"); }
 }
 
 io_service::~io_service(void) {
@@ -250,4 +250,4 @@ io_service::wake_up(void) {
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

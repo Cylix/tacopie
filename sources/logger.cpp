@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include <cpp_http_server/logger.hpp>
+#include <tacopie/logger.hpp>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 std::unique_ptr<logger_iface> active_logger = nullptr;
 
@@ -19,7 +19,7 @@ void
 logger::debug(const std::string& msg, const std::string& file, std::size_t line) {
   if (m_level >= log_level::debug) {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cout << "[" << black << "DEBUG" << normal << "][cpp_http_server][" << file << ":" << line << "] " << msg << std::endl;
+    std::cout << "[" << black << "DEBUG" << normal << "][tacopie][" << file << ":" << line << "] " << msg << std::endl;
   }
 }
 
@@ -27,7 +27,7 @@ void
 logger::info(const std::string& msg, const std::string& file, std::size_t line) {
   if (m_level >= log_level::info) {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cout << "[" << blue << "INFO " << normal << "][cpp_http_server][" << file << ":" << line << "] " << msg << std::endl;
+    std::cout << "[" << blue << "INFO " << normal << "][tacopie][" << file << ":" << line << "] " << msg << std::endl;
   }
 }
 
@@ -35,7 +35,7 @@ void
 logger::warn(const std::string& msg, const std::string& file, std::size_t line) {
   if (m_level >= log_level::warn) {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cout << "[" << yellow << "WARN " << normal << "][cpp_http_server][" << file << ":" << line << "] " << msg << std::endl;
+    std::cout << "[" << yellow << "WARN " << normal << "][tacopie][" << file << ":" << line << "] " << msg << std::endl;
   }
 }
 
@@ -43,7 +43,7 @@ void
 logger::error(const std::string& msg, const std::string& file, std::size_t line) {
   if (m_level >= log_level::error) {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cerr << "[" << red << "ERROR" << normal << "][cpp_http_server][" << file << ":" << line << "] " << msg << std::endl;
+    std::cerr << "[" << red << "ERROR" << normal << "][tacopie][" << file << ":" << line << "] " << msg << std::endl;
   }
 }
 
@@ -71,4 +71,4 @@ error(const std::string& msg, const std::string& file, std::size_t line) {
     active_logger->error(msg, file, line);
 }
 
-} //! cpp_http_server
+} //! tacopie

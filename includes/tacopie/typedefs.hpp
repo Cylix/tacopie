@@ -1,8 +1,8 @@
 #pragma once
 
-namespace cpp_http_server {
+namespace tacopie {
 
 //! file descriptor platform type
 typedef int fd_t;
 
-} //! cpp_http_server
+} //! tacopie

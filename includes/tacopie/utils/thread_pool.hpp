@@ -7,7 +7,7 @@
 #include <thread>
 #include <vector>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace utils {
 
@@ -56,4 +56,4 @@ private:
 
 } //! utils
 
-} //! cpp_http_server
+} //! tacopie

@@ -1,7 +1,7 @@
 ###
 # project
 ###
-set(PROJECT cpp_http_server_tests)
+set(PROJECT tacopie_tests)
 project(${PROJECT} CXX)
 
 
@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 # includes
 ###
 include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/includes
-                    ${CPP_HTTP_SERVER_INCLUDES}
+                    ${TACOPIE_INCLUDES}
                     ${GTEST_INCLUDES})
 
 
@@ -36,4 +36,4 @@ endforeach()
 # executable
 ###
 add_executable(${PROJECT} ${SOURCES})
-target_link_libraries(${PROJECT} cpp_http_server gtest pthread)
+target_link_libraries(${PROJECT} tacopie gtest pthread)

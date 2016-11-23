@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-#include <cpp_http_server/typedefs.hpp>
+#include <tacopie/typedefs.hpp>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -86,4 +86,4 @@ private:
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

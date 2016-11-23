@@ -1,6 +1,6 @@
-#include <cpp_http_server/utils/thread_pool.hpp>
+#include <tacopie/utils/thread_pool.hpp>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace utils {
 
@@ -87,4 +87,4 @@ thread_pool::operator<<(const task_t& task) {
 
 } //! utils
 
-} //! cpp_http_server
+} //! tacopie

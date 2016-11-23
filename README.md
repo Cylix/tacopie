@@ -1,10 +1,10 @@
-# cpp_http_server [![Build Status](https://travis-ci.org/Cylix/cpp_http_server.svg?branch=master)](https://travis-ci.org/Cylix/cpp_http_server)
-`cpp_http_server` is a C++11 Asynchronous HTTP Server.
+# Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie)
+`tacopie` is a TCP Client & Server C++11 library.
 
 **The library is still under development. No release is available yet.**
 
 ## Requirement
-`cpp_http_server` has **no dependency**. Its only requirement is `C++11`.
+`tacopie` has **no dependency**. Its only requirement is `C++11`.
 
 For now, the library is developed only for linux and mac platforms with no support for Windows environment.
 
@@ -12,10 +12,10 @@ For now, the library is developed only for linux and mac platforms with no suppo
 No example is available yet.
 
 ## Wiki
-A [Wiki](https://github.com/Cylix/cpp_http_server/wiki) is available and provides full documentation for the library as well as [installation explanations](https://github.com/Cylix/cpp_http_server/wiki/Installation).
+A [Wiki](https://github.com/Cylix/tacopie/wiki) is available and provides full documentation for the library as well as [installation explanations](https://github.com/Cylix/tacopie/wiki/Installation).
 
 ## License
-`cpp_http_server` is under [MIT License](LICENSE).
+`tacopie` is under [MIT License](LICENSE).
 
 ## Contributing
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md).

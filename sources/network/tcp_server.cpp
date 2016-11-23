@@ -1,7 +1,7 @@
-#include <cpp_http_server/error.hpp>
-#include <cpp_http_server/network/tcp_server.hpp>
+#include <tacopie/error.hpp>
+#include <tacopie/network/tcp_server.hpp>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -12,6 +12,7 @@ namespace network {
 tcp_server::tcp_server(void)
 : m_io_service(network::get_default_io_service())
 , m_is_running(false)
+, m_on_new_connection_callback(nullptr)
 {}
 
 tcp_server::~tcp_server(void)
@@ -22,15 +23,16 @@ tcp_server::~tcp_server(void)
 //!
 
 void
-tcp_server::start(const std::string& host, std::uint32_t port) {
+tcp_server::start(const std::string& host, std::uint32_t port, const on_new_connection_callback_t& callback) {
   if (is_running())
-    { __CPP_HTTP_SERVER_THROW("tcp_server::start: tcp_server is already running"); }
+    { __TACOPIE_THROW("tcp_server::start: tcp_server is already running"); }
 
   m_socket.bind(host, port);
-  m_socket.listen(__CPP_HTTP_SERVER_CONNECTION_QUEUE_SIZE);
+  m_socket.listen(__TACOPIE_CONNECTION_QUEUE_SIZE);
 
   m_io_service->track(m_socket);
   m_io_service->set_rd_callback(m_socket, std::bind(&tcp_server::on_read_available, this, std::placeholders::_1));
+  m_on_new_connection_callback = callback;
 
   m_is_running = true;
 }
@@ -57,9 +59,12 @@ tcp_server::stop(void) {
 void
 tcp_server::on_read_available(fd_t) {
   try {
-    m_clients.emplace_back(m_socket.accept());
+    auto socket = m_socket.accept();
+
+    if (!m_on_new_connection_callback || m_on_new_connection_callback(socket))
+      { m_on_new_connection_callback(socket); }
   }
-  catch (const cpp_http_server::error&) {
+  catch (const tacopie::error&) {
     stop();
   }
 }
@@ -75,4 +80,4 @@ tcp_server::is_running(void) const {
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

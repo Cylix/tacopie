@@ -55,7 +55,7 @@ DisableFormat:                                              false
 ExperimentalAutoDetectBinPacking:                           false
 ForEachMacros:                                              [ foreach, Q_FOREACH, BOOST_FOREACH ]
 IncludeCategories:
-  - Regex:                                                  'cpp_http_server'
+  - Regex:                                                  'tacopie'
     Priority:                                               1
 IncludeIsMainRegex:                                         '$'
 IndentCaseLabels:                                           false

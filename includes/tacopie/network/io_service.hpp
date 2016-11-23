@@ -11,12 +11,12 @@
 
 #include <poll.h>
 
-#include <cpp_http_server/network/tcp_socket.hpp>
-#include <cpp_http_server/utils/thread_pool.hpp>
+#include <tacopie/network/tcp_socket.hpp>
+#include <tacopie/utils/thread_pool.hpp>
 
-#define __CPP_HTTP_SERVER_IO_SERVICE_NB_WORKERS 1
+#define __TACOPIE_IO_SERVICE_NB_WORKERS 1
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -110,4 +110,4 @@ void set_default_io_service(const std::shared_ptr<io_service>&);
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

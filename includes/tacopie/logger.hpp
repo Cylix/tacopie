@@ -4,7 +4,7 @@
 #include <mutex>
 #include <string>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 //! logger_iface
 //! should be inherited by any class intended to be used for logging
@@ -67,10 +67,10 @@ void warn(const std::string& msg, const std::string& file, std::size_t line);
 void error(const std::string& msg, const std::string& file, std::size_t line);
 
 //! convenience macro to log with file and line information
-#ifdef __CPP_HTTP_SERVER_LOGGING_ENABLED
-#define __CPP_HTTP_SERVER_LOG(level, msg) cpp_http_server::level(msg, __FILE__, __LINE__);
+#ifdef __TACOPIE_LOGGING_ENABLED
+#define __TACOPIE_LOG(level, msg) tacopie::level(msg, __FILE__, __LINE__);
 #else
-#define __CPP_HTTP_SERVER_LOG(level, msg)
-#endif /* __CPP_HTTP_SERVER_LOGGING_ENABLED */
+#define __TACOPIE_LOG(level, msg)
+#endif /* __TACOPIE_LOGGING_ENABLED */
 
-} //! cpp_http_server
+} //! tacopie

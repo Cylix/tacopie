@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 class error : public std::runtime_error {
 public:
@@ -27,7 +27,7 @@ private:
   std::uint32_t m_line;
 };
 
-} //! cpp_http_server
+} //! tacopie
 
 //! macro for convenience
-#define __CPP_HTTP_SERVER_THROW(what) throw cpp_http_server::error(what, __FILE__, __LINE__);
+#define __TACOPIE_THROW(what) throw tacopie::error(what, __FILE__, __LINE__);

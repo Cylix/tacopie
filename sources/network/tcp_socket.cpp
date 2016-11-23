@@ -1,5 +1,5 @@
-#include <cpp_http_server/error.hpp>
-#include <cpp_http_server/network/tcp_server.hpp>
+#include <tacopie/error.hpp>
+#include <tacopie/network/tcp_server.hpp>
 
 #include <netdb.h>
 #include <netinet/in.h>
@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-namespace cpp_http_server {
+namespace tacopie {
 
 namespace network {
 
@@ -52,7 +52,7 @@ tcp_socket::recv(std::size_t size_to_read) {
   ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
 
   if (rd_size == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::recv: recv() failure"); }
+    { __TACOPIE_THROW("tcp_socket::recv: recv() failure"); }
 
   return data;
 }
@@ -65,7 +65,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   ssize_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
 
   if (wr_size == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::send: send() failure"); }
+    { __TACOPIE_THROW("tcp_socket::send: send() failure"); }
 
   return wr_size;
 }
@@ -78,7 +78,7 @@ tcp_socket::connect(const std::string& host, std::uint32_t port) {
   struct hostent* addr = gethostbyname(host.c_str());
 
   if (not addr)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::bind: gethostbyname() failure"); }
+    { __TACOPIE_THROW("tcp_socket::bind: gethostbyname() failure"); }
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
@@ -87,7 +87,7 @@ tcp_socket::connect(const std::string& host, std::uint32_t port) {
   server_addr.sin_family = AF_INET;
 
   if (::connect(m_fd, (const struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::bind: connect() failure"); }
+    { __TACOPIE_THROW("tcp_socket::bind: connect() failure"); }
 }
 
 //!
@@ -102,7 +102,7 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   struct hostent* addr = gethostbyname(host.c_str());
 
   if (not addr)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::bind: gethostbyname() failure"); }
+    { __TACOPIE_THROW("tcp_socket::bind: gethostbyname() failure"); }
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
@@ -111,7 +111,7 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   server_addr.sin_family = AF_INET;
 
   if (::bind(m_fd, (const struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::bind: bind() failure"); }
+    { __TACOPIE_THROW("tcp_socket::bind: bind() failure"); }
 }
 
 void
@@ -120,7 +120,7 @@ tcp_socket::listen(std::uint32_t max_connection_queue) {
   check_or_set_type(type::SERVER);
 
   if (::listen(m_fd, max_connection_queue) == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::listen: listen() failure"); }
+    { __TACOPIE_THROW("tcp_socket::listen: listen() failure"); }
 }
 
 tcp_socket
@@ -134,7 +134,7 @@ tcp_socket::accept(void) {
   fd_t client_fd = ::accept(m_fd, (struct sockaddr *)&client_info, &client_info_struct_size);
 
   if (client_fd == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::accept: accept() failure"); }
+    { __TACOPIE_THROW("tcp_socket::accept: accept() failure"); }
 
   //! TODO: init with real client addr
   return { m_fd, "", client_info.sin_port, type::CLIENT };
@@ -167,7 +167,7 @@ tcp_socket::create_socket_if_necessary(void) {
   m_type = type::UNKNOWN;
 
   if (m_fd == -1)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::create_socket_if_necessary: socket() failure"); }
+    { __TACOPIE_THROW("tcp_socket::create_socket_if_necessary: socket() failure"); }
 }
 
 //!
@@ -178,7 +178,7 @@ tcp_socket::create_socket_if_necessary(void) {
 void
 tcp_socket::check_or_set_type(type t) {
   if (m_type != type::UNKNOWN and m_type != t)
-    { __CPP_HTTP_SERVER_THROW("tcp_socket::check_or_set_type: trying to perform invalid operation on socket"); }
+    { __TACOPIE_THROW("tcp_socket::check_or_set_type: trying to perform invalid operation on socket"); }
 
   m_type = t;
 }
@@ -227,4 +227,4 @@ tcp_socket::get_fd(void) const{
 
 } //! network
 
-} //! cpp_http_server
+} //! tacopie

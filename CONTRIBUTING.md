@@ -17,8 +17,8 @@ cd build
 cmake .. -DBUILD_TESTS=true -DBUILD_EXAMPLES=true -DLOGGING_ENABLED=1
 make
 # Run tests and examples
-./bin/cpp_http_server_tests
-./bin/http_server
+./bin/tacopie_tests
+./bin/tacopie_example
 ```
 
 ## 5. Code your changes
@@ -47,7 +47,7 @@ You can do as many commits as you want: we will squash them into a single commit
 ## 8. Before the Pull Request
 Before submitting the pull request, ensure that:
 * your feature works as expected and is tested
-* all tests pass on both your computer and the [Travis](travis-ci.org/Cylix/cpp_http_server)
+* all tests pass on both your computer and the [Travis](travis-ci.org/Cylix/tacopie)
 * you have used the formatting tool
 
 ## 9. Submit your Pull Request on Github
