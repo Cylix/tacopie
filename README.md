@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="https://raw.githubusercontent.com/Cylix/tacopie/master/assets/images/tacopie_logo.jpg"/>
+</p>
+
 # Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie)
 `tacopie` is a TCP Client & Server C++11 library.
 
