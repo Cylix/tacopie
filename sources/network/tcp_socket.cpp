@@ -1,6 +1,7 @@
 #include <tacopie/error.hpp>
 #include <tacopie/network/tcp_server.hpp>
 
+#include <cstring>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
