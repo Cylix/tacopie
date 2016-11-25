@@ -62,7 +62,7 @@ tcp_server::on_read_available(fd_t) {
     auto socket = m_socket.accept();
 
     if (!m_on_new_connection_callback || m_on_new_connection_callback(socket))
-      { m_on_new_connection_callback(socket); }
+        { m_clients.emplace_back(socket); }
   }
   catch (const tacopie::error&) {
     stop();
