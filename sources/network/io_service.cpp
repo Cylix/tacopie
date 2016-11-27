@@ -66,7 +66,7 @@ io_service::poll(void) {
   while (not m_should_stop) {
     init_poll_fds_info();
 
-    if (::poll(const_cast<struct pollfd*>(m_poll_fds_info.data()), m_poll_fds_info.size(), 0) > 0)
+    if (::poll(const_cast<struct pollfd*>(m_poll_fds_info.data()), m_poll_fds_info.size(), -1) > 0)
       { process_events(); }
   }
 }
