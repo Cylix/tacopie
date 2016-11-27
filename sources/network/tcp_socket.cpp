@@ -28,7 +28,7 @@ tcp_socket::tcp_socket(void)
 //! build socket from existing file descriptor
 //!
 
-tcp_socket::tcp_socket(fd_t fd, const std::string& host, uint32_t port, type t)
+tcp_socket::tcp_socket(fd_t fd, const std::string& host, std::uint32_t port, type t)
 : m_fd(fd)
 , m_host(host)
 , m_port(port)
@@ -115,7 +115,7 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
 }
 
 void
-tcp_socket::listen(std::uint32_t max_connection_queue) {
+tcp_socket::listen(std::size_t max_connection_queue) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 

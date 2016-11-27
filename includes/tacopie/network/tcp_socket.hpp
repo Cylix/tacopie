@@ -30,7 +30,7 @@ public:
 
   //! custom ctor
   //! build socket from existing file descriptor
-  tcp_socket(fd_t fd, const std::string& host, uint32_t port, type t);
+  tcp_socket(fd_t fd, const std::string& host, std::uint32_t port, type t);
 
   //! copy ctor & assignment operator
   tcp_socket(const tcp_socket&) = default;
@@ -49,7 +49,7 @@ public:
 
   //! server socket operations
   void bind(const std::string& host, std::uint32_t port);
-  void listen(std::uint32_t max_connection_queue);
+  void listen(std::size_t max_connection_queue);
   tcp_socket accept(void);
 
   //! general socket operations

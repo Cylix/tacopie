@@ -6,7 +6,7 @@ namespace tacopie {
 //! ctor & dtor
 //!
 
-error::error(const std::string& what, const std::string& file, std::uint32_t line)
+error::error(const std::string& what, const std::string& file, std::size_t line)
 : std::runtime_error(what)
 , m_file(file)
 , m_line(line)
@@ -21,7 +21,7 @@ error::get_file(void) const {
   return m_file;
 }
 
-std::uint32_t
+std::size_t
 error::get_line(void) const {
   return m_line;
 }
