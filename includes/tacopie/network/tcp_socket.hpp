@@ -37,6 +37,11 @@ public:
   tcp_socket& operator=(const tcp_socket&) = default;
 
 public:
+  //! comparison operator
+  bool operator==(const tcp_socket& rhs) const;
+  bool operator!=(const tcp_socket& rhs) const;
+
+public:
   //! client socket operations
   std::vector<char> recv(std::size_t size_to_read);
   std::size_t send(const std::vector<char>& data, std::size_t size_to_write);

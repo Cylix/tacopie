@@ -225,6 +225,19 @@ tcp_socket::get_fd(void) const{
   return m_fd;
 }
 
+//!
+//! comparison operator
+//!
+bool
+tcp_socket::operator==(const tcp_socket& rhs) const {
+  return m_fd == rhs.m_fd and m_type == rhs.m_type;
+}
+
+bool
+tcp_socket::operator!=(const tcp_socket& rhs) const {
+  return not operator==(rhs);
+}
+
 } //! network
 
 } //! tacopie

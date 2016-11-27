@@ -60,6 +60,7 @@ void
 tcp_server::on_read_available(fd_t) {
   try {
     m_clients.emplace_back(m_socket.accept());
+    m_clients.back().set_on_disconnection_handler(std::bind(&tcp_server::on_client_disconnected, this, std::cref(m_clients.back())));
 
     if (m_on_new_connection_callback && !m_on_new_connection_callback(m_clients.back()))
       { m_clients.pop_back(); }
@@ -70,12 +71,37 @@ tcp_server::on_read_available(fd_t) {
 }
 
 //!
+//! client disconnected
+//!
+
+void
+tcp_server::on_client_disconnected(const tcp_client& client) {
+  auto it = std::find(m_clients.begin(), m_clients.end(), client);
+
+  if (it != m_clients.end())
+    { m_clients.erase(it); }
+}
+
+//!
 //! returns whether the server is currently running or not
 //!
 
 bool
 tcp_server::is_running(void) const {
   return m_is_running;
+}
+
+//!
+//! comparison operator
+//!
+bool
+tcp_server::operator==(const tcp_server& rhs) const {
+  return m_socket == rhs.m_socket;
+}
+
+bool
+tcp_server::operator!=(const tcp_server& rhs) const {
+  return not operator==(rhs);
 }
 
 } //! network

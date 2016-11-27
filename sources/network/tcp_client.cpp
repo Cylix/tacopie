@@ -54,6 +54,9 @@ tcp_client::disconnect(void) {
   m_socket.close();
 
   m_is_connected = false;
+
+  if (m_disconnection_handler)
+    { m_disconnection_handler(); }
 }
 
 //!
@@ -188,6 +191,19 @@ tcp_client::set_on_disconnection_handler(const disconnection_handler_t& disconne
 bool
 tcp_client::is_connected(void) const {
   return m_is_connected;
+}
+
+//!
+//! comparison operator
+//!
+bool
+tcp_client::operator==(const tcp_client& rhs) const {
+  return m_socket == rhs.m_socket;
+}
+
+bool
+tcp_client::operator!=(const tcp_client& rhs) const {
+  return not operator==(rhs);
 }
 
 } //! network

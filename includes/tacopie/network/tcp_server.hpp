@@ -27,6 +27,11 @@ public:
   tcp_server& operator=(const tcp_server&) = delete;
 
 public:
+  //! comparison operator
+  bool operator==(const tcp_server& rhs) const;
+  bool operator!=(const tcp_server& rhs) const;
+
+public:
   //! convenience typedef
   typedef std::function<bool(tcp_client&)> on_new_connection_callback_t;
 
@@ -40,6 +45,9 @@ public:
 private:
   //! io service read callback
   void on_read_available(fd_t fd);
+
+  //! client disconnected
+  void on_client_disconnected(const tcp_client& client);
 
 private:
   //! store io_service

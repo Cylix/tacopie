@@ -29,6 +29,11 @@ public:
   tcp_client& operator=(const tcp_client&) = delete;
 
 public:
+  //! comparison operator
+  bool operator==(const tcp_client& rhs) const;
+  bool operator!=(const tcp_client& rhs) const;
+
+public:
   //! start & stop the tcp client
   void connect(const std::string& addr, std::uint32_t port);
   void disconnect(void);
