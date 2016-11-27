@@ -64,8 +64,8 @@ private:
     event_callback_t wr_callback;
     std::atomic_bool is_executing_wr_callback;
 
-    //! is executing callback
-    std::condition_variable executing_callback_condvar;
+    //! marked for untrack
+    std::atomic_bool marked_for_untrack;
   };
 
 private:

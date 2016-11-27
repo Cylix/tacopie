@@ -123,9 +123,10 @@ io_service::process_rd_event(const struct pollfd& poll_result, tracked_socket& s
       { return ; }
 
     auto& socket = it->second;
-
     socket.is_executing_rd_callback = false;
-    socket.executing_callback_condvar.notify_all();
+
+    if (socket.marked_for_untrack && not socket.is_executing_wr_callback)
+      { m_tracked_sockets.erase(it); }
   };
 }
 
@@ -146,9 +147,10 @@ io_service::process_wr_event(const struct pollfd& poll_result, tracked_socket& s
       { return ; }
 
     auto& socket = it->second;
-
     socket.is_executing_wr_callback = false;
-    socket.executing_callback_condvar.notify_all();
+
+    if (socket.marked_for_untrack && not socket.is_executing_rd_callback)
+      { m_tracked_sockets.erase(it); }
   };
 }
 
@@ -167,6 +169,9 @@ io_service::init_poll_fds_info(void) {
     const auto& socket_info = socket.second;
 
     if (not socket_info.rd_callback and not socket_info.wr_callback)
+      { continue ; }
+
+    if (socket_info.marked_for_untrack)
       { continue ; }
 
     struct pollfd poll_fd_info;
@@ -198,6 +203,7 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = rd_callback;
   track_info.wr_callback = wr_callback;
+  track_info.marked_for_untrack = false;
 
   wake_up();
 }
@@ -208,6 +214,7 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = event_callback;
+  track_info.marked_for_untrack = false;
 
   wake_up();
 }
@@ -218,6 +225,7 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info = m_tracked_sockets[socket.get_fd()];
   track_info.wr_callback = event_callback;
+  track_info.marked_for_untrack = false;
 
   wake_up();
 }
@@ -231,11 +239,10 @@ io_service::untrack(const tcp_socket& socket) {
   if (it == m_tracked_sockets.end())
     { return ; }
 
-  it->second.executing_callback_condvar.wait(lock, [&] {
-    return not it->second.is_executing_rd_callback and not it->second.is_executing_wr_callback;
-  });
-
-  m_tracked_sockets.erase(it);
+  if (it->second.is_executing_rd_callback or it->second.is_executing_wr_callback)
+    { it->second.marked_for_untrack = true; }
+  else
+    { m_tracked_sockets.erase(it); }
 
   wake_up();
 }

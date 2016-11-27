@@ -1,13 +1,15 @@
 #include <tacopie/tacopie>
 
 #include <iostream>
+#include <mutex>
+#include <condition_variable>
 #include <signal.h>
 
-static std::atomic_bool should_stop(false);
+std::condition_variable cv;
 
 void
 signint_handler(int) {
-  should_stop = true;
+  cv.notify_all();
 }
 
 void
@@ -36,7 +38,10 @@ main(void) {
   });
 
   signal(SIGINT, &signint_handler);
-  while (not should_stop);
+
+  std::mutex mtx;
+  std::unique_lock<std::mutex> lock(mtx);
+  cv.wait(lock);
 
   return 0;
 }

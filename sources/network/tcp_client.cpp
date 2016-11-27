@@ -66,6 +66,9 @@ tcp_client::on_read_available(fd_t) {
 
   auto callback = process_read(result);
 
+  if (not result.success)
+    { disconnect(); }
+
   if (callback)
     { callback(*this, result); }
 }
@@ -79,6 +82,9 @@ tcp_client::on_write_available(fd_t) {
   write_result result;
 
   auto callback = process_write(result);
+
+  if (not result.success)
+    { disconnect(); }
 
   if (callback)
     { callback(*this, result); }
@@ -146,6 +152,9 @@ tcp_client::process_write(write_result& result) {
 
 void
 tcp_client::async_read(const read_request& request) {
+  if (not is_connected())
+    { __TACOPIE_THROW("tcp_client::async_read: tcp_client is disconnected"); }
+
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
   m_read_requests.push(request);
@@ -154,6 +163,9 @@ tcp_client::async_read(const read_request& request) {
 
 void
 tcp_client::async_write(const write_request& request) {
+  if (not is_connected())
+    { __TACOPIE_THROW("tcp_client::async_write: tcp_client is disconnected"); }
+
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 
   m_write_requests.push(request);

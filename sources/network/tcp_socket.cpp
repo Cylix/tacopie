@@ -51,6 +51,9 @@ tcp_socket::recv(std::size_t size_to_read) {
   if (rd_size == -1)
     { __TACOPIE_THROW("tcp_socket::recv: recv() failure"); }
 
+  if (rd_size == 0)
+    { __TACOPIE_THROW("tcp_socket::recv: nothing to read, socket has been closed by remote host"); }
+
   return data;
 }
 
