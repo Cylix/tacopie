@@ -59,10 +59,10 @@ tcp_server::stop(void) {
 void
 tcp_server::on_read_available(fd_t) {
   try {
-    auto socket = m_socket.accept();
+    m_clients.emplace_back(m_socket.accept());
 
-    if (!m_on_new_connection_callback || m_on_new_connection_callback(socket))
-        { m_clients.emplace_back(socket); }
+    if (m_on_new_connection_callback && !m_on_new_connection_callback(m_clients.back()))
+      { m_clients.pop_back(); }
   }
   catch (const tacopie::error&) {
     stop();

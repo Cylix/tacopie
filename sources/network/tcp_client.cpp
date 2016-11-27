@@ -28,7 +28,7 @@ tcp_client::tcp_client(const tcp_socket& socket)
 , m_socket(socket)
 , m_is_connected(true)
 , m_disconnection_handler(nullptr)
-{}
+{ m_io_service->track(m_socket); }
 
 //!
 //! start & stop the tcp client
@@ -108,6 +108,9 @@ tcp_client::process_read(read_result& result) {
 
   m_read_requests.pop();
 
+  if (m_read_requests.empty())
+    { m_io_service->set_rd_callback(m_socket, nullptr); }
+
   return callback;
 }
 
@@ -131,6 +134,9 @@ tcp_client::process_write(write_result& result) {
 
   m_write_requests.pop();
 
+  if (m_write_requests.empty())
+    { m_io_service->set_wr_callback(m_socket, nullptr); }
+
   return callback;
 }
 
@@ -143,6 +149,7 @@ tcp_client::async_read(const read_request& request) {
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
   m_read_requests.push(request);
+  m_io_service->set_rd_callback(m_socket, std::bind(&tcp_client::on_read_available, this, std::placeholders::_1));
 }
 
 void
@@ -150,6 +157,7 @@ tcp_client::async_write(const write_request& request) {
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 
   m_write_requests.push(request);
+  m_io_service->set_wr_callback(m_socket, std::bind(&tcp_client::on_write_available, this, std::placeholders::_1));
 }
 
 //!

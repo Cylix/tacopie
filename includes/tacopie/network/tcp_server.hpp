@@ -28,7 +28,7 @@ public:
 
 public:
   //! convenience typedef
-  typedef std::function<bool(tcp_socket&)> on_new_connection_callback_t;
+  typedef std::function<bool(tcp_client&)> on_new_connection_callback_t;
 
   //! start & stop the tcp server
   void start(const std::string& addr, std::uint32_t port, const on_new_connection_callback_t& callback = nullptr);

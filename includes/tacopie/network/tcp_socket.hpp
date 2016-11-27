@@ -26,7 +26,7 @@ public:
 public:
   //! ctor & dtor
   tcp_socket(void);
-  ~tcp_socket(void);
+  ~tcp_socket(void) = default;
 
   //! custom ctor
   //! build socket from existing file descriptor

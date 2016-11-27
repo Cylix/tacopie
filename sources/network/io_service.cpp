@@ -180,7 +180,8 @@ io_service::init_poll_fds_info(void) {
     if (socket_info.wr_callback and not socket_info.is_executing_wr_callback)
       { poll_fd_info.events |= POLLOUT; }
 
-    m_poll_fds_info.push_back(std::move(poll_fd_info));
+    if (poll_fd_info.events)
+      { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
   }
 
   m_poll_fds_info.push_back({ m_notif_pipe_fds[0], POLLIN, 0 });

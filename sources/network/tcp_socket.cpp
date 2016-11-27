@@ -23,10 +23,6 @@ tcp_socket::tcp_socket(void)
 , m_type(type::UNKNOWN)
 {}
 
-tcp_socket::~tcp_socket(void) {
-  close();
-}
-
 //!
 //! custom ctor
 //! build socket from existing file descriptor
@@ -138,7 +134,7 @@ tcp_socket::accept(void) {
     { __TACOPIE_THROW("tcp_socket::accept: accept() failure"); }
 
   //! TODO: init with real client addr
-  return { m_fd, "", client_info.sin_port, type::CLIENT };
+  return { client_fd, "", client_info.sin_port, type::CLIENT };
 }
 
 //!
