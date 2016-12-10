@@ -38,7 +38,6 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 
 io_service::io_service(void)
 : m_should_stop(false)
-, m_poll_worker(std::bind(&io_service::poll, this))
 , m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS)
 , m_notif_pipe_fds{-1, -1}
 {
@@ -49,11 +48,8 @@ io_service::io_service(void)
     __TACOPIE_THROW("io_service::io_service: pipe() failure");
   }
 
-  int flags = fcntl(m_notif_pipe_fds[1], F_GETFL, 0);
-  if (flags == -1 || fcntl(m_notif_pipe_fds[1], F_SETFL, flags | O_NONBLOCK) == -1) {
-    __TACOPIE_LOG(error, "fcntl() failure");
-    __TACOPIE_THROW("io_service::io_service: fcntl() failure");
-  }
+  //! Start worker after everything has been initialized
+  m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
 
 io_service::~io_service(void) {
