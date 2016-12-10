@@ -8,8 +8,6 @@
 
 namespace tacopie {
 
-namespace network {
-
 class tcp_socket {
 public:
   //! possible types of a TCP socket, either a client or a server
@@ -88,7 +86,5 @@ private:
   //! type of the socket
   type m_type;
 };
-
-} //! network
 
 } //! tacopie

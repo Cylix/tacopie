@@ -1,22 +1,23 @@
 #include <tacopie/error.hpp>
 #include <tacopie/network/tcp_client.hpp>
+#include <tacopie/logger.hpp>
 
 namespace tacopie {
-
-namespace network {
 
 //!
 //! ctor & dtor
 //!
 
 tcp_client::tcp_client(void)
-: m_io_service(network::get_default_io_service())
+: m_io_service(get_default_io_service())
 , m_is_connected(false)
 , m_disconnection_handler(nullptr)
-{}
+{ __TACOPIE_LOG(debug, "create tcp_client"); }
 
-tcp_client::~tcp_client(void)
-{ disconnect(); }
+tcp_client::~tcp_client(void) {
+  __TACOPIE_LOG(debug, "destroy tcp_client");
+  disconnect();
+}
 
 //!
 //! custom ctor
@@ -24,11 +25,14 @@ tcp_client::~tcp_client(void)
 //!
 
 tcp_client::tcp_client(const tcp_socket& socket)
-: m_io_service(network::get_default_io_service())
+: m_io_service(get_default_io_service())
 , m_socket(socket)
 , m_is_connected(true)
 , m_disconnection_handler(nullptr)
-{ m_io_service->track(m_socket); }
+{
+  __TACOPIE_LOG(debug, "create tcp_client");
+  m_io_service->track(m_socket);
+}
 
 //!
 //! start & stop the tcp client
@@ -36,13 +40,17 @@ tcp_client::tcp_client(const tcp_socket& socket)
 
 void
 tcp_client::connect(const std::string& host, std::uint32_t port) {
-  if (is_connected())
-    { __TACOPIE_THROW("tcp_client::connect: tcp_client is already connected"); }
+  if (is_connected()) {
+    __TACOPIE_LOG(warn, "tcp_client is already connected");
+    __TACOPIE_THROW("tcp_client::connect: tcp_client is already connected");
+  }
 
   m_socket.connect(host, port);
   m_io_service->track(m_socket);
 
   m_is_connected = true;
+
+  __TACOPIE_LOG(info, "tcp_client connected");
 }
 
 void
@@ -50,13 +58,23 @@ tcp_client::disconnect(void) {
   if (not is_connected())
     { return ; }
 
+  m_is_connected = false;
+
   m_io_service->untrack(m_socket);
   m_socket.close();
 
-  m_is_connected = false;
+  __TACOPIE_LOG(info, "tcp_client disconnected");
+}
 
-  if (m_disconnection_handler)
-    { m_disconnection_handler(); }
+//!
+//! Call disconnection handler
+//!
+void
+tcp_client::call_disconnection_handler(void) {
+  if (m_disconnection_handler) {
+    __TACOPIE_LOG(debug, "call disconnection handler");
+    m_disconnection_handler();
+  }
 }
 
 //!
@@ -65,15 +83,21 @@ tcp_client::disconnect(void) {
 
 void
 tcp_client::on_read_available(fd_t) {
-  read_result result;
+  __TACOPIE_LOG(info, "read available");
 
+  read_result result;
   auto callback = process_read(result);
 
-  if (not result.success)
-    { disconnect(); }
+  if (not result.success) {
+    __TACOPIE_LOG(warn, "read operation failure");
+    disconnect();
+  }
 
   if (callback)
     { callback(*this, result); }
+
+  if (not result.success)
+    { call_disconnection_handler(); }
 }
 
 //!
@@ -82,15 +106,21 @@ tcp_client::on_read_available(fd_t) {
 
 void
 tcp_client::on_write_available(fd_t) {
-  write_result result;
+  __TACOPIE_LOG(info, "write available");
 
+  write_result result;
   auto callback = process_write(result);
 
-  if (not result.success)
-    { disconnect(); }
+  if (not result.success) {
+    __TACOPIE_LOG(warn, "write operation failure");
+    disconnect();
+  }
 
   if (callback)
     { callback(*this, result); }
+
+  if (not result.success)
+    { call_disconnection_handler(); }
 }
 
 //!
@@ -111,7 +141,7 @@ tcp_client::process_read(read_result& result) {
     result.buffer = m_socket.recv(request.size);
     result.success = true;
   }
-  catch (const tacopie::error&) {
+  catch (const tacopie::tacopie_error&) {
     result.success = false;
   }
 
@@ -137,7 +167,7 @@ tcp_client::process_write(write_result& result) {
     result.size = m_socket.send(request.buffer, request.buffer.size());
     result.success = true;
   }
-  catch (const tacopie::error&) {
+  catch (const tacopie::tacopie_error&) {
     result.success = false;
   }
 
@@ -155,10 +185,14 @@ tcp_client::process_write(write_result& result) {
 
 void
 tcp_client::async_read(const read_request& request) {
-  if (not is_connected())
-    { __TACOPIE_THROW("tcp_client::async_read: tcp_client is disconnected"); }
+  if (not is_connected()) {
+    __TACOPIE_LOG(warn, "tcp_client is not connected");
+    __TACOPIE_THROW("tcp_client::async_read: tcp_client is disconnected");
+  }
 
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
+
+  __TACOPIE_LOG(info, "store async_read request");
 
   m_read_requests.push(request);
   m_io_service->set_rd_callback(m_socket, std::bind(&tcp_client::on_read_available, this, std::placeholders::_1));
@@ -166,10 +200,14 @@ tcp_client::async_read(const read_request& request) {
 
 void
 tcp_client::async_write(const write_request& request) {
-  if (not is_connected())
-    { __TACOPIE_THROW("tcp_client::async_write: tcp_client is disconnected"); }
+  if (not is_connected()) {
+    __TACOPIE_LOG(warn, "tcp_client is not connected");
+    __TACOPIE_THROW("tcp_client::async_write: tcp_client is disconnected");
+  }
 
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
+
+  __TACOPIE_LOG(info, "store async_write request");
 
   m_write_requests.push(request);
   m_io_service->set_wr_callback(m_socket, std::bind(&tcp_client::on_write_available, this, std::placeholders::_1));
@@ -205,7 +243,5 @@ bool
 tcp_client::operator!=(const tcp_client& rhs) const {
   return not operator==(rhs);
 }
-
-} //! network
 
 } //! tacopie

@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstdint>
 #include <list>
+#include <mutex>
 #include <string>
 
 #include <tacopie/network/io_service.hpp>
@@ -13,8 +14,6 @@
 #define __TACOPIE_CONNECTION_QUEUE_SIZE 1024
 
 namespace tacopie {
-
-namespace network {
 
 class tcp_server {
 public:
@@ -55,18 +54,19 @@ private:
   std::shared_ptr<io_service> m_io_service;
 
   //! server socket
-  tacopie::network::tcp_socket m_socket;
+  tacopie::tcp_socket m_socket;
 
   //! whether the server is currently running or not
   std::atomic_bool m_is_running;
 
   //! clients
-  std::list<tacopie::network::tcp_client> m_clients;
+  std::list<tacopie::tcp_client> m_clients;
+
+  //! clients thread safety
+  std::mutex m_clients_mtx;
 
   //! on new connection callback
   on_new_connection_callback_t m_on_new_connection_callback;
 };
-
-} //! network
 
 } //! tacopie

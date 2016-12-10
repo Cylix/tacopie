@@ -12,8 +12,6 @@
 
 namespace tacopie {
 
-namespace network {
-
 class tcp_client {
 public:
   //! ctor & dtor
@@ -40,6 +38,10 @@ public:
 
   //! returns whether the client is currently connected or not
   bool is_connected(void) const;
+
+public:
+  //! Call disconnection handler
+  void call_disconnection_handler(void);
 
 public:
   //! structure to store read requests result
@@ -102,7 +104,7 @@ private:
   std::shared_ptr<io_service> m_io_service;
 
   //! client socket
-  tacopie::network::tcp_socket m_socket;
+  tacopie::tcp_socket m_socket;
 
   //! whether the client is currently connected or not
   std::atomic_bool m_is_connected;
@@ -118,7 +120,5 @@ private:
   //! disconnection handler
   disconnection_handler_t m_disconnection_handler;
 };
-
-} //! network
 
 } //! tacopie

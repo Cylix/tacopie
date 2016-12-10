@@ -14,11 +14,11 @@
 #include <tacopie/network/tcp_socket.hpp>
 #include <tacopie/utils/thread_pool.hpp>
 
+#ifndef __TACOPIE_IO_SERVICE_NB_WORKERS
 #define __TACOPIE_IO_SERVICE_NB_WORKERS 1
+#endif /* __TACOPIE_IO_SERVICE_NB_WORKERS */
 
 namespace tacopie {
-
-namespace network {
 
 class io_service {
 public:
@@ -107,7 +107,5 @@ private:
 //! default io_service getter & setter
 const std::shared_ptr<io_service>& get_default_io_service(void);
 void set_default_io_service(const std::shared_ptr<io_service>&);
-
-} //! network
 
 } //! tacopie

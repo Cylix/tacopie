@@ -6,15 +6,15 @@
 
 namespace tacopie {
 
-class error : public std::runtime_error {
+class tacopie_error : public std::runtime_error {
 public:
   //! ctor & dtor
-  error(const std::string& what, const std::string& file, std::size_t line);
-  ~error(void) = default;
+  tacopie_error(const std::string& what, const std::string& file, std::size_t line);
+  ~tacopie_error(void) = default;
 
   //! copy ctor & assignment operator
-  error(const error&) = default;
-  error& operator=(const error&) = default;
+  tacopie_error(const tacopie_error&) = default;
+  tacopie_error& operator=(const tacopie_error&) = default;
 
 public:
   //! get location of the error
@@ -30,4 +30,4 @@ private:
 } //! tacopie
 
 //! macro for convenience
-#define __TACOPIE_THROW(what) throw tacopie::error(what, __FILE__, __LINE__);
+#define __TACOPIE_THROW(what) throw tacopie::tacopie_error((what), __FILE__, __LINE__);

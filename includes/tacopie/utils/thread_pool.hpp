@@ -32,6 +32,10 @@ public:
   //! stop the thread pool and wait for workers completion
   void stop(void);
 
+public:
+  //! whether the thread_pool is running or not
+  bool is_running(void) const;
+
 private:
   //! worker main loop
   void run(void);
