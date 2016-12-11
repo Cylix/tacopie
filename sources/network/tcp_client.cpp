@@ -40,10 +40,8 @@ tcp_client::tcp_client(const tcp_socket& socket)
 
 void
 tcp_client::connect(const std::string& host, std::uint32_t port) {
-  if (is_connected()) {
-    __TACOPIE_LOG(warn, "tcp_client is already connected");
-    __TACOPIE_THROW("tcp_client::connect: tcp_client is already connected");
-  }
+  if (is_connected())
+    { __TACOPIE_THROW(warn, "tcp_client is already connected"); }
 
   m_socket.connect(host, port);
   m_io_service->track(m_socket);
@@ -185,10 +183,8 @@ tcp_client::process_write(write_result& result) {
 
 void
 tcp_client::async_read(const read_request& request) {
-  if (not is_connected()) {
-    __TACOPIE_LOG(warn, "tcp_client is not connected");
-    __TACOPIE_THROW("tcp_client::async_read: tcp_client is disconnected");
-  }
+  if (not is_connected())
+    { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
 
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
@@ -200,10 +196,8 @@ tcp_client::async_read(const read_request& request) {
 
 void
 tcp_client::async_write(const write_request& request) {
-  if (not is_connected()) {
-    __TACOPIE_LOG(warn, "tcp_client is not connected");
-    __TACOPIE_THROW("tcp_client::async_write: tcp_client is disconnected");
-  }
+  if (not is_connected())
+    { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
 
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 

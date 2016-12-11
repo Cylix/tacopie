@@ -27,10 +27,8 @@ tcp_server::~tcp_server(void) {
 
 void
 tcp_server::start(const std::string& host, std::uint32_t port, const on_new_connection_callback_t& callback) {
-  if (is_running()) {
-    __TACOPIE_LOG(warn, "tcp_server is already running");
-    __TACOPIE_THROW("tcp_server::start: tcp_server is already running");
-  }
+  if (is_running())
+    { __TACOPIE_THROW(warn, "tcp_server is already running"); }
 
   m_socket.bind(host, port);
   m_socket.listen(__TACOPIE_CONNECTION_QUEUE_SIZE);

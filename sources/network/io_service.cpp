@@ -43,10 +43,8 @@ io_service::io_service(void)
 {
   __TACOPIE_LOG(debug, "create io_service");
 
-  if (pipe(m_notif_pipe_fds) == -1) {
-    __TACOPIE_LOG(error, "pipe() failure");
-    __TACOPIE_THROW("io_service::io_service: pipe() failure");
-  }
+  if (pipe(m_notif_pipe_fds) == -1)
+    { __TACOPIE_THROW(error, "pipe() failure"); }
 
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
