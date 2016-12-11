@@ -14,10 +14,16 @@ include_directories(${PROJECT_SOURCE_DIR}/includes
 ###
 # executable
 ###
-add_executable(tacopie_example tacopie.cpp)
-target_link_libraries(tacopie_example tacopie)
+add_executable(tcp_server tcp_server.cpp)
+target_link_libraries(tcp_server tacopie)
 IF (LOGGING_ENABLED)
-set_target_properties(tacopie_example PROPERTIES COMPILE_DEFINITIONS "__TACOPIE_LOGGING_ENABLED=${LOGGING_ENABLED}")
+set_target_properties(tcp_server PROPERTIES COMPILE_DEFINITIONS "__TACOPIE_LOGGING_ENABLED=${LOGGING_ENABLED}")
+ENDIF (LOGGING_ENABLED)
+
+add_executable(tcp_client tcp_client.cpp)
+target_link_libraries(tcp_client tacopie)
+IF (LOGGING_ENABLED)
+set_target_properties(tcp_client PROPERTIES COMPILE_DEFINITIONS "__TACOPIE_LOGGING_ENABLED=${LOGGING_ENABLED}")
 ENDIF (LOGGING_ENABLED)
 
 add_executable(logger logger.cpp)

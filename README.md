@@ -19,6 +19,16 @@ s.start("127.0.0.1", 3001, [] (tacopie::tcp_client& client) -> bool {
 ```
 `tacopie::tcp_server` [full documentation](https://github.com/Cylix/tacopie/wiki/TCP-Server) and [detailed example](https://github.com/Cylix/tacopie/wiki/Examples#tcp-server).
 
+`tacopie::tcp_client`:
+```cpp
+tacopie::tcp_client client;
+client.connect("127.0.0.1", 3001);
+client.async_read({ 1024, [] (tacopie::tcp_client& client, const tacopie::tcp_client::read_result& res) {
+  client.async_write({ res.buffer, nullptr });
+} });
+```
+`tacopie::tcp_client` [full documentation](https://github.com/Cylix/tacopie/wiki/TCP-Client) and [detailed example](https://github.com/Cylix/tacopie/wiki/Examples#tcp-client).
+
 ## Wiki
 A [Wiki](https://github.com/Cylix/tacopie/wiki) is available and provides full documentation for the library as well as [installation explanations](https://github.com/Cylix/tacopie/wiki/Installation).
 

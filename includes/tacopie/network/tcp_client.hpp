@@ -39,7 +39,7 @@ public:
   //! returns whether the client is currently connected or not
   bool is_connected(void) const;
 
-public:
+private:
   //! Call disconnection handler
   void call_disconnection_handler(void);
 
