@@ -27,9 +27,6 @@ on_new_client(tacopie::tcp_client& client, const tacopie::tcp_client::read_resul
 
 int
 main(void) {
-  //! enable logging
-  tacopie::active_logger = std::unique_ptr<tacopie::logger>(new tacopie::logger(tacopie::logger::log_level::debug));
-
   tacopie::tcp_server s;
   s.start("127.0.0.1", 3001, [] (tacopie::tcp_client& client) -> bool {
     std::cout << "New client" << std::endl;

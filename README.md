@@ -5,15 +5,19 @@
 # Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie)
 `tacopie` is a TCP Client & Server C++11 library.
 
-**The library is still under development. No release is available yet.**
-
 ## Requirement
 `tacopie` has **no dependency**. Its only requirement is `C++11`.
 
-For now, the library is developed only for linux and mac platforms with no support for Windows environment.
-
 ## Example
-No example is available yet.
+`tacopie::tcp_server`:
+```cpp
+tacopie::tcp_server s;
+s.start("127.0.0.1", 3001, [] (tacopie::tcp_client& client) -> bool {
+  std::cout << "New client" << std::endl;
+  return true;
+});
+```
+`tacopie::tcp_server` [full documentation](https://github.com/Cylix/tacopie/wiki/TCP-Server) and [detailed example](https://github.com/Cylix/tacopie/wiki/Examples#tcp-server).
 
 ## Wiki
 A [Wiki](https://github.com/Cylix/tacopie/wiki) is available and provides full documentation for the library as well as [installation explanations](https://github.com/Cylix/tacopie/wiki/Installation).
