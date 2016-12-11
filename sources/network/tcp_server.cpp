@@ -2,6 +2,8 @@
 #include <tacopie/network/tcp_server.hpp>
 #include <tacopie/logger.hpp>
 
+#include <algorithm>
+
 namespace tacopie {
 
 //!
