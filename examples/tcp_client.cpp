@@ -17,7 +17,7 @@ on_new_message(tacopie::tcp_client& client, const tacopie::tcp_client::read_resu
   if (res.success) {
     std::cout << "Client recv data" << std::endl;
     client.async_write({ res.buffer, nullptr });
-    client.async_read({ 1024, &on_new_message });
+    client.async_read({ 1024, std::bind(&on_new_message, std::ref(client), std::placeholders::_1) });
   }
   else {
     std::cout << "Client disconnected" << std::endl;
@@ -29,7 +29,7 @@ int
 main(void) {
   tacopie::tcp_client client;
   client.connect("127.0.0.1", 3001);
-  client.async_read({ 1024, &on_new_message });
+  client.async_read({ 1024, std::bind(&on_new_message, std::ref(client), std::placeholders::_1) });
 
   signal(SIGINT, &signint_handler);
 

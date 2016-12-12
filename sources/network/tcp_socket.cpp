@@ -35,6 +35,22 @@ tcp_socket::tcp_socket(fd_t fd, const std::string& host, std::uint32_t port, typ
 { __TACOPIE_LOG(debug, "create tcp_socket"); }
 
 //!
+//! Move constructor
+//!
+
+tcp_socket::tcp_socket(tcp_socket&& socket)
+: m_fd(std::move(socket.m_fd))
+, m_host(socket.m_host)
+, m_port(socket.m_port)
+, m_type(socket.m_type)
+{
+  socket.m_fd = -1;
+  socket.m_type = type::UNKNOWN;
+
+  __TACOPIE_LOG(debug, "moved tcp_socket");
+}
+
+//!
 //! client socket operations
 //!
 

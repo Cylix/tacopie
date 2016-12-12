@@ -30,9 +30,12 @@ public:
   //! build socket from existing file descriptor
   tcp_socket(fd_t fd, const std::string& host, std::uint32_t port, type t);
 
+  //! move ctor
+  tcp_socket(tcp_socket&&);
+
   //! copy ctor & assignment operator
-  tcp_socket(const tcp_socket&) = default;
-  tcp_socket& operator=(const tcp_socket&) = default;
+  tcp_socket(const tcp_socket&) = delete;
+  tcp_socket& operator=(const tcp_socket&) = delete;
 
 public:
   //! comparison operator

@@ -54,7 +54,7 @@ tcp_server::stop(void) {
 
   std::lock_guard<std::mutex> lock(m_clients_mtx);
   for (auto& client : m_clients)
-    { client.disconnect(); }
+    { client->disconnect(); }
   m_clients.clear();
 
   __TACOPIE_LOG(info, "tcp_server stopped");
@@ -69,13 +69,16 @@ tcp_server::on_read_available(fd_t) {
   try {
     __TACOPIE_LOG(info, "tcp_server received new connection");
 
-    std::lock_guard<std::mutex> lock(m_clients_mtx);
-    m_clients.emplace_back(m_socket.accept());
-    m_clients.back().set_on_disconnection_handler(std::bind(&tcp_server::on_client_disconnected, this, std::cref(m_clients.back())));
+    auto client = std::make_shared<tcp_client>(m_socket.accept());
 
-    if (m_on_new_connection_callback && !m_on_new_connection_callback(m_clients.back())) {
+    if (!m_on_new_connection_callback || m_on_new_connection_callback(client)) {
+      __TACOPIE_LOG(info, "tcp_server accepted new connection");
+
+      client->set_on_disconnection_handler(std::bind(&tcp_server::on_client_disconnected, this, client));
+      m_clients.push_back(client);
+    }
+    else {
       __TACOPIE_LOG(info, "tcp_server dismissed new connection");
-      m_clients.pop_back();
     }
   }
   catch (const tacopie::tacopie_error&) {
@@ -89,7 +92,7 @@ tcp_server::on_read_available(fd_t) {
 //!
 
 void
-tcp_server::on_client_disconnected(const tcp_client& client) {
+tcp_server::on_client_disconnected(const std::shared_ptr<tcp_client>& client) {
   //! If we are not running the server
   //! Then it means that this function is called by tcp_client::disconnect() at the destruction of all clients
   if (not is_running())

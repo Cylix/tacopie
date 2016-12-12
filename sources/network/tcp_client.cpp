@@ -24,9 +24,9 @@ tcp_client::~tcp_client(void) {
 //! build socket from existing socket
 //!
 
-tcp_client::tcp_client(const tcp_socket& socket)
+tcp_client::tcp_client(tcp_socket&& socket)
 : m_io_service(get_default_io_service())
-, m_socket(socket)
+, m_socket(std::move(socket))
 , m_is_connected(true)
 , m_disconnection_handler(nullptr)
 {
@@ -92,7 +92,7 @@ tcp_client::on_read_available(fd_t) {
   }
 
   if (callback)
-    { callback(*this, result); }
+    { callback(result); }
 
   if (not result.success)
     { call_disconnection_handler(); }
@@ -115,7 +115,7 @@ tcp_client::on_write_available(fd_t) {
   }
 
   if (callback)
-    { callback(*this, result); }
+    { callback(result); }
 
   if (not result.success)
     { call_disconnection_handler(); }

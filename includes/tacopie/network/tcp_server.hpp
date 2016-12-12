@@ -5,6 +5,7 @@
 #include <list>
 #include <mutex>
 #include <string>
+#include <memory>
 
 #include <tacopie/network/io_service.hpp>
 #include <tacopie/network/tcp_client.hpp>
@@ -32,7 +33,7 @@ public:
 
 public:
   //! convenience typedef
-  typedef std::function<bool(tcp_client&)> on_new_connection_callback_t;
+  typedef std::function<bool(const std::shared_ptr<tcp_client>&)> on_new_connection_callback_t;
 
   //! start & stop the tcp server
   void start(const std::string& addr, std::uint32_t port, const on_new_connection_callback_t& callback = nullptr);
@@ -46,7 +47,7 @@ private:
   void on_read_available(fd_t fd);
 
   //! client disconnected
-  void on_client_disconnected(const tcp_client& client);
+  void on_client_disconnected(const std::shared_ptr<tcp_client>& client);
 
 private:
   //! store io_service
@@ -60,7 +61,7 @@ private:
   std::atomic_bool m_is_running;
 
   //! clients
-  std::list<tacopie::tcp_client> m_clients;
+  std::list<std::shared_ptr<tacopie::tcp_client>> m_clients;
 
   //! clients thread safety
   std::mutex m_clients_mtx;

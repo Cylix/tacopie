@@ -20,7 +20,7 @@ public:
 
   //! custom ctor
   //! build socket from existing socket
-  explicit tcp_client(const tcp_socket& socket);
+  explicit tcp_client(tcp_socket&& socket);
 
   //! copy ctor & assignment operator
   tcp_client(const tcp_client&) = delete;
@@ -58,8 +58,8 @@ public:
 
 public:
   //! async read & write completion callbacks
-  typedef std::function<void(tcp_client&, const read_result&)> async_read_callback_t;
-  typedef std::function<void(tcp_client&, const write_result&)> async_write_callback_t;
+  typedef std::function<void(const read_result&)> async_read_callback_t;
+  typedef std::function<void(const write_result&)> async_write_callback_t;
 
 public:
   //! structure to store read requests information
