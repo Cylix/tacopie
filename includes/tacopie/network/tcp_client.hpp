@@ -80,6 +80,11 @@ public:
   void async_write(const write_request& request);
 
 public:
+  //! socket getter
+  tacopie::tcp_socket& get_socket(void);
+  const tacopie::tcp_socket& get_socket(void) const;
+
+public:
   //! disconnection handle
   typedef std::function<void()> disconnection_handler_t;
 

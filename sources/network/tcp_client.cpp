@@ -208,6 +208,20 @@ tcp_client::async_write(const write_request& request) {
 }
 
 //!
+//! socket getter
+//!
+
+tacopie::tcp_socket&
+tcp_client::get_socket(void) {
+  return m_socket;
+}
+
+const tacopie::tcp_socket&
+tcp_client::get_socket(void) const {
+  return m_socket;
+}
+
+//!
 //! set on disconnection handler
 //!
 

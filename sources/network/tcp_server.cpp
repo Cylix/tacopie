@@ -117,6 +117,29 @@ tcp_server::is_running(void) const {
 }
 
 //!
+//! get socket
+//!
+
+tcp_socket&
+tcp_server::get_socket(void) {
+  return m_socket;
+}
+
+const tcp_socket&
+tcp_server::get_socket(void) const {
+  return m_socket;
+}
+
+//!
+//! get client sockets
+//!
+
+const std::list<std::shared_ptr<tacopie::tcp_client>>&
+tcp_server::get_clients(void) const {
+  return m_clients;
+}
+
+//!
 //! comparison operator
 //!
 bool

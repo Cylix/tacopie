@@ -42,6 +42,15 @@ public:
   //! returns whether the server is currently running or not
   bool is_running(void) const;
 
+public:
+  //! get socket
+  tcp_socket& get_socket(void);
+  const tcp_socket& get_socket(void) const;
+
+public:
+  //! get client sockets
+  const std::list<std::shared_ptr<tacopie::tcp_client>>& get_clients(void) const;
+
 private:
   //! io service read callback
   void on_read_available(fd_t fd);
