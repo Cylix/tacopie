@@ -14,7 +14,6 @@ public:
   //! type is used to prevent the used of client specific operations on a server socket (and vice-versa)
   //!
   //! UNKNOWN is used when socket type could not be determined for now
-  //! for example, when
   enum class type {
     CLIENT,
     SERVER,
