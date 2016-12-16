@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.1.0
+**Tag**: `1.1.0`.
+
+**Date**: Dec. 16th, 2016
+
+**Description**:
+
+Improvement of the public API:
+
+* Make server on_new_connection callback take shared_ptr as parameter instead of reference (provide more flexibility to the client app)
+* Provide access to tcp_socket in the public API of tcp_client and tcp_server
+
+
 ## v1.0.0
 **Tag**: `1.0.0`.
 
