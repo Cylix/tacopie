@@ -30,7 +30,8 @@ private:
 } //! tacopie
 
 //! macro for convenience
-#define __TACOPIE_THROW(level, what)  { \
-                                        __TACOPIE_LOG(level, (what)); \
-                                        throw tacopie::tacopie_error((what), __FILE__, __LINE__); \
-                                      }
+#define __TACOPIE_THROW(level, what)                          \
+  {                                                           \
+    __TACOPIE_LOG(level, (what));                             \
+    throw tacopie::tacopie_error((what), __FILE__, __LINE__); \
+  }

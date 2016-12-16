@@ -1,5 +1,5 @@
-#include <tacopie/utils/thread_pool.hpp>
 #include <tacopie/logger.hpp>
+#include <tacopie/utils/thread_pool.hpp>
 
 namespace tacopie {
 
@@ -10,12 +10,10 @@ namespace utils {
 //!
 
 thread_pool::thread_pool(std::size_t nb_threads)
-: m_should_stop(false)
-{
+: m_should_stop(false) {
   __TACOPIE_LOG(debug, "create thread_pool");
 
-  for (std::size_t i = 0; i < nb_threads; ++i)
-    { m_workers.push_back(std::thread(std::bind(&thread_pool::run, this))); }
+  for (std::size_t i = 0; i < nb_threads; ++i) { m_workers.push_back(std::thread(std::bind(&thread_pool::run, this))); }
 }
 
 thread_pool::~thread_pool(void) {
@@ -49,14 +47,12 @@ thread_pool::run(void) {
 
 void
 thread_pool::stop(void) {
-  if (not is_running())
-    { return ; }
+  if (not is_running()) { return; }
 
   m_should_stop = true;
   m_tasks_condvar.notify_all();
 
-  for (auto& worker : m_workers)
-    { worker.join(); }
+  for (auto& worker : m_workers) { worker.join(); }
 
   m_workers.clear();
 
@@ -83,8 +79,7 @@ thread_pool::fetch_task(void) {
 
   m_tasks_condvar.wait(lock, [&] { return m_should_stop or not m_tasks.empty(); });
 
-  if (m_tasks.empty())
-    { return nullptr; }
+  if (m_tasks.empty()) { return nullptr; }
 
   task_t task = std::move(m_tasks.front());
   m_tasks.pop();

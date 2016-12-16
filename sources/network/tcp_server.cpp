@@ -1,6 +1,6 @@
 #include <tacopie/error.hpp>
-#include <tacopie/network/tcp_server.hpp>
 #include <tacopie/logger.hpp>
+#include <tacopie/network/tcp_server.hpp>
 
 #include <algorithm>
 
@@ -13,8 +13,7 @@ namespace tacopie {
 tcp_server::tcp_server(void)
 : m_io_service(get_default_io_service())
 , m_is_running(false)
-, m_on_new_connection_callback(nullptr)
-{ __TACOPIE_LOG(debug, "create tcp_server"); }
+, m_on_new_connection_callback(nullptr) { __TACOPIE_LOG(debug, "create tcp_server"); }
 
 tcp_server::~tcp_server(void) {
   __TACOPIE_LOG(debug, "destroy tcp_server");
@@ -27,8 +26,7 @@ tcp_server::~tcp_server(void) {
 
 void
 tcp_server::start(const std::string& host, std::uint32_t port, const on_new_connection_callback_t& callback) {
-  if (is_running())
-    { __TACOPIE_THROW(warn, "tcp_server is already running"); }
+  if (is_running()) { __TACOPIE_THROW(warn, "tcp_server is already running"); }
 
   m_socket.bind(host, port);
   m_socket.listen(__TACOPIE_CONNECTION_QUEUE_SIZE);
@@ -44,8 +42,7 @@ tcp_server::start(const std::string& host, std::uint32_t port, const on_new_conn
 
 void
 tcp_server::stop(void) {
-  if (not is_running())
-    { return ; }
+  if (not is_running()) { return; }
 
   m_is_running = false;
 
@@ -53,8 +50,7 @@ tcp_server::stop(void) {
   m_socket.close();
 
   std::lock_guard<std::mutex> lock(m_clients_mtx);
-  for (auto& client : m_clients)
-    { client->disconnect(); }
+  for (auto& client : m_clients) { client->disconnect(); }
   m_clients.clear();
 
   __TACOPIE_LOG(info, "tcp_server stopped");
@@ -95,16 +91,14 @@ void
 tcp_server::on_client_disconnected(const std::shared_ptr<tcp_client>& client) {
   //! If we are not running the server
   //! Then it means that this function is called by tcp_client::disconnect() at the destruction of all clients
-  if (not is_running())
-    { return ; }
+  if (not is_running()) { return; }
 
   __TACOPIE_LOG(debug, "handle server's client disconnection");
 
   std::lock_guard<std::mutex> lock(m_clients_mtx);
   auto it = std::find(m_clients.begin(), m_clients.end(), client);
 
-  if (it != m_clients.end())
-    { m_clients.erase(it); }
+  if (it != m_clients.end()) { m_clients.erase(it); }
 }
 
 //!

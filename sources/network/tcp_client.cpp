@@ -1,6 +1,6 @@
 #include <tacopie/error.hpp>
-#include <tacopie/network/tcp_client.hpp>
 #include <tacopie/logger.hpp>
+#include <tacopie/network/tcp_client.hpp>
 
 namespace tacopie {
 
@@ -11,8 +11,7 @@ namespace tacopie {
 tcp_client::tcp_client(void)
 : m_io_service(get_default_io_service())
 , m_is_connected(false)
-, m_disconnection_handler(nullptr)
-{ __TACOPIE_LOG(debug, "create tcp_client"); }
+, m_disconnection_handler(nullptr) { __TACOPIE_LOG(debug, "create tcp_client"); }
 
 tcp_client::~tcp_client(void) {
   __TACOPIE_LOG(debug, "destroy tcp_client");
@@ -28,8 +27,7 @@ tcp_client::tcp_client(tcp_socket&& socket)
 : m_io_service(get_default_io_service())
 , m_socket(std::move(socket))
 , m_is_connected(true)
-, m_disconnection_handler(nullptr)
-{
+, m_disconnection_handler(nullptr) {
   __TACOPIE_LOG(debug, "create tcp_client");
   m_io_service->track(m_socket);
 }
@@ -40,8 +38,7 @@ tcp_client::tcp_client(tcp_socket&& socket)
 
 void
 tcp_client::connect(const std::string& host, std::uint32_t port) {
-  if (is_connected())
-    { __TACOPIE_THROW(warn, "tcp_client is already connected"); }
+  if (is_connected()) { __TACOPIE_THROW(warn, "tcp_client is already connected"); }
 
   m_socket.connect(host, port);
   m_io_service->track(m_socket);
@@ -53,8 +50,7 @@ tcp_client::connect(const std::string& host, std::uint32_t port) {
 
 void
 tcp_client::disconnect(void) {
-  if (not is_connected())
-    { return ; }
+  if (not is_connected()) { return; }
 
   m_is_connected = false;
 
@@ -91,11 +87,9 @@ tcp_client::on_read_available(fd_t) {
     disconnect();
   }
 
-  if (callback)
-    { callback(result); }
+  if (callback) { callback(result); }
 
-  if (not result.success)
-    { call_disconnection_handler(); }
+  if (not result.success) { call_disconnection_handler(); }
 }
 
 //!
@@ -114,11 +108,9 @@ tcp_client::on_write_available(fd_t) {
     disconnect();
   }
 
-  if (callback)
-    { callback(result); }
+  if (callback) { callback(result); }
 
-  if (not result.success)
-    { call_disconnection_handler(); }
+  if (not result.success) { call_disconnection_handler(); }
 }
 
 //!
@@ -129,14 +121,13 @@ tcp_client::async_read_callback_t
 tcp_client::process_read(read_result& result) {
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
-  if (m_read_requests.empty())
-    { return nullptr; }
+  if (m_read_requests.empty()) { return nullptr; }
 
   const auto& request = m_read_requests.front();
-  auto callback = request.async_read_callback;
+  auto callback       = request.async_read_callback;
 
   try {
-    result.buffer = m_socket.recv(request.size);
+    result.buffer  = m_socket.recv(request.size);
     result.success = true;
   }
   catch (const tacopie::tacopie_error&) {
@@ -145,8 +136,7 @@ tcp_client::process_read(read_result& result) {
 
   m_read_requests.pop();
 
-  if (m_read_requests.empty())
-    { m_io_service->set_rd_callback(m_socket, nullptr); }
+  if (m_read_requests.empty()) { m_io_service->set_rd_callback(m_socket, nullptr); }
 
   return callback;
 }
@@ -155,14 +145,13 @@ tcp_client::async_write_callback_t
 tcp_client::process_write(write_result& result) {
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 
-  if (m_write_requests.empty())
-    { return nullptr; }
+  if (m_write_requests.empty()) { return nullptr; }
 
   const auto& request = m_write_requests.front();
-  auto callback = request.async_write_callback;
+  auto callback       = request.async_write_callback;
 
   try {
-    result.size = m_socket.send(request.buffer, request.buffer.size());
+    result.size    = m_socket.send(request.buffer, request.buffer.size());
     result.success = true;
   }
   catch (const tacopie::tacopie_error&) {
@@ -171,8 +160,7 @@ tcp_client::process_write(write_result& result) {
 
   m_write_requests.pop();
 
-  if (m_write_requests.empty())
-    { m_io_service->set_wr_callback(m_socket, nullptr); }
+  if (m_write_requests.empty()) { m_io_service->set_wr_callback(m_socket, nullptr); }
 
   return callback;
 }
@@ -183,8 +171,7 @@ tcp_client::process_write(write_result& result) {
 
 void
 tcp_client::async_read(const read_request& request) {
-  if (not is_connected())
-    { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
+  if (not is_connected()) { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
 
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
@@ -196,8 +183,7 @@ tcp_client::async_read(const read_request& request) {
 
 void
 tcp_client::async_write(const write_request& request) {
-  if (not is_connected())
-    { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
+  if (not is_connected()) { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
 
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 

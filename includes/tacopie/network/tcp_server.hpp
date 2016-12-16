@@ -3,9 +3,9 @@
 #include <atomic>
 #include <cstdint>
 #include <list>
+#include <memory>
 #include <mutex>
 #include <string>
-#include <memory>
 
 #include <tacopie/network/io_service.hpp>
 #include <tacopie/network/tcp_client.hpp>

@@ -9,8 +9,7 @@ namespace tacopie {
 tacopie_error::tacopie_error(const std::string& what, const std::string& file, std::size_t line)
 : std::runtime_error(what)
 , m_file(file)
-, m_line(line)
-{}
+, m_line(line) {}
 
 //!
 //! get location of the error
