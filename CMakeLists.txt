@@ -28,8 +28,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
 # variables
 ###
 set(DEPS_FOLDER ${PROJECT_SOURCE_DIR}/deps/build)
-set(GTEST_INCLUDES ${DEPS_FOLDER}/gtest/include)
-set(GTEST_LIBS ${DEPS_FOLDER}/gtest/lib)
+IF (NOT GTEST_INCLUDES)
+  set(GTEST_INCLUDES ${DEPS_FOLDER}/gtest/include)
+ENDIF (NOT GTEST_INCLUDES)
+IF (NOT GTEST_LIBS)
+  set(GTEST_LIBS ${DEPS_FOLDER}/gtest/lib)
+ENDIF (NOT GTEST_LIBS)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
