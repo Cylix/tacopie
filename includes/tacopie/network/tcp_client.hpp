@@ -56,7 +56,7 @@ public:
 public:
   //! start & stop the tcp client
   void connect(const std::string& addr, std::uint32_t port);
-  void disconnect(void);
+  void disconnect(bool wait_for_removal = false);
 
   //! returns whether the client is currently connected or not
   bool is_connected(void) const;

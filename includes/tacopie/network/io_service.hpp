@@ -66,6 +66,10 @@ public:
   //! force poll to wake-up
   void wake_up(void);
 
+  //! wait until the socket has been effectively removed
+  //! basically wait until all pending callbacks are executed
+  void wait_for_removal(const tcp_socket& socket);
+
 private:
   //! struct tracked_socket
   //! contains information about what a current socket is tracking
@@ -120,6 +124,9 @@ private:
 
   //! data structure given to poll
   std::vector<struct pollfd> m_poll_fds_info;
+
+  //! condition variable to wait on removal
+  std::condition_variable m_wait_for_removal_condvar;
 
   //! fd associated to the pipe used to wake up the poll call
   int m_notif_pipe_fds[2];

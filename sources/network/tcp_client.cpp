@@ -37,7 +37,7 @@ tcp_client::tcp_client(void)
 
 tcp_client::~tcp_client(void) {
   __TACOPIE_LOG(debug, "destroy tcp_client");
-  disconnect();
+  disconnect(true);
 }
 
 //!
@@ -71,12 +71,13 @@ tcp_client::connect(const std::string& host, std::uint32_t port) {
 }
 
 void
-tcp_client::disconnect(void) {
+tcp_client::disconnect(bool wait_for_removal) {
   if (not is_connected()) { return; }
 
   m_is_connected = false;
 
   m_io_service->untrack(m_socket);
+  if (wait_for_removal) { m_io_service->wait_for_removal(m_socket); }
   m_socket.close();
 
   __TACOPIE_LOG(info, "tcp_client disconnected");
@@ -193,26 +194,28 @@ tcp_client::process_write(write_result& result) {
 
 void
 tcp_client::async_read(const read_request& request) {
-  if (not is_connected()) { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
-
   std::lock_guard<std::mutex> lock(m_read_requests_mtx);
 
-  __TACOPIE_LOG(info, "store async_read request");
-
-  m_read_requests.push(request);
-  m_io_service->set_rd_callback(m_socket, std::bind(&tcp_client::on_read_available, this, std::placeholders::_1));
+  if (is_connected()) {
+    m_io_service->set_rd_callback(m_socket, std::bind(&tcp_client::on_read_available, this, std::placeholders::_1));
+    m_read_requests.push(request);
+  }
+  else {
+    __TACOPIE_THROW(warn, "tcp_client is disconnected");
+  }
 }
 
 void
 tcp_client::async_write(const write_request& request) {
-  if (not is_connected()) { __TACOPIE_THROW(warn, "tcp_client is disconnected"); }
-
   std::lock_guard<std::mutex> lock(m_write_requests_mtx);
 
-  __TACOPIE_LOG(info, "store async_write request");
-
-  m_write_requests.push(request);
-  m_io_service->set_wr_callback(m_socket, std::bind(&tcp_client::on_write_available, this, std::placeholders::_1));
+  if (is_connected()) {
+    m_io_service->set_wr_callback(m_socket, std::bind(&tcp_client::on_write_available, this, std::placeholders::_1));
+    m_write_requests.push(request);
+  }
+  else {
+    __TACOPIE_THROW(warn, "tcp_client is disconnected");
+  }
 }
 
 //!

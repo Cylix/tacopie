@@ -163,6 +163,7 @@ io_service::process_rd_event(const struct pollfd& poll_result, tracked_socket& s
     if (socket.marked_for_untrack && not socket.is_executing_wr_callback) {
       __TACOPIE_LOG(debug, "untrack socket");
       m_tracked_sockets.erase(it);
+      m_wait_for_removal_condvar.notify_all();
     }
   };
 }
@@ -191,6 +192,7 @@ io_service::process_wr_event(const struct pollfd& poll_result, tracked_socket& s
     if (socket.marked_for_untrack && not socket.is_executing_rd_callback) {
       __TACOPIE_LOG(debug, "untrack socket");
       m_tracked_sockets.erase(it);
+      m_wait_for_removal_condvar.notify_all();
     }
   };
 }
@@ -238,43 +240,46 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
 
   __TACOPIE_LOG(debug, "track new socket");
 
-  auto& track_info              = m_tracked_sockets[socket.get_fd()];
-  track_info.rd_callback        = rd_callback;
-  track_info.wr_callback        = wr_callback;
-  track_info.marked_for_untrack = false;
+  auto& track_info       = m_tracked_sockets[socket.get_fd()];
+  track_info.rd_callback = rd_callback;
+  track_info.wr_callback = wr_callback;
+
+  if (rd_callback or wr_callback) { track_info.marked_for_untrack = false; }
 
   wake_up();
 }
 
 void
 io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& event_callback) {
-  std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
+  std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
   __TACOPIE_LOG(debug, "update read socket tracking callback");
 
-  auto& track_info              = m_tracked_sockets[socket.get_fd()];
-  track_info.rd_callback        = event_callback;
-  track_info.marked_for_untrack = false;
+  auto& track_info       = m_tracked_sockets[socket.get_fd()];
+  track_info.rd_callback = event_callback;
+
+  if (event_callback) { track_info.marked_for_untrack = false; }
 
   wake_up();
 }
 
 void
 io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& event_callback) {
-  std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
+  std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
   __TACOPIE_LOG(debug, "update write socket tracking callback");
 
-  auto& track_info              = m_tracked_sockets[socket.get_fd()];
-  track_info.wr_callback        = event_callback;
-  track_info.marked_for_untrack = false;
+  auto& track_info       = m_tracked_sockets[socket.get_fd()];
+  track_info.wr_callback = event_callback;
+
+  if (event_callback) { track_info.marked_for_untrack = false; }
 
   wake_up();
 }
 
 void
 io_service::untrack(const tcp_socket& socket) {
-  std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
+  std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
   auto it = m_tracked_sockets.find(socket.get_fd());
 
@@ -287,6 +292,7 @@ io_service::untrack(const tcp_socket& socket) {
   else {
     __TACOPIE_LOG(debug, "untrack socket");
     m_tracked_sockets.erase(it);
+    m_wait_for_removal_condvar.notify_all();
   }
 
   wake_up();
@@ -300,6 +306,20 @@ void
 io_service::wake_up(void) {
   __TACOPIE_LOG(debug, "wake up poll");
   (void) write(m_notif_pipe_fds[1], "a", 1);
+}
+
+//!
+//! wait until the socket has been effectively removed
+//! basically wait until all pending callbacks are executed
+//!
+
+void
+io_service::wait_for_removal(const tcp_socket& socket) {
+  std::unique_lock<std::mutex> lock(m_tracked_sockets_mtx);
+
+  m_wait_for_removal_condvar.wait(lock, [&]() {
+    return m_tracked_sockets.find(socket.get_fd()) == m_tracked_sockets.end();
+  });
 }
 
 } //! tacopie
