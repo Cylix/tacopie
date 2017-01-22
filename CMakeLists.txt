@@ -52,12 +52,15 @@ link_directories(${GTEST_LIBS})
 ###
 # sources
 ###
-set(SRC_DIRS "sources" "sources/network" "sources/utils")
+set(SRC_DIRS "sources" "sources/network" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
 foreach(dir ${SRC_DIRS})
-  # get directory sources
+  # get directory sources and headers
   file(GLOB s_${dir} "${dir}/*.cpp")
+  file(GLOB h_${dir} "${dir}/*.hpp")
+  file(GLOB i_${dir} "${dir}/*.ipp")
+
   # set sources
-  set(SOURCES ${SOURCES} ${s_${dir}})
+  set(SOURCES ${SOURCES} ${s_${dir}} ${h_${dir}} ${i_${dir}})
 endforeach()
 
 
