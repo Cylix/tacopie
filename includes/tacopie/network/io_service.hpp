@@ -31,7 +31,11 @@
 #include <unordered_map>
 #include <vector>
 
+#ifdef _WIN32
+#include <Winsock2.h>
+#else
 #include <poll.h>
+#endif /* _WIN32 */
 
 #include <tacopie/network/tcp_socket.hpp>
 #include <tacopie/utils/thread_pool.hpp>
@@ -129,7 +133,13 @@ private:
   std::condition_variable m_wait_for_removal_condvar;
 
   //! fd associated to the pipe used to wake up the poll call
-  int m_notif_pipe_fds[2];
+  self_pipe_t m_notif_pipe_fds[2];
+
+#ifdef _WIN32
+private:
+	//! keep track of the number of instances under windows to now when to call WSA(init-cleanup).
+	static unsigned int m_nb_instances;
+#endif /* _WIN32 */
 };
 
 //! default io_service getter & setter

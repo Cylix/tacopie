@@ -25,11 +25,17 @@
 #include <tacopie/network/tcp_server.hpp>
 
 #include <cstring>
+
+#ifdef _WIN32
+#include <Winsock2.h>
+#include <Ws2tcpip.h>
+#else
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#endif /* _WIN32 */
 
 namespace tacopie {
 
@@ -38,7 +44,7 @@ namespace tacopie {
 //!
 
 tcp_socket::tcp_socket(void)
-: m_fd(-1)
+: m_fd(__TACOPIE_INVALID_FD)
 , m_host("")
 , m_port(0)
 , m_type(type::UNKNOWN) { __TACOPIE_LOG(debug, "create tcp_socket"); }
@@ -63,7 +69,7 @@ tcp_socket::tcp_socket(tcp_socket&& socket)
 , m_host(socket.m_host)
 , m_port(socket.m_port)
 , m_type(socket.m_type) {
-  socket.m_fd   = -1;
+  socket.m_fd   = __TACOPIE_INVALID_FD;
   socket.m_type = type::UNKNOWN;
 
   __TACOPIE_LOG(debug, "moved tcp_socket");
@@ -80,7 +86,7 @@ tcp_socket::recv(std::size_t size_to_read) {
 
   std::vector<char> data(size_to_read, 0);
 
-  ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
+  std::size_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
 
   if (rd_size == -1) { __TACOPIE_THROW(error, "recv() failure"); }
 
@@ -96,7 +102,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  ssize_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
+  std::size_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
 
   if (wr_size == -1) { __TACOPIE_THROW(error, "send() failure"); }
 
@@ -108,15 +114,35 @@ tcp_socket::connect(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
+#ifdef _WIN32
+  struct addrinfo *result = nullptr;
+  struct addrinfo hints;
+
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_family = AF_INET;
+
+  if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0)
+    { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
+#else
   struct hostent* addr = gethostbyname(host.c_str());
 
-  if (not addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+  if (!addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+#endif /* _WIN32 */
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
+#ifdef _WIN32
+  server_addr.sin_addr = ((struct sockaddr_in *)(result->ai_addr))->sin_addr;
+#else
   std::memcpy(&server_addr.sin_addr.s_addr, addr->h_addr, addr->h_length);
+#endif
   server_addr.sin_port   = htons(port);
   server_addr.sin_family = AF_INET;
+
+#ifdef _WIN32
+  freeaddrinfo(result);
+#endif
 
   if (::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "connect() failure"); }
 }
@@ -130,15 +156,32 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
+#ifdef _WIN32
+  struct addrinfo *result = nullptr;
+
+  if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0)
+  {
+	  __TACOPIE_THROW(error, "getaddrinfo() failure");
+  }
+#else
   struct hostent* addr = gethostbyname(host.c_str());
 
-  if (not addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+  if (!addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+#endif /* _WIN32 */
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
+#ifdef _WIN32
+  server_addr.sin_addr = ((struct sockaddr_in *)(result->ai_addr))->sin_addr;
+#else
   std::memcpy(&server_addr.sin_addr.s_addr, addr->h_addr, addr->h_length);
+#endif
   server_addr.sin_port   = htons(port);
   server_addr.sin_family = AF_INET;
+
+#ifdef _WIN32
+  freeaddrinfo(result);
+#endif
 
   if (::bind(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
 }
@@ -161,7 +204,7 @@ tcp_socket::accept(void) {
 
   fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
 
-  if (client_fd == -1) { __TACOPIE_THROW(error, "accept() failure"); }
+  if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
 
   //! TODO: init with real client addr
   return {client_fd, "", client_info.sin_port, type::CLIENT};
@@ -173,12 +216,16 @@ tcp_socket::accept(void) {
 
 void
 tcp_socket::close(void) {
-  if (m_fd != -1) {
+  if (m_fd != __TACOPIE_INVALID_FD) {
     __TACOPIE_LOG(debug, "close socket");
+#ifdef _WIN32
+	closesocket(m_fd);
+#else
     ::close(m_fd);
+#endif /* _WIN32 */
   }
 
-  m_fd   = -1;
+  m_fd   = __TACOPIE_INVALID_FD;
   m_type = type::UNKNOWN;
 }
 
@@ -188,13 +235,13 @@ tcp_socket::close(void) {
 
 void
 tcp_socket::create_socket_if_necessary(void) {
-  if (m_fd != -1) { return; }
+  if (m_fd != __TACOPIE_INVALID_FD) { return; }
 
   //! new TCP socket
   m_fd   = socket(AF_INET, SOCK_STREAM, 0);
   m_type = type::UNKNOWN;
 
-  if (m_fd == -1) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }
+  if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }
 }
 
 //!
@@ -204,7 +251,7 @@ tcp_socket::create_socket_if_necessary(void) {
 
 void
 tcp_socket::check_or_set_type(type t) {
-  if (m_type != type::UNKNOWN and m_type != t) { __TACOPIE_THROW(error, "trying to perform invalid operation on socket"); }
+  if (m_type != type::UNKNOWN && m_type != t) { __TACOPIE_THROW(error, "trying to perform invalid operation on socket"); }
 
   m_type = t;
 }
@@ -256,12 +303,12 @@ tcp_socket::get_fd(void) const {
 //!
 bool
 tcp_socket::operator==(const tcp_socket& rhs) const {
-  return m_fd == rhs.m_fd and m_type == rhs.m_type;
+  return m_fd == rhs.m_fd && m_type == rhs.m_type;
 }
 
 bool
 tcp_socket::operator!=(const tcp_socket& rhs) const {
-  return not operator==(rhs);
+  return !operator==(rhs);
 }
 
 } //! tacopie
