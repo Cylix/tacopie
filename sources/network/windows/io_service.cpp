@@ -59,8 +59,7 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 
 io_service::io_service(void)
 : m_should_stop(false)
-, m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS)
-, m_notif_pipe_fds{__TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD} {
+, m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS) {
   __TACOPIE_LOG(debug, "create io_service");
 
   //! Windows netword DLL init
@@ -73,25 +72,6 @@ io_service::io_service(void)
     ++m_nb_instances;
   }
 
-  struct sockaddr_in inaddr;
-  struct sockaddr addr;
-  SOCKET server = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  memset(&inaddr, 0, sizeof(inaddr));
-  memset(&addr, 0, sizeof(addr));
-  inaddr.sin_family      = AF_INET;
-  inaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-  inaddr.sin_port        = 0;
-  int yes                = 1;
-  setsockopt(server, SOL_SOCKET, SO_REUSEADDR, (char*) &yes, sizeof(yes));
-  bind(server, (struct sockaddr*) &inaddr, sizeof(inaddr));
-  listen(server, 1);
-  int len = sizeof(inaddr);
-  getsockname(server, &addr, &len);
-  m_notif_pipe_fds[0] = ::socket(AF_INET, SOCK_STREAM, 0);
-  connect(m_notif_pipe_fds[0], &addr, len);
-  m_notif_pipe_fds[1] = accept(server, 0, 0);
-  closesocket(server);
-
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
@@ -101,12 +81,9 @@ io_service::~io_service(void) {
 
   m_should_stop = true;
 
-  wake_up();
+  m_notifier.notify();
   m_poll_worker.join();
   m_callback_workers.stop();
-
-  closesocket(m_notif_pipe_fds[0]);
-  closesocket(m_notif_pipe_fds[1]);
 
   if (!--m_nb_instances) { WSACleanup(); }
 }
@@ -143,9 +120,9 @@ io_service::process_events(void) {
   __TACOPIE_LOG(debug, "processing events");
 
   for (const auto& poll_result : m_poll_fds_info) {
-    if (poll_result.fd == m_notif_pipe_fds[0] && poll_result.revents & POLLIN) {
-      process_wake_up_event();
-      continue;
+    if (poll_result.fd == m_notifier.get_read_fd() && poll_result.revents & POLLIN) {
+		m_notifier.notify();
+		continue;
     }
 
     auto it = m_tracked_sockets.find(poll_result.fd);
@@ -158,14 +135,6 @@ io_service::process_events(void) {
 
     if (poll_result.revents & POLLOUT && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
   }
-}
-
-void
-io_service::process_wake_up_event(void) {
-  __TACOPIE_LOG(debug, "processing wake_up event");
-
-  char buf[1024];
-  (void) recv(m_notif_pipe_fds[0], buf, 1024, 0);
 }
 
 void
@@ -256,7 +225,7 @@ io_service::init_poll_fds_info(void) {
     if (poll_fd_info.events) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
   }
 
-  m_poll_fds_info.push_back({m_notif_pipe_fds[0], POLLIN, 0});
+  m_poll_fds_info.push_back({m_notifier.get_read_fd(), POLLIN, 0});
 }
 
 //!
@@ -275,7 +244,7 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
 
   if (rd_callback || wr_callback) { track_info.marked_for_untrack = false; }
 
-  wake_up();
+  m_notifier.notify();
 }
 
 void
@@ -289,7 +258,7 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
 
   if (event_callback) { track_info.marked_for_untrack = false; }
 
-  wake_up();
+  m_notifier.notify();
 }
 
 void
@@ -303,7 +272,7 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
 
   if (event_callback) { track_info.marked_for_untrack = false; }
 
-  wake_up();
+  m_notifier.notify();
 }
 
 void
@@ -324,17 +293,7 @@ io_service::untrack(const tcp_socket& socket) {
     m_wait_for_removal_condvar.notify_all();
   }
 
-  wake_up();
-}
-
-//!
-//! force poll to wake-up
-//!
-
-void
-io_service::wake_up(void) {
-  __TACOPIE_LOG(debug, "wake up poll");
-  (void) send(m_notif_pipe_fds[1], "a", 1, 0);
+  m_notifier.notify();
 }
 
 //!

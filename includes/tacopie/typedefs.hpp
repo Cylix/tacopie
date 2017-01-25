@@ -37,4 +37,10 @@ typedef int fd_t;
 #define __TACOPIE_INVALID_FD -1
 #endif /* _WIN32 */
 
+//! ssize_t
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 } //! tacopie
