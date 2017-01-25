@@ -82,6 +82,13 @@ link_directories(${GTEST_LIBS})
 # sources
 ###
 set(SRC_DIRS "sources" "sources/network" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
+
+IF (WIN32)
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/windows")
+ELSE ()
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/unix")
+ENDIF (WIN32)
+
 foreach(dir ${SRC_DIRS})
   # get directory sources and headers
   file(GLOB s_${dir} "${dir}/*.cpp")

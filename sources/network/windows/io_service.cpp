@@ -25,20 +25,7 @@
 #include <tacopie/network/io_service.hpp>
 
 #include <fcntl.h>
-
-#ifdef _WIN32
 #include <io.h>
-#else
-#include <unistd.h>
-#endif /* _WIN32 */
-
-#ifdef _WIN32
-std::function<int(LPWSAPOLLFD, ULONG, INT)> poll_fct = &WSAPoll;
-
-unsigned int tacopie::io_service::m_nb_instances = 0;
-#else
-std::function<int(struct pollfd[], nfds_t, int)> poll_fct = &::poll;
-#endif  /* _WIN32 */
 
 namespace tacopie {
 
@@ -73,18 +60,17 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 io_service::io_service(void)
 : m_should_stop(false)
 , m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS)
-, m_notif_pipe_fds{ __TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD } {
+, m_notif_pipe_fds{__TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD} {
   __TACOPIE_LOG(debug, "create io_service");
 
-#ifdef _WIN32
   //! Windows netword DLL init
   if (!m_nb_instances) {
-	WORD version = MAKEWORD(2, 2);
-	WSADATA data;
+    WORD version = MAKEWORD(2, 2);
+    WSADATA data;
 
-	if (WSAStartup(version, &data) != 0) { __TACOPIE_THROW(error, "WSAStartup() failure"); }
+    if (WSAStartup(version, &data) != 0) { __TACOPIE_THROW(error, "WSAStartup() failure"); }
 
-	++m_nb_instances;
+    ++m_nb_instances;
   }
 
   struct sockaddr_in inaddr;
@@ -92,12 +78,12 @@ io_service::io_service(void)
   SOCKET server = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   memset(&inaddr, 0, sizeof(inaddr));
   memset(&addr, 0, sizeof(addr));
-  inaddr.sin_family = AF_INET;
+  inaddr.sin_family      = AF_INET;
   inaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-  inaddr.sin_port = 0;
-  int yes = 1;
-  setsockopt(server, SOL_SOCKET, SO_REUSEADDR, (char*)&yes, sizeof(yes));
-  bind(server, (struct sockaddr *)&inaddr, sizeof(inaddr));
+  inaddr.sin_port        = 0;
+  int yes                = 1;
+  setsockopt(server, SOL_SOCKET, SO_REUSEADDR, (char*) &yes, sizeof(yes));
+  bind(server, (struct sockaddr*) &inaddr, sizeof(inaddr));
   listen(server, 1);
   int len = sizeof(inaddr);
   getsockname(server, &addr, &len);
@@ -105,9 +91,6 @@ io_service::io_service(void)
   connect(m_notif_pipe_fds[0], &addr, len);
   m_notif_pipe_fds[1] = accept(server, 0, 0);
   closesocket(server);
-#else
-  if (pipe(m_notif_pipe_fds) == -1) { __TACOPIE_THROW(error, "pipe() failure"); }
-#endif /* _WIN32 */
 
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
@@ -122,16 +105,10 @@ io_service::~io_service(void) {
   m_poll_worker.join();
   m_callback_workers.stop();
 
-#ifdef _WIN32
   closesocket(m_notif_pipe_fds[0]);
   closesocket(m_notif_pipe_fds[1]);
 
-  if (!--m_nb_instances)
-    { WSACleanup(); }
-#else
-  close(m_notif_pipe_fds[0]);
-  close(m_notif_pipe_fds[1]);
-#endif
+  if (!--m_nb_instances) { WSACleanup(); }
 }
 
 //!
@@ -146,7 +123,7 @@ io_service::poll(void) {
     init_poll_fds_info();
 
     __TACOPIE_LOG(debug, "polling fds");
-    if (poll_fct(const_cast<struct pollfd*>(m_poll_fds_info.data()), m_poll_fds_info.size(), -1) > 0) { process_events(); }
+    if (WSAPoll(const_cast<struct pollfd*>(m_poll_fds_info.data()), m_poll_fds_info.size(), -1) > 0) { process_events(); }
     else {
       __TACOPIE_LOG(debug, "poll woke up, but nothing to process");
     }
@@ -188,11 +165,7 @@ io_service::process_wake_up_event(void) {
   __TACOPIE_LOG(debug, "processing wake_up event");
 
   char buf[1024];
-#ifdef _WIN32
   (void) recv(m_notif_pipe_fds[0], buf, 1024, 0);
-#else
-  (void) read(m_notif_pipe_fds[0], buf, 1024);
-#endif /* _WIN32 */
 }
 
 void
@@ -361,11 +334,7 @@ io_service::untrack(const tcp_socket& socket) {
 void
 io_service::wake_up(void) {
   __TACOPIE_LOG(debug, "wake up poll");
-#ifdef _WIN32
   (void) send(m_notif_pipe_fds[1], "a", 1, 0);
-#else
-  (void) write(m_notif_pipe_fds[1], "a", 1);
-#endif /* _WIN32 */
 }
 
 //!

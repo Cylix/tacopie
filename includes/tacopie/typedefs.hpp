@@ -37,6 +37,4 @@ typedef int fd_t;
 #define __TACOPIE_INVALID_FD -1
 #endif /* _WIN32 */
 
-typedef fd_t self_pipe_t;
-
 } //! tacopie
