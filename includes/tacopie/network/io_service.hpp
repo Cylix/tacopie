@@ -124,7 +124,7 @@ private:
   std::mutex m_tracked_sockets_mtx;
 
   //! data structure given to poll
-  std::vector<WSAPOLLFD> m_poll_fds_info;
+  std::vector<struct pollfd> m_poll_fds_info;
 
   //! condition variable to wait on removal
   std::condition_variable m_wait_for_removal_condvar;

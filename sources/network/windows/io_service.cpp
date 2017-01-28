@@ -132,8 +132,7 @@ io_service::process_events(void) {
     if (it == m_tracked_sockets.end()) { continue; }
 
     auto& socket = it->second;
-
-    if (poll_result.revents & POLLRDNORM && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
+	if (poll_result.revents & (POLLRDNORM | POLLHUP) && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
 
     if (poll_result.revents & POLLWRNORM && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
   }
