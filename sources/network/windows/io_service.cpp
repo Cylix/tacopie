@@ -29,6 +29,8 @@
 
 namespace tacopie {
 
+unsigned int io_service::m_nb_instances = 0;
+
 //!
 //! default io_service getter & setter
 //!
@@ -100,7 +102,7 @@ io_service::poll(void) {
     init_poll_fds_info();
 
     __TACOPIE_LOG(debug, "polling fds");
-    if (WSAPoll(const_cast<struct pollfd*>(m_poll_fds_info.data()), m_poll_fds_info.size(), -1) > 0) { process_events(); }
+    if (WSAPoll(const_cast<WSAPOLLFD*>(m_poll_fds_info.data()), m_poll_fds_info.size(), 100) > 0) { process_events(); }
     else {
       __TACOPIE_LOG(debug, "poll woke up, but nothing to process");
     }
@@ -120,7 +122,7 @@ io_service::process_events(void) {
   __TACOPIE_LOG(debug, "processing events");
 
   for (const auto& poll_result : m_poll_fds_info) {
-    if (poll_result.fd == m_notifier.get_read_fd() && poll_result.revents & POLLIN) {
+    if (poll_result.fd == m_notifier.get_read_fd() && poll_result.revents & POLLRDNORM) {
 		m_notifier.notify();
 		continue;
     }
@@ -131,9 +133,9 @@ io_service::process_events(void) {
 
     auto& socket = it->second;
 
-    if (poll_result.revents & POLLIN && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
+    if (poll_result.revents & POLLRDNORM && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
 
-    if (poll_result.revents & POLLOUT && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
+    if (poll_result.revents & POLLWRNORM && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
   }
 }
 
@@ -218,14 +220,14 @@ io_service::init_poll_fds_info(void) {
     poll_fd_info.events  = 0;
     poll_fd_info.revents = 0;
 
-    if (socket_info.rd_callback && !socket_info.is_executing_rd_callback) { poll_fd_info.events |= POLLIN; }
+    if (socket_info.rd_callback && !socket_info.is_executing_rd_callback) { poll_fd_info.events |= POLLRDNORM; }
 
-    if (socket_info.wr_callback && !socket_info.is_executing_wr_callback) { poll_fd_info.events |= POLLOUT; }
+    if (socket_info.wr_callback && !socket_info.is_executing_wr_callback) { poll_fd_info.events |= POLLWRNORM; }
 
     if (poll_fd_info.events) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
   }
 
-  m_poll_fds_info.push_back({m_notifier.get_read_fd(), POLLIN, 0});
+  m_poll_fds_info.push_back({m_notifier.get_read_fd(), POLLRDNORM, 0});
 }
 
 //!

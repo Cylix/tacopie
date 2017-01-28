@@ -88,7 +88,8 @@ self_pipe::get_write_fd(void) const {
 //!
 void
 self_pipe::notify(void) {
-  (void) send(m_fds[1], "a", 1, 0);
+	char buf[1024];
+	(void) send(m_fds[1], buf, 1024, 0);
 }
 
 //!
