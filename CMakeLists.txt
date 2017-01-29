@@ -63,7 +63,7 @@ ENDIF (WIN32)
 ###
 # variables
 ###
-set(GTEST_INCLUDES /tmp/cpp_redis/deps/src/googletest/googletest/include)
+set(GTEST_INCLUDES ${PROJECT_SOURCE_DIR}/deps/src/googletest/googletest/include)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
