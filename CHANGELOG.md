@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.0.0
+**Tag**: `2.0.0`.
+
+**Date**: Jan. 29th, 2017
+
+**Description**:
+
+* Feature: Port the library onto windows
+* Feature: Make the library usable by cpp_redis
+* Fix: some sockets where not removed from io_service tracking. Now fixed
+* Improvement: handle POLLHUP events
+
+
 ## v1.1.0
 **Tag**: `1.1.0`.
 
