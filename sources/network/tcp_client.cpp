@@ -72,7 +72,7 @@ tcp_client::connect(const std::string& host, std::uint32_t port) {
 
 void
 tcp_client::disconnect(bool wait_for_removal) {
-  if (not is_connected()) { return; }
+  if (!is_connected()) { return; }
 
   m_is_connected = false;
 
@@ -105,14 +105,14 @@ tcp_client::on_read_available(fd_t) {
   read_result result;
   auto callback = process_read(result);
 
-  if (not result.success) {
+  if (!result.success) {
     __TACOPIE_LOG(warn, "read operation failure");
     disconnect();
   }
 
   if (callback) { callback(result); }
 
-  if (not result.success) { call_disconnection_handler(); }
+  if (!result.success) { call_disconnection_handler(); }
 }
 
 //!
@@ -126,14 +126,14 @@ tcp_client::on_write_available(fd_t) {
   write_result result;
   auto callback = process_write(result);
 
-  if (not result.success) {
+  if (!result.success) {
     __TACOPIE_LOG(warn, "write operation failure");
     disconnect();
   }
 
   if (callback) { callback(result); }
 
-  if (not result.success) { call_disconnection_handler(); }
+  if (!result.success) { call_disconnection_handler(); }
 }
 
 //!
@@ -260,7 +260,7 @@ tcp_client::operator==(const tcp_client& rhs) const {
 
 bool
 tcp_client::operator!=(const tcp_client& rhs) const {
-  return not operator==(rhs);
+  return !operator==(rhs);
 }
 
 } //! tacopie

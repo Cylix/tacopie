@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2015-2017 Simon Ninon <simon.ninon@gmail.com>
+# Copyright (c) 2016-2017 Simon Ninon <simon.ninon@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,19 +43,29 @@ project(${PROJECT} CXX)
 ###
 # compilation options
 ###
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
+IF (WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2")
+
+  # was causing conflics with gtest build
+  string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
+  foreach (flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
+    string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
+  endforeach()
+
+  add_definitions(-D_UNICODE)
+  add_definitions(-DUNICODE)
+  add_definitions(-DWIN32_LEAN_AND_MEAN)
+ELSE ()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
+ENDIF (WIN32)
 
 
 ###
 # variables
 ###
-set(DEPS_FOLDER ${PROJECT_SOURCE_DIR}/deps/build)
 IF (NOT GTEST_INCLUDES)
-  set(GTEST_INCLUDES ${DEPS_FOLDER}/gtest/include)
+  set(GTEST_INCLUDES ${PROJECT_SOURCE_DIR}/deps/src/googletest/googletest/include)
 ENDIF (NOT GTEST_INCLUDES)
-IF (NOT GTEST_LIBS)
-  set(GTEST_LIBS ${DEPS_FOLDER}/gtest/lib)
-ENDIF (NOT GTEST_LIBS)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
@@ -64,17 +74,17 @@ set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 ###
 include_directories(${TACOPIE_INCLUDES})
 
-
-###
-# link
-###
-link_directories(${GTEST_LIBS})
-
-
 ###
 # sources
 ###
 set(SRC_DIRS "sources" "sources/network" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
+
+IF (WIN32)
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/windows" "includes/tacopie/network/windows")
+ELSE ()
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/unix" "includes/tacopie/network/unix")
+ENDIF (WIN32)
+
 foreach(dir ${SRC_DIRS})
   # get directory sources and headers
   file(GLOB s_${dir} "${dir}/*.cpp")
@@ -98,7 +108,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # executable
 ###
 add_library(${PROJECT} STATIC ${SOURCES})
-target_link_libraries(${PROJECT} pthread)
+
+IF (WIN32)
+  target_link_libraries(${PROJECT} ws2_32)
+ELSE ()
+  target_link_libraries(${PROJECT} pthread)
+ENDIF (WIN32)
 
 # __TACOPIE_LOGGING_ENABLED
 IF (LOGGING_ENABLED)
@@ -137,4 +152,7 @@ ENDIF(BUILD_EXAMPLES)
 ###
 IF (BUILD_TESTS)
   add_subdirectory(tests)
+  IF (EXISTS ${PROJECT_SOURCE_DIR}/deps/src/googletest)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/deps/src/googletest)
+  ENDIF ()
 ENDIF(BUILD_TESTS)

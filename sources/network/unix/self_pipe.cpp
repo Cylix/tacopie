@@ -20,42 +20,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include <tacopie/error.hpp>
+#include <tacopie/network/self_pipe.hpp>
 
-#include <cstdint>
-#include <stdexcept>
-#include <string>
-
-#include <tacopie/logger.hpp>
+#include <fcntl.h>
+#include <unistd.h>
 
 namespace tacopie {
 
-class tacopie_error : public std::runtime_error {
-public:
-  //! ctor & dtor
-  tacopie_error(const std::string& what, const std::string& file, std::size_t line);
-  ~tacopie_error(void) = default;
+//!
+//! ctor & dtor
+//!
+self_pipe::self_pipe(void)
+: m_fds{__TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD} {
+  if (pipe(m_fds) == -1) { __TACOPIE_THROW(error, "pipe() failure"); }
+}
 
-  //! copy ctor & assignment operator
-  tacopie_error(const tacopie_error&) = default;
-  tacopie_error& operator=(const tacopie_error&) = default;
+self_pipe::~self_pipe(void) {
+  close(m_fds[0]);
+  close(m_fds[1]);
+}
 
-public:
-  //! get location of the error
-  const std::string& get_file(void) const;
-  std::size_t get_line(void) const;
+//!
+//! get rd/wr fds
+//!
+fd_t
+self_pipe::get_read_fd(void) const {
+  return m_fds[0];
+}
 
-private:
-  //! location of the error
-  std::string m_file;
-  std::size_t m_line;
-};
+fd_t
+self_pipe::get_write_fd(void) const {
+  return m_fds[1];
+}
+
+//!
+//! notify
+//!
+void
+self_pipe::notify(void) {
+  (void) write(m_fds[1], "a", 1);
+}
+
+//!
+//! clr buffer
+//!
+void
+self_pipe::clr_buffer(void) {
+  char buf[1024];
+  (void) read(m_fds[0], buf, 1024);
+}
 
 } //! tacopie
-
-//! macro for convenience
-#define __TACOPIE_THROW(level, what)                          \
-  {                                                           \
-    __TACOPIE_LOG(level, (what));                             \
-    throw tacopie::tacopie_error((what), __FILE__, __LINE__); \
-  }

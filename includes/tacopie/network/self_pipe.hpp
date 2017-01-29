@@ -22,40 +22,39 @@
 
 #pragma once
 
-#include <cstdint>
-#include <stdexcept>
-#include <string>
-
-#include <tacopie/logger.hpp>
+#include <tacopie/typedefs.hpp>
 
 namespace tacopie {
 
-class tacopie_error : public std::runtime_error {
+class self_pipe {
 public:
   //! ctor & dtor
-  tacopie_error(const std::string& what, const std::string& file, std::size_t line);
-  ~tacopie_error(void) = default;
+  self_pipe(void);
+  ~self_pipe(void);
 
   //! copy ctor & assignment operator
-  tacopie_error(const tacopie_error&) = default;
-  tacopie_error& operator=(const tacopie_error&) = default;
+  self_pipe(const self_pipe&) = delete;
+  self_pipe& operator=(const self_pipe&) = delete;
 
 public:
-  //! get location of the error
-  const std::string& get_file(void) const;
-  std::size_t get_line(void) const;
+  //! get rd/wr fds
+  fd_t get_read_fd(void) const;
+  fd_t get_write_fd(void) const;
+
+  //! notify
+  void notify(void);
+
+  //! clr buffer
+  void clr_buffer(void);
 
 private:
-  //! location of the error
-  std::string m_file;
-  std::size_t m_line;
+#ifdef _WIN32
+  fd_t m_fd;
+  struct sockaddr m_addr;
+  int m_addr_len;
+#else
+  fd_t m_fds[2];
+#endif /* _WIN32 */
 };
 
 } //! tacopie
-
-//! macro for convenience
-#define __TACOPIE_THROW(level, what)                          \
-  {                                                           \
-    __TACOPIE_LOG(level, (what));                             \
-    throw tacopie::tacopie_error((what), __FILE__, __LINE__); \
-  }

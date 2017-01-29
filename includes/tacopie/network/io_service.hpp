@@ -31,8 +31,13 @@
 #include <unordered_map>
 #include <vector>
 
+#ifdef _WIN32
+#include <Winsock2.h>
+#else
 #include <poll.h>
+#endif /* _WIN32 */
 
+#include <tacopie/network/self_pipe.hpp>
 #include <tacopie/network/tcp_socket.hpp>
 #include <tacopie/utils/thread_pool.hpp>
 
@@ -63,9 +68,6 @@ public:
   void set_wr_callback(const tcp_socket& socket, const event_callback_t& event_callback);
   void untrack(const tcp_socket& socket);
 
-  //! force poll to wake-up
-  void wake_up(void);
-
   //! wait until the socket has been effectively removed
   //! basically wait until all pending callbacks are executed
   void wait_for_removal(const tcp_socket& socket);
@@ -79,7 +81,8 @@ private:
     : rd_callback(nullptr)
     , is_executing_rd_callback(false)
     , wr_callback(nullptr)
-    , is_executing_wr_callback(false) {}
+    , is_executing_wr_callback(false)
+    , marked_for_untrack(false) {}
 
     //! rd event
     event_callback_t rd_callback;
@@ -102,7 +105,6 @@ private:
 
   //! process poll detected events
   void process_events(void);
-  void process_wake_up_event(void);
   void process_rd_event(const struct pollfd& poll_result, tracked_socket& socket);
   void process_wr_event(const struct pollfd& poll_result, tracked_socket& socket);
 
@@ -129,7 +131,7 @@ private:
   std::condition_variable m_wait_for_removal_condvar;
 
   //! fd associated to the pipe used to wake up the poll call
-  int m_notif_pipe_fds[2];
+  tacopie::self_pipe m_notifier;
 };
 
 //! default io_service getter & setter

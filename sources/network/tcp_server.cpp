@@ -64,7 +64,7 @@ tcp_server::start(const std::string& host, std::uint32_t port, const on_new_conn
 
 void
 tcp_server::stop(void) {
-  if (not is_running()) { return; }
+  if (!is_running()) { return; }
 
   m_is_running = false;
 
@@ -113,7 +113,7 @@ void
 tcp_server::on_client_disconnected(const std::shared_ptr<tcp_client>& client) {
   //! If we are not running the server
   //! Then it means that this function is called by tcp_client::disconnect() at the destruction of all clients
-  if (not is_running()) { return; }
+  if (!is_running()) { return; }
 
   __TACOPIE_LOG(debug, "handle server's client disconnection");
 
@@ -165,7 +165,7 @@ tcp_server::operator==(const tcp_server& rhs) const {
 
 bool
 tcp_server::operator!=(const tcp_server& rhs) const {
-  return not operator==(rhs);
+  return !operator==(rhs);
 }
 
 } //! tacopie

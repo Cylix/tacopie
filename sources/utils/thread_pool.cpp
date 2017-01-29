@@ -51,7 +51,7 @@ void
 thread_pool::run(void) {
   __TACOPIE_LOG(debug, "start run() worker");
 
-  while (not m_should_stop) {
+  while (!m_should_stop) {
     task_t task = fetch_task();
 
     if (task) {
@@ -69,7 +69,7 @@ thread_pool::run(void) {
 
 void
 thread_pool::stop(void) {
-  if (not is_running()) { return; }
+  if (!is_running()) { return; }
 
   m_should_stop = true;
   m_tasks_condvar.notify_all();
@@ -86,7 +86,7 @@ thread_pool::stop(void) {
 //!
 bool
 thread_pool::is_running(void) const {
-  return not m_should_stop;
+  return !m_should_stop;
 }
 
 //!
@@ -99,7 +99,7 @@ thread_pool::fetch_task(void) {
 
   __TACOPIE_LOG(debug, "waiting to fetch task");
 
-  m_tasks_condvar.wait(lock, [&] { return m_should_stop or not m_tasks.empty(); });
+  m_tasks_condvar.wait(lock, [&] { return m_should_stop || !m_tasks.empty(); });
 
   if (m_tasks.empty()) { return nullptr; }
 
