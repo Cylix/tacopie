@@ -48,8 +48,13 @@ public:
   void clr_buffer(void);
 
 private:
-  //! self-pipe fds
-  fd_t m_fds[2];
+#ifdef _WIN32
+  fd_t m_fd;
+  struct sockaddr m_addr;
+  int m_addr_len;
+#else
+	fd_t m_fds[2];
+#endif /* _WIN32 */
 };
 
 } //! tacopie

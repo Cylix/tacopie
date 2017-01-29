@@ -81,7 +81,8 @@ private:
     : rd_callback(nullptr)
     , is_executing_rd_callback(false)
     , wr_callback(nullptr)
-    , is_executing_wr_callback(false) {}
+    , is_executing_wr_callback(false)
+	, marked_for_untrack(false) {}
 
     //! rd event
     event_callback_t rd_callback;
@@ -131,12 +132,6 @@ private:
 
   //! fd associated to the pipe used to wake up the poll call
   tacopie::self_pipe m_notifier;
-
-#ifdef _WIN32
-private:
-  //! keep track of the number of instances under windows to now when to call WSA(startup-cleanup).
-  static unsigned int m_nb_instances;
-#endif /* _WIN32 */
 };
 
 //! default io_service getter & setter

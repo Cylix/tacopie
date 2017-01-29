@@ -29,8 +29,6 @@
 
 namespace tacopie {
 
-unsigned int io_service::m_nb_instances = 0;
-
 //!
 //! default io_service getter & setter
 //!
@@ -64,16 +62,6 @@ io_service::io_service(void)
 , m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS) {
   __TACOPIE_LOG(debug, "create io_service");
 
-  //! Windows netword DLL init
-  if (!m_nb_instances) {
-    WORD version = MAKEWORD(2, 2);
-    WSADATA data;
-
-    if (WSAStartup(version, &data) != 0) { __TACOPIE_THROW(error, "WSAStartup() failure"); }
-
-    ++m_nb_instances;
-  }
-
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
@@ -86,8 +74,6 @@ io_service::~io_service(void) {
   m_notifier.notify();
   m_poll_worker.join();
   m_callback_workers.stop();
-
-  if (!--m_nb_instances) { WSACleanup(); }
 }
 
 //!
@@ -102,7 +88,7 @@ io_service::poll(void) {
     init_poll_fds_info();
 
     __TACOPIE_LOG(debug, "polling fds");
-    if (WSAPoll(const_cast<WSAPOLLFD*>(m_poll_fds_info.data()), m_poll_fds_info.size(), 100) > 0) { process_events(); }
+    if (WSAPoll(const_cast<WSAPOLLFD*>(m_poll_fds_info.data()), m_poll_fds_info.size(), -1) > 0) { process_events(); }
     else {
       __TACOPIE_LOG(debug, "poll woke up, but nothing to process");
     }
@@ -123,7 +109,7 @@ io_service::process_events(void) {
 
   for (const auto& poll_result : m_poll_fds_info) {
     if (poll_result.fd == m_notifier.get_read_fd() && poll_result.revents & POLLRDNORM) {
-		m_notifier.notify();
+		m_notifier.clr_buffer();
 		continue;
     }
 
@@ -135,6 +121,12 @@ io_service::process_events(void) {
 	if (poll_result.revents & (POLLRDNORM | POLLHUP) && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
 
     if (poll_result.revents & POLLWRNORM && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
+
+	if (socket.marked_for_untrack && !socket.is_executing_rd_callback && !socket.is_executing_wr_callback) {
+		__TACOPIE_LOG(debug, "untrack socket");
+		m_tracked_sockets.erase(it);
+		m_wait_for_removal_condvar.notify_all();
+	}
   }
 }
 
@@ -209,11 +201,6 @@ io_service::init_poll_fds_info(void) {
   for (const auto& socket : m_tracked_sockets) {
     const auto& fd          = socket.first;
     const auto& socket_info = socket.second;
-
-    if (!socket_info.rd_callback && !socket_info.wr_callback) { continue; }
-
-    if (socket_info.marked_for_untrack) { continue; }
-
     struct pollfd poll_fd_info;
     poll_fd_info.fd      = fd;
     poll_fd_info.events  = 0;
@@ -223,7 +210,7 @@ io_service::init_poll_fds_info(void) {
 
     if (socket_info.wr_callback && !socket_info.is_executing_wr_callback) { poll_fd_info.events |= POLLWRNORM; }
 
-    if (poll_fd_info.events) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
+    if (poll_fd_info.events || socket_info.marked_for_untrack) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
   }
 
   m_poll_fds_info.push_back({m_notifier.get_read_fd(), POLLRDNORM, 0});
@@ -243,8 +230,6 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   track_info.rd_callback = rd_callback;
   track_info.wr_callback = wr_callback;
 
-  if (rd_callback || wr_callback) { track_info.marked_for_untrack = false; }
-
   m_notifier.notify();
 }
 
@@ -257,8 +242,6 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = event_callback;
 
-  if (event_callback) { track_info.marked_for_untrack = false; }
-
   m_notifier.notify();
 }
 
@@ -270,8 +253,6 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.wr_callback = event_callback;
-
-  if (event_callback) { track_info.marked_for_untrack = false; }
 
   m_notifier.notify();
 }
