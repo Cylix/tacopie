@@ -9,7 +9,7 @@
 
 * Feature: Port the library onto windows
 * Feature: Make the library usable by cpp_redis
-* Fix: some sockets where not removed from io_service tracking. Now fixed
+* Fix: some sockets were not removed from io_service tracking. Now fixed
 * Improvement: handle POLLHUP events
 
 
