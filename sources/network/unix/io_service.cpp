@@ -119,9 +119,14 @@ io_service::process_events(void) {
 
     auto& socket = it->second;
 
-    if (poll_result.revents & POLLIN && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
-
+    if (poll_result.revents & (POLLIN | POLLHUP) && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
     if (poll_result.revents & POLLOUT && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
+
+    if (socket.marked_for_untrack && !socket.is_executing_rd_callback && !socket.is_executing_wr_callback) {
+      __TACOPIE_LOG(debug, "untrack socket");
+      m_tracked_sockets.erase(it);
+      m_wait_for_removal_condvar.notify_all();
+    }
   }
 }
 
@@ -197,10 +202,6 @@ io_service::init_poll_fds_info(void) {
     const auto& fd          = socket.first;
     const auto& socket_info = socket.second;
 
-    if (!socket_info.rd_callback && !socket_info.wr_callback) { continue; }
-
-    if (socket_info.marked_for_untrack) { continue; }
-
     struct pollfd poll_fd_info;
     poll_fd_info.fd      = fd;
     poll_fd_info.events  = 0;
@@ -210,7 +211,7 @@ io_service::init_poll_fds_info(void) {
 
     if (socket_info.wr_callback && !socket_info.is_executing_wr_callback) { poll_fd_info.events |= POLLOUT; }
 
-    if (poll_fd_info.events) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
+    if (poll_fd_info.events || socket_info.marked_for_untrack) { m_poll_fds_info.push_back(std::move(poll_fd_info)); }
   }
 
   m_poll_fds_info.push_back({m_notifier.get_read_fd(), POLLIN, 0});
@@ -230,8 +231,6 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   track_info.rd_callback = rd_callback;
   track_info.wr_callback = wr_callback;
 
-  if (rd_callback || wr_callback) { track_info.marked_for_untrack = false; }
-
   m_notifier.notify();
 }
 
@@ -244,8 +243,6 @@ io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& ev
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = event_callback;
 
-  if (event_callback) { track_info.marked_for_untrack = false; }
-
   m_notifier.notify();
 }
 
@@ -257,8 +254,6 @@ io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& ev
 
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.wr_callback = event_callback;
-
-  if (event_callback) { track_info.marked_for_untrack = false; }
 
   m_notifier.notify();
 }
