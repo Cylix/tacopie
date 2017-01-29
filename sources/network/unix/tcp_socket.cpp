@@ -81,7 +81,7 @@ tcp_socket::recv(std::size_t size_to_read) {
 
   std::vector<char> data(size_to_read, 0);
 
-  std::size_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
+  int rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
 
   if (rd_size == -1) { __TACOPIE_THROW(error, "recv() failure"); }
 
@@ -97,7 +97,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  std::size_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
+  int wr_size = ::send(m_fd, data.data(), size_to_write, 0);
 
   if (wr_size == -1) { __TACOPIE_THROW(error, "send() failure"); }
 

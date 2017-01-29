@@ -53,7 +53,7 @@ private:
   struct sockaddr m_addr;
   int m_addr_len;
 #else
-	fd_t m_fds[2];
+  fd_t m_fds[2];
 #endif /* _WIN32 */
 };
 

@@ -25,8 +25,8 @@
 
 #include <Winsock2.h>
 
-#include <fcntl.h>
 #include <tacopie/typedefs.hpp>
+#include <fcntl.h>
 #include <iostream>
 namespace tacopie {
 
@@ -35,28 +35,28 @@ namespace tacopie {
 //!
 self_pipe::self_pipe(void)
 : m_fd(__TACOPIE_INVALID_FD) {
-	//! Create a server
-	m_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
-	if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "fail socket()"); }
+  //! Create a server
+  m_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
+  if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "fail socket()"); }
 
-	u_long flags = 1;
-	ioctlsocket(m_fd, FIONBIO, &flags);
+  u_long flags = 1;
+  ioctlsocket(m_fd, FIONBIO, &flags);
 
-	//! Bind server to localhost
-	struct sockaddr_in inaddr;
-	memset(&inaddr, 0, sizeof(inaddr));
-	inaddr.sin_family = AF_INET;
-	inaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-	inaddr.sin_port = 0;
-	if (bind(m_fd, (struct sockaddr*) &inaddr, sizeof(inaddr)) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail bind()"); }
-	
-	//! Retrieve server information
-	m_addr_len = sizeof(m_addr);
-	memset(&m_addr, 0, sizeof(m_addr));
-	if (getsockname(m_fd, &m_addr, &m_addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail getsockname()"); }
-	
-	//! connect read fd to the server
-	if (connect(m_fd, &m_addr, m_addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail connect()"); }
+  //! Bind server to localhost
+  struct sockaddr_in inaddr;
+  memset(&inaddr, 0, sizeof(inaddr));
+  inaddr.sin_family      = AF_INET;
+  inaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  inaddr.sin_port        = 0;
+  if (bind(m_fd, (struct sockaddr*) &inaddr, sizeof(inaddr)) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail bind()"); }
+
+  //! Retrieve server information
+  m_addr_len = sizeof(m_addr);
+  memset(&m_addr, 0, sizeof(m_addr));
+  if (getsockname(m_fd, &m_addr, &m_addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail getsockname()"); }
+
+  //! connect read fd to the server
+  if (connect(m_fd, &m_addr, m_addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail connect()"); }
 }
 
 self_pipe::~self_pipe(void) {
@@ -81,7 +81,7 @@ self_pipe::get_write_fd(void) const {
 //!
 void
 self_pipe::notify(void) {
-	(void)sendto(m_fd, "a", 1, 0, &m_addr, m_addr_len);
+  (void) sendto(m_fd, "a", 1, 0, &m_addr, m_addr_len);
 }
 
 //!

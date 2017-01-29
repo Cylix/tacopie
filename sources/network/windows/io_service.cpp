@@ -109,8 +109,8 @@ io_service::process_events(void) {
 
   for (const auto& poll_result : m_poll_fds_info) {
     if (poll_result.fd == m_notifier.get_read_fd() && poll_result.revents & POLLRDNORM) {
-		m_notifier.clr_buffer();
-		continue;
+      m_notifier.clr_buffer();
+      continue;
     }
 
     auto it = m_tracked_sockets.find(poll_result.fd);
@@ -118,15 +118,15 @@ io_service::process_events(void) {
     if (it == m_tracked_sockets.end()) { continue; }
 
     auto& socket = it->second;
-	if (poll_result.revents & (POLLRDNORM | POLLHUP) && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
+    if (poll_result.revents & (POLLRDNORM | POLLHUP) && socket.rd_callback && !socket.is_executing_rd_callback) { process_rd_event(poll_result, socket); }
 
     if (poll_result.revents & POLLWRNORM && socket.wr_callback && !socket.is_executing_wr_callback) { process_wr_event(poll_result, socket); }
 
-	if (socket.marked_for_untrack && !socket.is_executing_rd_callback && !socket.is_executing_wr_callback) {
-		__TACOPIE_LOG(debug, "untrack socket");
-		m_tracked_sockets.erase(it);
-		m_wait_for_removal_condvar.notify_all();
-	}
+    if (socket.marked_for_untrack && !socket.is_executing_rd_callback && !socket.is_executing_wr_callback) {
+      __TACOPIE_LOG(debug, "untrack socket");
+      m_tracked_sockets.erase(it);
+      m_wait_for_removal_condvar.notify_all();
+    }
   }
 }
 
