@@ -63,6 +63,7 @@ ENDIF (WIN32)
 ###
 # variables
 ###
+set(GTEST_INCLUDES ${PROJECT_SOURCE_DIR}/deps/src/googletest/include)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 

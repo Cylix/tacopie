@@ -39,7 +39,8 @@ ENDIF (NOT WIN32)
 # includes
 ###
 include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/includes
-                    ${TACOPIE_INCLUDES})
+                    ${TACOPIE_INCLUDES}
+                    ${(GTEST_INCLUDES})
 
 
 ###
