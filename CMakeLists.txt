@@ -112,7 +112,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # executable
 ###
 add_library(${PROJECT} STATIC ${SOURCES})
-target_link_libraries(${PROJECT} pthread)
+
+IF (WIN32)
+  target_link_libraries(${PROJECT} ws2_32)
+ELSE ()
+  target_link_libraries(${PROJECT} pthread)
+ENDIF (WIN32)
 
 # __TACOPIE_LOGGING_ENABLED
 IF (LOGGING_ENABLED)

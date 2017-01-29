@@ -30,7 +30,9 @@ project(${PROJECT} CXX)
 ###
 # compilation options
 ###
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+IF (NOT WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 /MD")
+ENDIF (NOT WIN32)
 
 
 ###
@@ -58,4 +60,11 @@ endforeach()
 # executable
 ###
 add_executable(${PROJECT} ${SOURCES})
-target_link_libraries(${PROJECT} tacopie gtest pthread)
+
+target_link_libraries(${PROJECT} tacopie gtest)
+
+IF (WIN32)
+  target_link_libraries(${PROJECT} ws2_32)
+ELSE ()
+  target_link_libraries(${PROJECT} pthread)
+ENDIF (WIN32)
