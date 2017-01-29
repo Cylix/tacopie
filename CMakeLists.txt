@@ -45,6 +45,13 @@ project(${PROJECT} CXX)
 ###
 IF (WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2")
+
+  # was causing conflics with gtest build
+  string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
+  foreach (flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
+    string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
+  endforeach()
+
   add_definitions(-D_UNICODE)
   add_definitions(-DUNICODE)
   add_definitions(-DWIN32_LEAN_AND_MEAN)
@@ -56,13 +63,6 @@ ENDIF (WIN32)
 ###
 # variables
 ###
-set(DEPS_FOLDER ${PROJECT_SOURCE_DIR}/deps/build)
-IF (NOT GTEST_INCLUDES)
-  set(GTEST_INCLUDES ${DEPS_FOLDER}/gtest/include)
-ENDIF (NOT GTEST_INCLUDES)
-IF (NOT GTEST_LIBS)
-  set(GTEST_LIBS ${DEPS_FOLDER}/gtest/lib)
-ENDIF (NOT GTEST_LIBS)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
@@ -70,13 +70,6 @@ set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 # includes
 ###
 include_directories(${TACOPIE_INCLUDES})
-
-
-###
-# link
-###
-link_directories(${GTEST_LIBS})
-
 
 ###
 # sources
@@ -156,4 +149,7 @@ ENDIF(BUILD_EXAMPLES)
 ###
 IF (BUILD_TESTS)
   add_subdirectory(tests)
+  IF (EXISTS ${PROJECT_SOURCE_DIR}/deps/src/googletest)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/deps/src/googletest)
+  ENDIF ()
 ENDIF(BUILD_TESTS)

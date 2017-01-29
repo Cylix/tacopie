@@ -31,7 +31,7 @@ project(${PROJECT} CXX)
 # compilation options
 ###
 IF (NOT WIN32)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 /MD")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ENDIF (NOT WIN32)
 
 
@@ -39,8 +39,7 @@ ENDIF (NOT WIN32)
 # includes
 ###
 include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/includes
-                    ${TACOPIE_INCLUDES}
-                    ${GTEST_INCLUDES})
+                    ${TACOPIE_INCLUDES})
 
 
 ###
