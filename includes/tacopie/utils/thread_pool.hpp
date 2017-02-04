@@ -70,7 +70,7 @@ private:
   std::vector<std::thread> m_workers;
 
   //! whether the thread_pool should stop or not
-  std::atomic_bool m_should_stop;
+  std::atomic_bool m_should_stop = ATOMIC_VAR_INIT(false);
 
   //! tasks
   std::queue<task_t> m_tasks;
