@@ -79,10 +79,10 @@ private:
     //! ctor
     tracked_socket(void)
     : rd_callback(nullptr)
-    , is_executing_rd_callback(false)
+    , is_executing_rd_callback(ATOMIC_VAR_INIT(false))
     , wr_callback(nullptr)
-    , is_executing_wr_callback(false)
-    , marked_for_untrack(false) {}
+    , is_executing_wr_callback(ATOMIC_VAR_INIT(false))
+    , marked_for_untrack(ATOMIC_VAR_INIT(false)) {}
 
     //! rd event
     event_callback_t rd_callback;

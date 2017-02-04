@@ -58,7 +58,7 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 //!
 
 io_service::io_service(void)
-: m_should_stop(false)
+: m_should_stop(ATOMIC_VAR_INIT(false))
 , m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS) {
   __TACOPIE_LOG(debug, "create io_service");
 

@@ -32,7 +32,7 @@ namespace utils {
 //!
 
 thread_pool::thread_pool(std::size_t nb_threads)
-: m_should_stop(false) {
+: m_should_stop(ATOMIC_VAR_INIT(false)) {
   __TACOPIE_LOG(debug, "create thread_pool");
 
   for (std::size_t i = 0; i < nb_threads; ++i) { m_workers.push_back(std::thread(std::bind(&thread_pool::run, this))); }
