@@ -89,7 +89,7 @@ private:
   tacopie::tcp_socket m_socket;
 
   //! whether the server is currently running or not
-  std::atomic_bool m_is_running;
+  std::atomic_bool m_is_running = ATOMIC_VAR_INIT(false);
 
   //! clients
   std::list<std::shared_ptr<tacopie::tcp_client>> m_clients;

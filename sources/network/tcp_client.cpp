@@ -32,7 +32,6 @@ namespace tacopie {
 
 tcp_client::tcp_client(void)
 : m_io_service(get_default_io_service())
-, m_is_connected(ATOMIC_VAR_INIT(false))
 , m_disconnection_handler(nullptr) { __TACOPIE_LOG(debug, "create tcp_client"); }
 
 tcp_client::~tcp_client(void) {
@@ -48,8 +47,8 @@ tcp_client::~tcp_client(void) {
 tcp_client::tcp_client(tcp_socket&& socket)
 : m_io_service(get_default_io_service())
 , m_socket(std::move(socket))
-, m_is_connected(ATOMIC_VAR_INIT(true))
 , m_disconnection_handler(nullptr) {
+  m_is_connected = true;
   __TACOPIE_LOG(debug, "create tcp_client");
   m_io_service->track(m_socket);
 }

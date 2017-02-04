@@ -34,7 +34,6 @@ namespace tacopie {
 
 tcp_server::tcp_server(void)
 : m_io_service(get_default_io_service())
-, m_is_running(ATOMIC_VAR_INIT(false))
 , m_on_new_connection_callback(nullptr) { __TACOPIE_LOG(debug, "create tcp_server"); }
 
 tcp_server::~tcp_server(void) {
