@@ -134,7 +134,7 @@ private:
   tacopie::tcp_socket m_socket;
 
   //! whether the client is currently connected or not
-  std::atomic_bool m_is_connected = ATOMIC_VAR_INIT(false);
+  std::atomic<bool> m_is_connected = ATOMIC_VAR_INIT(false);
 
   //! read & write requests
   std::queue<read_request> m_read_requests;
