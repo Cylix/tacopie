@@ -83,14 +83,14 @@ private:
 
     //! rd event
     event_callback_t rd_callback;
-    std::atomic_bool is_executing_rd_callback = ATOMIC_VAR_INIT(false);
+    std::atomic<bool> is_executing_rd_callback = ATOMIC_VAR_INIT(false);
 
     //! wr event
     event_callback_t wr_callback;
-    std::atomic_bool is_executing_wr_callback = ATOMIC_VAR_INIT(false);
+    std::atomic<bool> is_executing_wr_callback = ATOMIC_VAR_INIT(false);
 
     //! marked for untrack
-    std::atomic_bool marked_for_untrack = ATOMIC_VAR_INIT(false);
+    std::atomic<bool> marked_for_untrack = ATOMIC_VAR_INIT(false);
   };
 
 private:
@@ -110,7 +110,7 @@ private:
   std::unordered_map<fd_t, tracked_socket> m_tracked_sockets;
 
   //! whether the worker should stop or not
-  std::atomic_bool m_should_stop;
+  std::atomic<bool> m_should_stop;
 
   //! poll thread
   std::thread m_poll_worker;
