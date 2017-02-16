@@ -109,15 +109,23 @@ tcp_socket::connect(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  struct hostent* addr = gethostbyname(host.c_str());
 
-  if (!addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+  struct addrinfo* result = nullptr;
+  struct addrinfo hints;
+
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_family   = AF_INET;
+
+  if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
-  std::memcpy(&server_addr.sin_addr.s_addr, addr->h_addr, addr->h_length);
+  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
   server_addr.sin_port   = htons(port);
   server_addr.sin_family = AF_INET;
+
+  freeaddrinfo(result);
 
   if (::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "connect() failure"); }
 }
@@ -131,15 +139,19 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct hostent* addr = gethostbyname(host.c_str());
+  struct addrinfo* result = nullptr;
 
-  if (!addr) { __TACOPIE_THROW(error, "gethostbyname() failure"); }
+  if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
+    __TACOPIE_THROW(error, "getaddrinfo() failure");
+  }
 
   struct sockaddr_in server_addr;
   std::memset(&server_addr, 0, sizeof(server_addr));
-  std::memcpy(&server_addr.sin_addr.s_addr, addr->h_addr, addr->h_length);
+  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
   server_addr.sin_port   = htons(port);
   server_addr.sin_family = AF_INET;
+
+  freeaddrinfo(result);
 
   if (::bind(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
 }
