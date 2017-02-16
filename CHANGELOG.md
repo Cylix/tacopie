@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.1
+**Tag**: `2.0.1`.
+
+**Date**: Feb. 17th, 2017
+
+**Description**:
+
+* Fix: replace gethostbyname() (not thread-safe) usage by getaddrinfo() (thread-safe) on unix platforms. No change where required on windows as getaddrinfo() was already in use before.
+
+
 ## v2.0.0
 **Tag**: `2.0.0`.
 
