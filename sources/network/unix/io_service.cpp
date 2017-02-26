@@ -127,6 +127,8 @@ io_service::process_events(void) {
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
+
+    m_notifier.notify();
   }
 }
 
@@ -156,6 +158,8 @@ io_service::process_rd_event(const struct pollfd& poll_result, tracked_socket& s
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
+
+    m_notifier.notify();
   };
 }
 
