@@ -80,8 +80,8 @@ public:
 
 public:
   //! async read & write completion callbacks
-  typedef std::function<void(const read_result&)> async_read_callback_t;
-  typedef std::function<void(const write_result&)> async_write_callback_t;
+  typedef std::function<void(read_result&)> async_read_callback_t;
+  typedef std::function<void(write_result&)> async_write_callback_t;
 
 public:
   //! structure to store read requests information
