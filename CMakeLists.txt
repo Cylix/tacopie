@@ -76,9 +76,8 @@ ENDIF (WIN32)
 ###
 # variables
 ###
-IF (NOT GTEST_INCLUDES)
-  set(GTEST_INCLUDES ${PROJECT_SOURCE_DIR}/deps/src/googletest/googletest/include)
-ENDIF (NOT GTEST_INCLUDES)
+set(DEPS_INCLUDES ${PROJECT_SOURCE_DIR}/deps/include)
+set(DEPS_LIBRARIES ${PROJECT_SOURCE_DIR}/deps/lib)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
@@ -169,5 +168,7 @@ ENDIF(BUILD_EXAMPLES)
 ###
 IF (BUILD_TESTS)
   add_subdirectory(tests)
-  ExternalProject_Add("googletest" GIT_REPOSITORY "https://github.com/google/googletest.git" INSTALL_DIR "deps")
+  ExternalProject_Add("googletest"
+                      GIT_REPOSITORY "https://github.com/google/googletest.git"
+                      CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
 ENDIF(BUILD_TESTS)
