@@ -25,6 +25,7 @@
 ###
 cmake_minimum_required(VERSION 2.8.7)
 set(CMAKE_MACOSX_RPATH 1)
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
 
 ###
@@ -51,7 +52,7 @@ IF (WIN32)
 
   IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "")
     set(MSVC_RUNTIME_LIBRARY_CONFIG "/MT")
-  ENDIF() 
+  ENDIF()
 
   foreach (flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
     IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MT")
@@ -146,6 +147,10 @@ ENDIF(IO_SERVICE_NB_WORKERS)
 ###
 # install
 ###
+# ensure lib and bin directories exist
+install(DIRECTORY DESTINATION ${CMAKE_BINARY_DIR}/lib/)
+install(DIRECTORY DESTINATION ${CMAKE_BINARY_DIR}/bin/)
+# install tacopie
 install (DIRECTORY ${CMAKE_BINARY_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
 install (DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 install (DIRECTORY ${TACOPIE_INCLUDES}/ DESTINATION include USE_SOURCE_PERMISSIONS)
@@ -164,7 +169,5 @@ ENDIF(BUILD_EXAMPLES)
 ###
 IF (BUILD_TESTS)
   add_subdirectory(tests)
-  IF (EXISTS ${PROJECT_SOURCE_DIR}/deps/src/googletest)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/deps/src/googletest)
-  ENDIF ()
+  ExternalProject_Add("googletest" GIT_REPOSITORY "https://github.com/google/googletest.git" INSTALL_DIR "deps")
 ENDIF(BUILD_TESTS)
