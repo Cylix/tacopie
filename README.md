@@ -23,7 +23,7 @@ s.start("127.0.0.1", 3001, [] (const std::shared_ptr<tacopie::tcp_client>& clien
 ```cpp
 tacopie::tcp_client client;
 client.connect("127.0.0.1", 3001);
-client.async_read({ 1024, [&] (const tacopie::tcp_client::read_result& res) {
+client.async_read({ 1024, [&] (tacopie::tcp_client::read_result& res) {
   client.async_write({ res.buffer, nullptr });
 } });
 ```
