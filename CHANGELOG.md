@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.1.0
+**Tag**: `2.1.0`.
+
+**Date**: March 19th, 2017
+
+**Description**:
+
+* Remove: install_deps.sh has been removed in favor of CMakelists.txt enhancement.
+* Change: read and write TCP client callbacks now takes a reference to the result as parameter instead of a const-reference.
+
+
 ## v2.0.1
 **Tag**: `2.0.1`.
 
