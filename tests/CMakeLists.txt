@@ -38,9 +38,13 @@ ENDIF (NOT WIN32)
 ###
 # includes
 ###
-include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/includes
-                    ${TACOPIE_INCLUDES}
-                    ${GTEST_INCLUDES})
+include_directories(${DEPS_INCLUDES} ${TACOPIE_INCLUDES})
+
+
+###
+# libraries
+###
+link_directories(${DEPS_LIBRARIES})
 
 
 ###
