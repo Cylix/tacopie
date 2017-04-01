@@ -120,9 +120,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # executable
 ###
 add_library(${PROJECT} STATIC ${SOURCES})
-set_target_properties(${PROJECT} PROPERTIES COMPILE_PDB_NAME ${PROJECT}
-  COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
+
+IF (WIN32)
+   set_target_properties(${PROJECT}
+                         PROPERTIES COMPILE_PDB_NAME ${PROJECT}
+                         COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ENDIF (WIN32)
 
 IF (WIN32)
   target_link_libraries(${PROJECT} ws2_32)
