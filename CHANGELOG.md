@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.2.0
+**Tag**: `2.2.0`.
+
+**Date**: April 4th, 2017
+
+**Description**:
+
+* Change: IO Service is now based on `select` and not on `poll` anymore to solve some issues encountered on windows due to the buggy implementation of `poll` on windows Systems.
+
 ## v2.1.0
 **Tag**: `2.1.0`.
 
