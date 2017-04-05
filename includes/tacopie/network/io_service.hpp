@@ -34,7 +34,7 @@
 #ifdef _WIN32
 #include <Winsock2.h>
 #else
-#include <poll.h>
+#include <sys/select.h>
 #endif /* _WIN32 */
 
 #include <tacopie/network/self_pipe.hpp>
@@ -98,12 +98,12 @@ private:
   void poll(void);
 
   //! init m_poll_fds_info
-  void init_poll_fds_info(void);
+  int init_poll_fds_info(void);
 
   //! process poll detected events
   void process_events(void);
-  void process_rd_event(const struct pollfd& poll_result, tracked_socket& socket);
-  void process_wr_event(const struct pollfd& poll_result, tracked_socket& socket);
+  void process_rd_event(const fd_t& fd, tracked_socket& socket);
+  void process_wr_event(const fd_t& fd, tracked_socket& socket);
 
 private:
   //! tracked sockets
@@ -121,8 +121,10 @@ private:
   //! thread safety
   std::mutex m_tracked_sockets_mtx;
 
-  //! data structure given to poll
-  std::vector<struct pollfd> m_poll_fds_info;
+  //! data structure given to select
+  std::vector<fd_t> m_polled_fds;
+  fd_set m_rd_set;
+  fd_set m_wr_set;
 
   //! condition variable to wait on removal
   std::condition_variable m_wait_for_removal_condvar;
