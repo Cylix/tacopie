@@ -210,15 +210,15 @@ io_service::init_poll_fds_info(void) {
     const auto& fd          = socket.first;
     const auto& socket_info = socket.second;
 
-	bool should_rd = socket_info.rd_callback && !socket_info.is_executing_rd_callback;
-	if (should_rd) { FD_SET(fd, &m_rd_set); }
+    bool should_rd = socket_info.rd_callback && !socket_info.is_executing_rd_callback;
+    if (should_rd) { FD_SET(fd, &m_rd_set); }
 
-	bool should_wr = socket_info.wr_callback && !socket_info.is_executing_wr_callback;
-	if (should_wr) { FD_SET(fd, &m_wr_set); }
+    bool should_wr = socket_info.wr_callback && !socket_info.is_executing_wr_callback;
+    if (should_wr) { FD_SET(fd, &m_wr_set); }
 
     if (should_rd || should_wr || socket_info.marked_for_untrack) { m_polled_fds.push_back(fd); }
 
-	if ((should_rd || should_wr) && (int)fd > ndfs) { ndfs = fd; }
+    if ((should_rd || should_wr) && (int) fd > ndfs) { ndfs = fd; }
   }
 
   return ndfs + 1;
