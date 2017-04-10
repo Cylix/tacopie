@@ -1,6 +1,22 @@
 # Changelog
 
 
+## [v2.4.0](https://github.com/Cylix/tacopie/releases/tag/2.4.0)
+### Tag
+`2.4.0`
+### Date
+April 9th, 2017
+### Changes
+None.
+### Additions
+* Provide support for Unix socket. Simply pass in 0 as the port when building a `tcp_socket`, `tcp_client` or `tcp_server`. Then, the host will automatically be treated as the path to a Unix socket instead of a real host.
+### Removals
+None.
+
+
+
+
+
 ## [v2.3.0](https://github.com/Cylix/tacopie/releases/tag/2.3.0)
 ### Tag
 `2.3.0`
