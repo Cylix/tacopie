@@ -62,16 +62,19 @@ tcp_server::start(const std::string& host, std::uint32_t port, const on_new_conn
 }
 
 void
-tcp_server::stop(void) {
+tcp_server::stop(bool wait_for_removal, bool recursive_wait_for_removal) {
   if (!is_running()) { return; }
 
   m_is_running = false;
 
   m_io_service->untrack(m_socket);
+  if (wait_for_removal) { m_io_service->wait_for_removal(m_socket); }
   m_socket.close();
 
   std::lock_guard<std::mutex> lock(m_clients_mtx);
-  for (auto& client : m_clients) { client->disconnect(); }
+  for (auto& client : m_clients) {
+    client->disconnect(recursive_wait_for_removal && wait_for_removal);
+  }
   m_clients.clear();
 
   __TACOPIE_LOG(info, "tcp_server stopped");
