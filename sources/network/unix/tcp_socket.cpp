@@ -30,6 +30,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/un.h>
 #include <unistd.h>
 
 namespace tacopie {
@@ -109,25 +110,38 @@ tcp_socket::connect(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
+  const struct sockaddr* server_addr;
+  struct sockaddr_un server_addr_un;
+  struct sockaddr_in server_addr_in;
 
-  struct addrinfo* result = nullptr;
-  struct addrinfo hints;
+  //! Handle case of unix sockets if port is 0
+  if (m_port == 0) {
+    std::memset(&server_addr_un, 0, sizeof(server_addr_un));
+    server_addr_un.sun_family = AF_UNIX;
+    strncpy(server_addr_un.sun_path, host.c_str(), sizeof(server_addr_un.sun_path) - 1);
 
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_socktype = SOCK_STREAM;
-  hints.ai_family   = AF_INET;
+    server_addr = (const struct sockaddr*) &server_addr_un;
+  }
+  else {
+    struct addrinfo* result = nullptr;
+    struct addrinfo hints;
 
-  if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
+    std::memset(&hints, 0, sizeof(hints));
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family   = AF_INET;
 
-  struct sockaddr_in server_addr;
-  std::memset(&server_addr, 0, sizeof(server_addr));
-  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-  server_addr.sin_port   = htons(port);
-  server_addr.sin_family = AF_INET;
+    if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
 
-  freeaddrinfo(result);
+    std::memset(&server_addr_in, 0, sizeof(server_addr_in));
+    server_addr_in.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    server_addr_in.sin_port   = htons(port);
+    server_addr_in.sin_family = AF_INET;
+    server_addr               = (const struct sockaddr*) &server_addr_in;
 
-  if (::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "connect() failure"); }
+    freeaddrinfo(result);
+  }
+
+  if (::connect(m_fd, server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "connect() failure"); }
 }
 
 //!
@@ -139,21 +153,35 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct addrinfo* result = nullptr;
+  const struct sockaddr* server_addr;
+  struct sockaddr_un server_addr_un;
+  struct sockaddr_in server_addr_in;
 
-  if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
-    __TACOPIE_THROW(error, "getaddrinfo() failure");
+  //! Handle case of unix sockets if port is 0
+  if (m_port == 0) {
+    std::memset(&server_addr_un, 0, sizeof(server_addr_un));
+    server_addr_un.sun_family = AF_UNIX;
+    strncpy(server_addr_un.sun_path, host.c_str(), sizeof(server_addr_un.sun_path) - 1);
+
+    server_addr = (const struct sockaddr*) &server_addr_un;
+  }
+  else {
+    struct addrinfo* result = nullptr;
+
+    if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
+      __TACOPIE_THROW(error, "getaddrinfo() failure");
+    }
+
+    std::memset(&server_addr_in, 0, sizeof(server_addr_in));
+    server_addr_in.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    server_addr_in.sin_port   = htons(port);
+    server_addr_in.sin_family = AF_INET;
+    server_addr               = (const struct sockaddr*) &server_addr_in;
+
+    freeaddrinfo(result);
   }
 
-  struct sockaddr_in server_addr;
-  std::memset(&server_addr, 0, sizeof(server_addr));
-  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-  server_addr.sin_port   = htons(port);
-  server_addr.sin_family = AF_INET;
-
-  freeaddrinfo(result);
-
-  if (::bind(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
+  if (::bind(m_fd, server_addr, sizeof(server_addr)) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
 }
 
 void
@@ -204,7 +232,8 @@ tcp_socket::create_socket_if_necessary(void) {
   if (m_fd != __TACOPIE_INVALID_FD) { return; }
 
   //! new TCP socket
-  m_fd   = socket(AF_INET, SOCK_STREAM, 0);
+  //! handle case of unix sockets by checking whether the port is 0 or not
+  m_fd   = socket(m_port == 0 ? AF_UNIX : AF_INET, SOCK_STREAM, 0);
   m_type = type::UNKNOWN;
 
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }
