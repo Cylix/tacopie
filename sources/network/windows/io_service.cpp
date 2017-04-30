@@ -234,9 +234,10 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
 
   __TACOPIE_LOG(debug, "track new socket");
 
-  auto& track_info       = m_tracked_sockets[socket.get_fd()];
-  track_info.rd_callback = rd_callback;
-  track_info.wr_callback = wr_callback;
+  auto& track_info              = m_tracked_sockets[socket.get_fd()];
+  track_info.rd_callback        = rd_callback;
+  track_info.wr_callback        = wr_callback;
+  track_info.marked_for_untrack = false;
 
   m_notifier.notify();
 }
