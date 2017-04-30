@@ -1,6 +1,23 @@
 # Changelog
 
 
+## [v2.4.1](https://github.com/Cylix/tacopie/releases/tag/2.4.1)
+### Tag
+`2.4.1`
+### Date
+April 30th, 2017
+### Changes
+* Compile project with `/bigobj` option on windows
+* Fix behavior when trying to reconnect from disconnection_handler callback
+### Additions
+None.
+### Removals
+None.
+
+
+
+
+
 ## [v2.4.0](https://github.com/Cylix/tacopie/releases/tag/2.4.0)
 ### Tag
 `2.4.0`
