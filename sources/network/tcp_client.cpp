@@ -54,6 +54,20 @@ tcp_client::tcp_client(tcp_socket&& socket)
 }
 
 //!
+//! get host & port information
+//!
+
+const std::string&
+tcp_client::get_host(void) const {
+  return m_socket.get_host();
+}
+
+std::uint32_t
+tcp_client::get_port(void) const {
+  return m_socket.get_port();
+}
+
+//!
 //! start & stop the tcp client
 //!
 
@@ -268,4 +282,4 @@ tcp_client::operator!=(const tcp_client& rhs) const {
   return !operator==(rhs);
 }
 
-} //! tacopie
+} // namespace tacopie

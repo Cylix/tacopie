@@ -54,6 +54,11 @@ public:
   bool operator!=(const tcp_client& rhs) const;
 
 public:
+  //! get host & port information
+  const std::string& get_host(void) const;
+  std::uint32_t get_port(void) const;
+
+public:
   //! start & stop the tcp client
   void connect(const std::string& addr, std::uint32_t port);
   void disconnect(bool wait_for_removal = false);
@@ -148,4 +153,4 @@ private:
   disconnection_handler_t m_disconnection_handler;
 };
 
-} //! tacopie
+} // namespace tacopie
