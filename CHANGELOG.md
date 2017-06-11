@@ -1,6 +1,23 @@
 # Changelog
 
 
+## [v2.4.2](https://github.com/Cylix/tacopie/releases/tag/2.4.2)
+### Tag
+`2.4.2`
+### Date
+June 11th, 2017
+### Changes
+* Compilation Fix
+* change behavior of on_new_connection_handler. Returning true means connection is handled by tcp_client wrapper and nothing will be done by tcp_server. Returning false means connection is handled by tcp_server, will be stored in an internal list and tcp_client disconection_handler overriden.
+### Additions
+* `get_host` & `get_port` methods for `tcp_client`
+### Removals
+None.
+
+
+
+
+
 ## [v2.4.1](https://github.com/Cylix/tacopie/releases/tag/2.4.1)
 ### Tag
 `2.4.1`
