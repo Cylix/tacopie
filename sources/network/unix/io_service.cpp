@@ -126,8 +126,6 @@ io_service::process_events(void) {
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
-
-    m_notifier.notify();
   }
 }
 
@@ -156,8 +154,6 @@ io_service::process_rd_event(const fd_t& fd, tracked_socket& socket) {
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
-
-    m_notifier.notify();
   };
 }
 
@@ -300,4 +296,4 @@ io_service::wait_for_removal(const tcp_socket& socket) {
   });
 }
 
-} //! tacopie
+} // namespace tacopie
