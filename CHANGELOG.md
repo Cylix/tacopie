@@ -1,6 +1,22 @@
 # Changelog
 
 
+## [v2.4.3](https://github.com/Cylix/tacopie/releases/tag/2.4.3)
+### Tag
+`2.4.3`
+### Date
+June 19th, 2017
+### Changes
+* Remove unnecessary use of self-pipe to try to fix high-CPU usage issued reported on this repository and on cpp_redis repository.
+### Additions
+* CMake compilation flag `SELECT_TIMEOUT` that can be used to define the select timeout in nano seconds. By default, timeout is set to NULL (unlimited).
+### Removals
+None.
+
+
+
+
+
 ## [v2.4.2](https://github.com/Cylix/tacopie/releases/tag/2.4.2)
 ### Tag
 `2.4.2`
@@ -8,7 +24,7 @@
 June 11th, 2017
 ### Changes
 * Compilation Fix
-* change behavior of on_new_connection_handler. Returning true means connection is handled by tcp_client wrapper and nothing will be done by tcp_server. Returning false means connection is handled by tcp_server, will be stored in an internal list and tcp_client disconection_handler overriden.
+* change behavior of on_new_connection_handler. Returning true means connection is handled by tcp_client wrapper and nothing will be done by tcp_server. Returning false means connection is handled by tcp_server, will be stored in an internal list and tcp_client disconnection_handler overridden.
 ### Additions
 * `get_host` & `get_port` methods for `tcp_client`
 ### Removals
