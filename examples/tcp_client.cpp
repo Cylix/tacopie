@@ -27,6 +27,10 @@
 #include <mutex>
 #include <signal.h>
 
+#ifdef _WIN32
+#include <Winsock2.h>
+#endif /* _WIN32 */
+
 std::condition_variable cv;
 
 void
@@ -49,6 +53,17 @@ on_new_message(tacopie::tcp_client& client, const tacopie::tcp_client::read_resu
 
 int
 main(void) {
+#ifdef _WIN32
+  //! Windows netword DLL init
+  WORD version = MAKEWORD(2, 2);
+  WSADATA data;
+
+  if (WSAStartup(version, &data) != 0) {
+    std::cerr << "WSAStartup() failure" << std::endl;
+    return -1;
+  }
+#endif /* _WIN32 */
+
   tacopie::tcp_client client;
   client.connect("127.0.0.1", 3001);
   client.async_read({1024, std::bind(&on_new_message, std::ref(client), std::placeholders::_1)});
@@ -58,6 +73,10 @@ main(void) {
   std::mutex mtx;
   std::unique_lock<std::mutex> lock(mtx);
   cv.wait(lock);
+
+#ifdef _WIN32
+  WSACleanup();
+#endif /* _WIN32 */
 
   return 0;
 }
