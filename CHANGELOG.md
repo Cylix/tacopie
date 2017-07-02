@@ -1,6 +1,23 @@
 # Changelog
 
 
+## [v2.4.4](https://github.com/Cylix/tacopie/releases/tag/2.4.4)
+### Tag
+`2.4.4`
+### Date
+July 2nd, 2017
+### Changes
+* add calls to WSAStartup and WSACleanup in examples (#16).
+* fix #17 and cpp_redis#85 (select keep sleeping and does not process incoming read/write events).
+### Additions
+None.
+### Removals
+None.
+
+
+
+
+
 ## [v2.4.3](https://github.com/Cylix/tacopie/releases/tag/2.4.3)
 ### Tag
 `2.4.3`
