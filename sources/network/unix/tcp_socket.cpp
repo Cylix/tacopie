@@ -26,6 +26,7 @@
 
 #include <cstring>
 
+#include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -212,8 +213,7 @@ tcp_socket::accept(void) {
 
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
 
-  //! TODO: init with real client addr
-  return {client_fd, "", client_info.sin_port, type::CLIENT};
+  return {client_fd, inet_ntoa(client_info.sin_addr), client_info.sin_port, type::CLIENT};
 }
 
 //!
@@ -314,4 +314,4 @@ tcp_socket::operator!=(const tcp_socket& rhs) const {
   return !operator==(rhs);
 }
 
-} //! tacopie
+} // namespace tacopie
