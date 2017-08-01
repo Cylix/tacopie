@@ -22,20 +22,20 @@
 
 #pragma once
 
-#ifdef _WIN32
+#ifdef WINDOWS
 #include <Winsock2.h>
-#endif /* _WIN32 */
+#endif /* WINDOWS */
 
 namespace tacopie {
 
 //! file descriptor platform type
-#ifdef _WIN32
+#ifdef WINDOWS
 typedef SOCKET fd_t;
 #define __TACOPIE_INVALID_FD INVALID_SOCKET
 #else
 typedef int fd_t;
 #define __TACOPIE_INVALID_FD -1
-#endif /* _WIN32 */
+#endif /* WINDOWS */
 
 //! ssize_t
 #if defined(_MSC_VER)
