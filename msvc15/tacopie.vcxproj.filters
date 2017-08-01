@@ -13,8 +13,40 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{8d28aa89-4337-4f27-95aa-d050f528e6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network">
+      <UniqueIdentifier>{04a5ca3f-d966-48fa-938c-2b38a05d6a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network\windows">
+      <UniqueIdentifier>{beb1feae-89f2-4fd5-b2b4-8e7915d1a8be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="..\sources\error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\utils\thread_pool.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\tcp_client.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\tcp_server.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\windows\io_service.cpp">
+      <Filter>Source Files\network\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\windows\self_pipe.cpp">
+      <Filter>Source Files\network\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\windows\tcp_socket.cpp">
+      <Filter>Source Files\network\windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
