@@ -31,11 +31,11 @@
 #include <unordered_map>
 #include <vector>
 
-#ifdef WINDOWS
+#ifdef _WIN32
 #include <Winsock2.h>
 #else
 #include <sys/select.h>
-#endif /* WINDOWS */
+#endif /* _WIN32 */
 
 #include <tacopie/network/self_pipe.hpp>
 #include <tacopie/network/tcp_socket.hpp>
