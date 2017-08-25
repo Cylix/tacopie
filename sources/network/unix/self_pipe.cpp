@@ -28,10 +28,15 @@
 
 namespace tacopie {
 
+void
+self_pipe::startup() {}
+void
+self_pipe::shutdown() {}
+
 //!
 //! ctor & dtor
 //!
-self_pipe::self_pipe(void)
+self_pipe::self_pipe(bool bDelayedStartup)
 : m_fds{__TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD} {
   if (pipe(m_fds) == -1) { __TACOPIE_THROW(error, "pipe() failure"); }
 }
@@ -71,4 +76,4 @@ self_pipe::clr_buffer(void) {
   (void) read(m_fds[0], buf, 1024);
 }
 
-} //! tacopie
+} // namespace tacopie

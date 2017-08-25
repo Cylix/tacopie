@@ -57,8 +57,8 @@ public:
   io_service(const io_service&) = delete;
   io_service& operator=(const io_service&) = delete;
 
-  void io_service::startup(void);
-  void io_service::shutdown(void);
+  void startup(void);
+  void shutdown(void);
 
 public:
   //! callback handler typedef

@@ -106,7 +106,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
 }
 
 void
-tcp_socket::connect(const std::string& host, std::uint32_t port) {
+tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs) {
   //! Reset host and port
   m_host = host;
   m_port = port;
@@ -314,4 +314,4 @@ tcp_socket::operator!=(const tcp_socket& rhs) const {
   return !operator==(rhs);
 }
 
-} //! tacopie
+} // namespace tacopie
