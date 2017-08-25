@@ -67,7 +67,7 @@ public:
   //! client socket operations
   std::vector<char> recv(std::size_t size_to_read);
   std::size_t send(const std::vector<char>& data, std::size_t size_to_write);
-  void connect(const std::string& host, std::uint32_t port);
+  void connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs=0);
 
   //! server socket operations
   void bind(const std::string& host, std::uint32_t port);

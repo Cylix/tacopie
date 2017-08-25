@@ -37,7 +37,7 @@ namespace tacopie {
 class tcp_client {
 public:
   //! ctor & dtor
-  tcp_client(void);
+  tcp_client(std::uint32_t num_io_workers=2);
   ~tcp_client(void);
 
   //! custom ctor
@@ -55,7 +55,7 @@ public:
 
 public:
   //! start & stop the tcp client
-  void connect(const std::string& addr, std::uint32_t port);
+  void connect(const std::string& addr, std::uint32_t port, std::uint32_t timeout_msecs=0);
   void disconnect(bool wait_for_removal = false);
 
   //! returns whether the client is currently connected or not
@@ -80,8 +80,8 @@ public:
 
 public:
   //! async read & write completion callbacks
-  typedef std::function<void(const read_result&)> async_read_callback_t;
-  typedef std::function<void(const write_result&)> async_write_callback_t;
+  typedef std::function<void(read_result&)> async_read_callback_t;
+  typedef std::function<void(write_result&)> async_write_callback_t;
 
 public:
   //! structure to store read requests information

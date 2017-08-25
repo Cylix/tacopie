@@ -34,7 +34,7 @@
 #ifdef _WIN32
 #include <Winsock2.h>
 #else
-#include <poll.h>
+#include <sys/select.h>
 #endif /* _WIN32 */
 
 #include <tacopie/network/self_pipe.hpp>
@@ -50,12 +50,15 @@ namespace tacopie {
 class io_service {
 public:
   //! ctor & dtor
-  io_service(void);
+  io_service(std::size_t nb_threads = __TACOPIE_IO_SERVICE_NB_WORKERS, bool bDelayedStart = false);
   ~io_service(void);
 
   //! copy ctor & assignment operator
   io_service(const io_service&) = delete;
   io_service& operator=(const io_service&) = delete;
+
+  void io_service::startup(void);
+  void io_service::shutdown(void);
 
 public:
   //! callback handler typedef
@@ -71,6 +74,9 @@ public:
   //! wait until the socket has been effectively removed
   //! basically wait until all pending callbacks are executed
   void wait_for_removal(const tcp_socket& socket);
+
+  //! Launch asyncrounous task
+  void run_async_task(const utils::thread_pool::task_t& task);
 
 private:
   //! struct tracked_socket
@@ -98,12 +104,12 @@ private:
   void poll(void);
 
   //! init m_poll_fds_info
-  void init_poll_fds_info(void);
+  int init_poll_fds_info(void);
 
   //! process poll detected events
   void process_events(void);
-  void process_rd_event(const struct pollfd& poll_result, tracked_socket& socket);
-  void process_wr_event(const struct pollfd& poll_result, tracked_socket& socket);
+  void process_rd_event(const fd_t& fd, tracked_socket& socket);
+  void process_wr_event(const fd_t& fd, tracked_socket& socket);
 
 private:
   //! tracked sockets
@@ -121,8 +127,10 @@ private:
   //! thread safety
   std::mutex m_tracked_sockets_mtx;
 
-  //! data structure given to poll
-  std::vector<struct pollfd> m_poll_fds_info;
+  //! data structure given to select
+  std::vector<fd_t> m_polled_fds;
+  fd_set m_rd_set;
+  fd_set m_wr_set;
 
   //! condition variable to wait on removal
   std::condition_variable m_wait_for_removal_condvar;
@@ -132,7 +140,7 @@ private:
 };
 
 //! default io_service getter & setter
-const std::shared_ptr<io_service>& get_default_io_service(void);
+const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers=2);
 void set_default_io_service(const std::shared_ptr<io_service>&);
 
 } //! tacopie

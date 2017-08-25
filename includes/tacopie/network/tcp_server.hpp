@@ -59,7 +59,7 @@ public:
 
   //! start & stop the tcp server
   void start(const std::string& addr, std::uint32_t port, const on_new_connection_callback_t& callback = nullptr);
-  void stop(void);
+  void stop(bool wait_for_removal = false, bool recursive_wait_for_removal = true);
 
   //! returns whether the server is currently running or not
   bool is_running(void) const;

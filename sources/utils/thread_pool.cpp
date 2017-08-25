@@ -54,8 +54,9 @@ thread_pool::run(void) {
     task_t task = fetch_task();
 
     if (task) {
-      __TACOPIE_LOG(debug, "execute task");
+      __TACOPIE_LOG(debug, "executing task");
       task();
+      __TACOPIE_LOG(debug, "execution complete");
     }
   }
 

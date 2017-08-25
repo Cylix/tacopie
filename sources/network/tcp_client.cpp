@@ -30,9 +30,11 @@ namespace tacopie {
 //! ctor & dtor
 //!
 
-tcp_client::tcp_client(void)
-: m_io_service(get_default_io_service())
-, m_disconnection_handler(nullptr) { __TACOPIE_LOG(debug, "create tcp_client"); }
+tcp_client::tcp_client(std::uint32_t num_io_workers)
+: m_disconnection_handler(nullptr) { 
+  m_io_service = get_default_io_service(num_io_workers);
+  __TACOPIE_LOG(debug, "create tcp_client"); 
+}
 
 tcp_client::~tcp_client(void) {
   __TACOPIE_LOG(debug, "destroy tcp_client");
@@ -58,11 +60,17 @@ tcp_client::tcp_client(tcp_socket&& socket)
 //!
 
 void
-tcp_client::connect(const std::string& host, std::uint32_t port) {
+tcp_client::connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs) {
   if (is_connected()) { __TACOPIE_THROW(warn, "tcp_client is already connected"); }
 
-  m_socket.connect(host, port);
-  m_io_service->track(m_socket);
+  try {
+    m_socket.connect(host, port, timeout_msecs);
+    m_io_service->track(m_socket);
+  }
+  catch (const tacopie_error& e) {
+    m_socket.close();
+    throw e;
+  }
 
   m_is_connected = true;
 
@@ -88,8 +96,11 @@ tcp_client::disconnect(bool wait_for_removal) {
 void
 tcp_client::call_disconnection_handler(void) {
   if (m_disconnection_handler) {
-    __TACOPIE_LOG(debug, "call disconnection handler");
-    m_disconnection_handler();
+    __TACOPIE_LOG(debug, "queued async disconnect handler");
+    m_io_service->run_async_task([=] {
+       __TACOPIE_LOG(debug, "calling disconnect handler");
+       m_disconnection_handler();
+    });
   }
 }
 
