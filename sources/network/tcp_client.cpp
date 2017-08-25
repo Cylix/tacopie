@@ -31,9 +31,9 @@ namespace tacopie {
 //!
 
 tcp_client::tcp_client(std::uint32_t num_io_workers)
-: m_disconnection_handler(nullptr) { 
+: m_disconnection_handler(nullptr) {
   m_io_service = get_default_io_service(num_io_workers);
-  __TACOPIE_LOG(debug, "create tcp_client"); 
+  __TACOPIE_LOG(debug, "create tcp_client");
 }
 
 tcp_client::~tcp_client(void) {
@@ -53,6 +53,20 @@ tcp_client::tcp_client(tcp_socket&& socket)
   m_is_connected = true;
   __TACOPIE_LOG(debug, "create tcp_client");
   m_io_service->track(m_socket);
+}
+
+//!
+//! get host & port information
+//!
+
+const std::string&
+tcp_client::get_host(void) const {
+  return m_socket.get_host();
+}
+
+std::uint32_t
+tcp_client::get_port(void) const {
+  return m_socket.get_port();
 }
 
 //!
@@ -98,8 +112,8 @@ tcp_client::call_disconnection_handler(void) {
   if (m_disconnection_handler) {
     __TACOPIE_LOG(debug, "queued async disconnect handler");
     m_io_service->run_async_task([=] {
-       __TACOPIE_LOG(debug, "calling disconnect handler");
-       m_disconnection_handler();
+      __TACOPIE_LOG(debug, "calling disconnect handler");
+      m_disconnection_handler();
     });
   }
 }
@@ -273,4 +287,4 @@ tcp_client::operator!=(const tcp_client& rhs) const {
   return !operator==(rhs);
 }
 
-} //! tacopie
+} // namespace tacopie

@@ -91,14 +91,14 @@ tcp_server::on_read_available(fd_t) {
 
     auto client = std::make_shared<tcp_client>(m_socket.accept());
 
-    if (!m_on_new_connection_callback || m_on_new_connection_callback(client)) {
-      __TACOPIE_LOG(info, "tcp_server accepted new connection");
+    if (!m_on_new_connection_callback || !m_on_new_connection_callback(client)) {
+      __TACOPIE_LOG(info, "connection handling delegated to tcp_server");
 
       client->set_on_disconnection_handler(std::bind(&tcp_server::on_client_disconnected, this, client));
       m_clients.push_back(client);
     }
     else {
-      __TACOPIE_LOG(info, "tcp_server dismissed new connection");
+      __TACOPIE_LOG(info, "connection handled by tcp_server wrapper");
     }
   }
   catch (const tacopie::tacopie_error&) {
@@ -170,4 +170,4 @@ tcp_server::operator!=(const tcp_server& rhs) const {
   return !operator==(rhs);
 }
 
-} //! tacopie
+} // namespace tacopie

@@ -126,8 +126,16 @@ io_service::poll(void) {
   while (!m_should_stop) {
     int ndfs = init_poll_fds_info();
 
+    //! setup timeout
+    struct timeval* timeout_ptr = NULL;
+#ifdef __TACOPIE_TIMEOUT
+    struct timeval timeout;
+    timeout.tv_usec = __TACOPIE_TIMEOUT;
+    timeout_ptr     = &timeout;
+#endif /* __TACOPIE_TIMEOUT */
+
     __TACOPIE_LOG(debug, "polling fds");
-    if (::select(ndfs, &m_rd_set, &m_wr_set, NULL, NULL) > 0) { process_events(); }
+    if (::select(ndfs, &m_rd_set, &m_wr_set, NULL, timeout_ptr) > 0) { process_events(); }
     else {
       __TACOPIE_LOG(debug, "poll woke up, but nothing to process");
     }
@@ -165,8 +173,6 @@ io_service::process_events(void) {
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
-
-    m_notifier.notify();
   }
 }
 
@@ -225,6 +231,8 @@ io_service::process_wr_event(const fd_t& fd, tracked_socket& socket) {
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
+
+    m_notifier.notify();
   };
 }
 

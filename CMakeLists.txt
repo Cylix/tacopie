@@ -25,6 +25,7 @@
 ###
 cmake_minimum_required(VERSION 2.8.7)
 set(CMAKE_MACOSX_RPATH 1)
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
 
 ###
@@ -44,14 +45,14 @@ project(${PROJECT} CXX)
 # compilation options
 ###
 IF (WIN32)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2 /bigobj")
 
   # was causing conflics with gtest build
   string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 
   IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "")
     set(MSVC_RUNTIME_LIBRARY_CONFIG "/MT")
-  ENDIF() 
+  ENDIF()
 
   foreach (flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
     IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MT")
@@ -75,9 +76,8 @@ ENDIF (WIN32)
 ###
 # variables
 ###
-IF (NOT GTEST_INCLUDES)
-  set(GTEST_INCLUDES ${PROJECT_SOURCE_DIR}/deps/src/googletest/googletest/include)
-ENDIF (NOT GTEST_INCLUDES)
+set(DEPS_INCLUDES ${PROJECT_SOURCE_DIR}/deps/include)
+set(DEPS_LIBRARIES ${PROJECT_SOURCE_DIR}/deps/lib)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
@@ -122,6 +122,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_library(${PROJECT} STATIC ${SOURCES})
 
 IF (WIN32)
+   set_target_properties(${PROJECT}
+                         PROPERTIES COMPILE_PDB_NAME ${PROJECT}
+                         COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ENDIF (WIN32)
+
+IF (WIN32)
   target_link_libraries(${PROJECT} ws2_32)
 ELSE ()
   target_link_libraries(${PROJECT} pthread)
@@ -142,10 +148,19 @@ IF (IO_SERVICE_NB_WORKERS)
   set_target_properties(${PROJECT} PROPERTIES COMPILE_DEFINITIONS "__TACOPIE_IO_SERVICE_NB_WORKERS=${IO_SERVICE_NB_WORKERS}")
 ENDIF(IO_SERVICE_NB_WORKERS)
 
+#__TACOPIE_TIMEOUT
+IF (SELECT_TIMEOUT)
+  set_target_properties(${PROJECT} PROPERTIES COMPILE_DEFINITIONS "__TACOPIE_TIMEOUT=${SELECT_TIMEOUT}")
+ENDIF(SELECT_TIMEOUT)
+
 
 ###
 # install
 ###
+# ensure lib and bin directories exist
+install(DIRECTORY DESTINATION ${CMAKE_BINARY_DIR}/lib/)
+install(DIRECTORY DESTINATION ${CMAKE_BINARY_DIR}/bin/)
+# install tacopie
 install (DIRECTORY ${CMAKE_BINARY_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
 install (DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 install (DIRECTORY ${TACOPIE_INCLUDES}/ DESTINATION include USE_SOURCE_PERMISSIONS)
@@ -164,7 +179,7 @@ ENDIF(BUILD_EXAMPLES)
 ###
 IF (BUILD_TESTS)
   add_subdirectory(tests)
-  IF (EXISTS ${PROJECT_SOURCE_DIR}/deps/src/googletest)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/deps/src/googletest)
-  ENDIF ()
+  ExternalProject_Add("googletest"
+                      GIT_REPOSITORY "https://github.com/google/googletest.git"
+                      CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
 ENDIF(BUILD_TESTS)

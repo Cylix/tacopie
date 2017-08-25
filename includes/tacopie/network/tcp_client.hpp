@@ -37,7 +37,7 @@ namespace tacopie {
 class tcp_client {
 public:
   //! ctor & dtor
-  tcp_client(std::uint32_t num_io_workers=2);
+  tcp_client(std::uint32_t num_io_workers = 2);
   ~tcp_client(void);
 
   //! custom ctor
@@ -54,8 +54,13 @@ public:
   bool operator!=(const tcp_client& rhs) const;
 
 public:
+  //! get host & port information
+  const std::string& get_host(void) const;
+  std::uint32_t get_port(void) const;
+
+public:
   //! start & stop the tcp client
-  void connect(const std::string& addr, std::uint32_t port, std::uint32_t timeout_msecs=0);
+  void connect(const std::string& addr, std::uint32_t port, std::uint32_t timeout_msecs = 0);
   void disconnect(bool wait_for_removal = false);
 
   //! returns whether the client is currently connected or not
@@ -148,4 +153,4 @@ private:
   disconnection_handler_t m_disconnection_handler;
 };
 
-} //! tacopie
+} // namespace tacopie

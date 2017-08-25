@@ -29,7 +29,7 @@ namespace tacopie {
 class self_pipe {
 public:
   //! ctor & dtor
-  self_pipe(bool bDelayedStartup=false);
+  self_pipe(bool bDelayedStartup = false);
   ~self_pipe(void);
 
   void startup();

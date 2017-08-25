@@ -24,6 +24,5 @@ before_install:
 
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-  - ./install_deps.sh
 
 script: mkdir build && cd build && cmake .. -DBUILD_TESTS=true -DBUILD_EXAMPLES=true && make && ./bin/tacopie_tests

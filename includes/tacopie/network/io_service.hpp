@@ -140,7 +140,7 @@ private:
 };
 
 //! default io_service getter & setter
-const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers=2);
+const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers = 2);
 void set_default_io_service(const std::shared_ptr<io_service>&);
 
 } //! tacopie

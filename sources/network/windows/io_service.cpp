@@ -74,7 +74,8 @@ io_service::~io_service(void) {
   shutdown();
 }
 
-void io_service::startup(void) {
+void
+io_service::startup(void) {
   __TACOPIE_LOG(debug, "starting io_service");
 
 #ifdef _WIN32
@@ -91,13 +92,14 @@ void io_service::startup(void) {
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
 
-void io_service::shutdown(void) {
+void
+io_service::shutdown(void) {
   __TACOPIE_LOG(debug, "shutting down io_service");
 
   m_should_stop = true;
 
   m_notifier.notify();
-  if(m_poll_worker.joinable())
+  if (m_poll_worker.joinable())
     m_poll_worker.join();
   m_callback_workers.stop();
 
@@ -120,9 +122,17 @@ io_service::poll(void) {
   while (!m_should_stop) {
     int ndfs = init_poll_fds_info();
 
+    //! setup timeout
+    struct timeval* timeout_ptr = NULL;
+#ifdef __TACOPIE_TIMEOUT
+    struct timeval timeout;
+    timeout.tv_usec = __TACOPIE_TIMEOUT;
+    timeout_ptr     = &timeout;
+#endif /* __TACOPIE_TIMEOUT */
+
     __TACOPIE_LOG(debug, "polling fds");
-    if (select(ndfs, &m_rd_set, &m_wr_set, NULL, NULL) > 0) { 
-       process_events(); 
+    if (select(ndfs, &m_rd_set, &m_wr_set, NULL, timeout_ptr) > 0) {
+      process_events();
     }
     else {
       __TACOPIE_LOG(debug, "poll woke up, but nothing to process");
@@ -131,7 +141,6 @@ io_service::poll(void) {
 
   __TACOPIE_LOG(debug, "stop poll() worker");
 }
-
 
 
 //!
@@ -145,9 +154,8 @@ io_service::process_events(void) {
   __TACOPIE_LOG(debug, "processing events");
 
   for (const auto& fd : m_polled_fds) {
-    if (fd == m_notifier.get_read_fd()) {
-      if(FD_ISSET(fd, &m_rd_set)) 
-         m_notifier.clr_buffer();
+    if (fd == m_notifier.get_read_fd() && FD_ISSET(fd, &m_rd_set)) {
+      m_notifier.clr_buffer();
       continue;
     }
 
@@ -157,11 +165,11 @@ io_service::process_events(void) {
 
     auto& socket = it->second;
 
-    if (FD_ISSET(fd, &m_rd_set) && socket.rd_callback && !socket.is_executing_rd_callback) { 
-       process_rd_event(fd, socket); 
+    if (FD_ISSET(fd, &m_rd_set) && socket.rd_callback && !socket.is_executing_rd_callback) {
+      process_rd_event(fd, socket);
     }
-    if (FD_ISSET(fd, &m_wr_set) && socket.wr_callback && !socket.is_executing_wr_callback) { 
-       process_wr_event(fd, socket); 
+    if (FD_ISSET(fd, &m_wr_set) && socket.wr_callback && !socket.is_executing_wr_callback) {
+      process_wr_event(fd, socket);
     }
 
     if (socket.marked_for_untrack && !socket.is_executing_rd_callback && !socket.is_executing_wr_callback) {
@@ -185,14 +193,14 @@ io_service::process_rd_event(const fd_t& fd, tracked_socket& socket) {
     rd_callback(fd);
 
     std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
-    auto it = m_tracked_sockets.find(fd);
+    auto it      = m_tracked_sockets.find(fd);
     auto& socket = it->second;
 
     if (it == m_tracked_sockets.end()) {
-       //Make sure we clean up the flags and notify...
-       socket.is_executing_rd_callback = false;
-       m_notifier.notify();
-       return; 
+      //Make sure we clean up the flags and notify...
+      socket.is_executing_rd_callback = false;
+      m_notifier.notify();
+      return;
     }
 
     socket.is_executing_rd_callback = false;
@@ -220,14 +228,14 @@ io_service::process_wr_event(const fd_t& fd, tracked_socket& socket) {
     wr_callback(fd);
 
     std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
-    auto it = m_tracked_sockets.find(fd);
+    auto it      = m_tracked_sockets.find(fd);
     auto& socket = it->second;
 
     if (it == m_tracked_sockets.end()) {
-       //Make sure we clean up the flags and notify...
-       socket.is_executing_wr_callback = false;
-       m_notifier.notify();
-       return;
+      //Make sure we clean up the flags and notify...
+      socket.is_executing_wr_callback = false;
+      m_notifier.notify();
+      return;
     }
 
     socket.is_executing_wr_callback = false;
@@ -254,7 +262,7 @@ io_service::init_poll_fds_info(void) {
   FD_ZERO(&m_rd_set);
   FD_ZERO(&m_wr_set);
 
-  int ndfs = (int)m_notifier.get_read_fd();
+  int ndfs = m_notifier.get_read_fd();
   FD_SET(m_notifier.get_read_fd(), &m_rd_set);
   m_polled_fds.push_back(m_notifier.get_read_fd());
 
@@ -263,21 +271,21 @@ io_service::init_poll_fds_info(void) {
     const auto& socket_info = socket.second;
 
     bool should_rd = socket_info.rd_callback && !socket_info.is_executing_rd_callback;
-    if (should_rd) { 
-       FD_SET(fd, &m_rd_set); 
+    if (should_rd) {
+      FD_SET(fd, &m_rd_set);
     }
 
     bool should_wr = socket_info.wr_callback && !socket_info.is_executing_wr_callback;
-    if (should_wr) { 
-       FD_SET(fd, &m_wr_set); 
+    if (should_wr) {
+      FD_SET(fd, &m_wr_set);
     }
 
-    if (should_rd || should_wr || socket_info.marked_for_untrack) { 
-       m_polled_fds.push_back(fd); 
+    if (should_rd || should_wr || socket_info.marked_for_untrack) {
+      m_polled_fds.push_back(fd);
     }
 
-    if ((should_rd || should_wr) && (int) fd > ndfs) { 
-       ndfs = (int)fd; 
+    if ((should_rd || should_wr) && (int) fd > ndfs) {
+      ndfs = (int) fd;
     }
   }
 
@@ -300,7 +308,7 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   track_info.marked_for_untrack = false;
 
   //Make sure we clear these because we might be in a read callback when we
-  //detect the socket failure and reconnect with reused socket handle 
+  //detect the socket failure and reconnect with reused socket handle
   track_info.is_executing_rd_callback = false;
   track_info.is_executing_wr_callback = false;
 
@@ -364,14 +372,15 @@ io_service::wait_for_removal(const tcp_socket& socket) {
   __TACOPIE_LOG(debug, "waiting for socket removal");
 
   m_wait_for_removal_condvar.wait(lock, [&]() {
-     __TACOPIE_LOG(debug, "socket has been removed");
+    __TACOPIE_LOG(debug, "socket has been removed");
 
     return m_tracked_sockets.find(socket.get_fd()) == m_tracked_sockets.end();
   });
 }
 
-void io_service::run_async_task(const utils::thread_pool::task_t& task) {
-   m_callback_workers.add_task(task);
+void
+io_service::run_async_task(const utils::thread_pool::task_t& task) {
+  m_callback_workers.add_task(task);
 }
 
-} //! tacopie
+} // namespace tacopie
