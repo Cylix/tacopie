@@ -58,56 +58,25 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 //! ctor & dtor
 //!
 
-io_service::io_service(std::size_t nb_threads, bool bDelayedStart)
+io_service::io_service(std::size_t nb_threads)
 : m_should_stop(ATOMIC_VAR_INIT(false))
-, m_notifier(bDelayedStart)
 , m_callback_workers(nb_threads) {
   __TACOPIE_LOG(debug, "create io_service");
-
-  if (!bDelayedStart)
-    startup();
-}
-
-io_service::~io_service(void) {
-  __TACOPIE_LOG(debug, "destroy io_service");
-
-  shutdown();
-}
-
-void
-io_service::startup(void) {
-  __TACOPIE_LOG(debug, "starting io_service");
-
-#ifdef _WIN32
-  //! Start winsock before any other socket calls.
-  WSADATA wsaData;
-  int nRet = WSAStartup(0x202, &wsaData);
-  if (nRet)
-    throw cpp_redis::redis_error("Could not startup io_service, WSAStartup() failure");
-#endif
-
-  m_notifier.startup();
 
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
 
-void
-io_service::shutdown(void) {
-  __TACOPIE_LOG(debug, "shutting down io_service");
+io_service::~io_service(void) {
+  __TACOPIE_LOG(debug, "destroy io_service");
 
   m_should_stop = true;
 
   m_notifier.notify();
-  if (m_poll_worker.joinable())
+  if (m_poll_worker.joinable()) {
     m_poll_worker.join();
+  }
   m_callback_workers.stop();
-
-  m_notifier.shutdown();
-
-#ifdef _WIN32
-  WSACleanup();
-#endif
 }
 
 
@@ -141,7 +110,6 @@ io_service::poll(void) {
 
   __TACOPIE_LOG(debug, "stop poll() worker");
 }
-
 
 //!
 //! process poll detected events
@@ -193,15 +161,9 @@ io_service::process_rd_event(const fd_t& fd, tracked_socket& socket) {
     rd_callback(fd);
 
     std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
-    auto it      = m_tracked_sockets.find(fd);
-    auto& socket = it->second;
+    auto it = m_tracked_sockets.find(fd);
 
-    if (it == m_tracked_sockets.end()) {
-      //Make sure we clean up the flags and notify...
-      socket.is_executing_rd_callback = false;
-      m_notifier.notify();
-      return;
-    }
+    if (it == m_tracked_sockets.end()) { return; }
 
     socket.is_executing_rd_callback = false;
 
@@ -228,20 +190,14 @@ io_service::process_wr_event(const fd_t& fd, tracked_socket& socket) {
     wr_callback(fd);
 
     std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
-    auto it      = m_tracked_sockets.find(fd);
-    auto& socket = it->second;
+    auto it = m_tracked_sockets.find(fd);
 
-    if (it == m_tracked_sockets.end()) {
-      //Make sure we clean up the flags and notify...
-      socket.is_executing_wr_callback = false;
-      m_notifier.notify();
-      return;
-    }
+    if (it == m_tracked_sockets.end()) { return; }
 
     socket.is_executing_wr_callback = false;
 
     if (socket.marked_for_untrack && !socket.is_executing_rd_callback) {
-      __TACOPIE_LOG(debug, "untracking marked socket");
+      __TACOPIE_LOG(debug, "untrack socket");
       m_tracked_sockets.erase(it);
       m_wait_for_removal_condvar.notify_all();
     }
@@ -319,7 +275,7 @@ void
 io_service::set_rd_callback(const tcp_socket& socket, const event_callback_t& event_callback) {
   std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
-  __TACOPIE_LOG(debug, "set read socket callback");
+  __TACOPIE_LOG(debug, "update read socket tracking callback");
 
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.rd_callback = event_callback;
@@ -331,7 +287,7 @@ void
 io_service::set_wr_callback(const tcp_socket& socket, const event_callback_t& event_callback) {
   std::lock_guard<std::mutex> lock(m_tracked_sockets_mtx);
 
-  __TACOPIE_LOG(debug, "set write socket callback");
+  __TACOPIE_LOG(debug, "update write socket tracking callback");
 
   auto& track_info       = m_tracked_sockets[socket.get_fd()];
   track_info.wr_callback = event_callback;

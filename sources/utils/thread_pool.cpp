@@ -54,7 +54,7 @@ thread_pool::run(void) {
     task_t task = fetch_task();
 
     if (task) {
-      __TACOPIE_LOG(debug, "executing task");
+      __TACOPIE_LOG(debug, "execute task");
       task();
       __TACOPIE_LOG(debug, "execution complete");
     }
@@ -129,6 +129,6 @@ thread_pool::operator<<(const task_t& task) {
   return *this;
 }
 
-} //! utils
+} // namespace utils
 
-} //! tacopie
+} // namespace tacopie

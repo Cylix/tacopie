@@ -29,12 +29,6 @@
 
 namespace tacopie {
 
-//! todo: code review and port of windows change to unix
-void
-io_service::run_async_task(const utils::thread_pool::task_t& task) {
-}
-
-
 //!
 //! default io_service getter & setter
 //!
@@ -42,8 +36,8 @@ io_service::run_async_task(const utils::thread_pool::task_t& task) {
 static std::shared_ptr<io_service> io_service_default_instance = nullptr;
 
 const std::shared_ptr<io_service>&
-get_default_io_service(unsigned int) {
-  if (io_service_default_instance == nullptr) { io_service_default_instance = std::make_shared<io_service>(); }
+get_default_io_service(unsigned int num_io_workers) {
+  if (io_service_default_instance == nullptr) { io_service_default_instance = std::make_shared<io_service>(num_io_workers); }
 
   return io_service_default_instance;
 }
@@ -63,56 +57,25 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 //! ctor & dtor
 //!
 
-io_service::io_service(std::size_t nb_threads, bool bDelayedStart)
+io_service::io_service(std::size_t nb_threads)
 : m_should_stop(ATOMIC_VAR_INIT(false))
-, m_notifier(bDelayedStart)
 , m_callback_workers(nb_threads) {
   __TACOPIE_LOG(debug, "create io_service");
-
-  if (!bDelayedStart)
-    startup();
-}
-
-io_service::~io_service(void) {
-  __TACOPIE_LOG(debug, "destroy io_service");
-
-  shutdown();
-}
-
-void
-io_service::startup(void) {
-  __TACOPIE_LOG(debug, "starting io_service");
-
-#ifdef _WIN32
-  //! Start winsock before any other socket calls.
-  WSADATA wsaData;
-  int nRet = WSAStartup(0x202, &wsaData);
-  if (nRet)
-    throw cpp_redis::redis_error("Could not startup io_service, WSAStartup() failure");
-#endif
-
-  m_notifier.startup();
 
   //! Start worker after everything has been initialized
   m_poll_worker = std::thread(std::bind(&io_service::poll, this));
 }
 
-void
-io_service::shutdown(void) {
-  __TACOPIE_LOG(debug, "shutting down io_service");
+io_service::~io_service(void) {
+  __TACOPIE_LOG(debug, "destroy io_service");
 
   m_should_stop = true;
 
   m_notifier.notify();
-  if (m_poll_worker.joinable())
+  if (m_poll_worker.joinable()) {
     m_poll_worker.join();
+  }
   m_callback_workers.stop();
-
-  m_notifier.shutdown();
-
-#ifdef _WIN32
-  WSACleanup();
-#endif
 }
 
 //!
@@ -345,6 +308,11 @@ io_service::wait_for_removal(const tcp_socket& socket) {
   m_wait_for_removal_condvar.wait(lock, [&]() {
     return m_tracked_sockets.find(socket.get_fd()) == m_tracked_sockets.end();
   });
+}
+
+void
+io_service::run_async_task(const utils::thread_pool::task_t& task) {
+  m_callback_workers.add_task(task);
 }
 
 } // namespace tacopie

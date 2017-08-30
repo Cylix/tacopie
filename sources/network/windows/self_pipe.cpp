@@ -33,18 +33,8 @@ namespace tacopie {
 //!
 //! ctor & dtor
 //!
-self_pipe::self_pipe(bool bDelayedStartup)
+self_pipe::self_pipe(void)
 : m_fd(__TACOPIE_INVALID_FD) {
-  if (!bDelayedStartup)
-    startup();
-}
-
-self_pipe::~self_pipe(void) {
-  shutdown();
-}
-
-void
-self_pipe::startup() {
   //! Create a server
   m_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "fail socket()"); }
@@ -69,11 +59,9 @@ self_pipe::startup() {
   if (connect(m_fd, &m_addr, m_addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "fail connect()"); }
 }
 
-void
-self_pipe::shutdown() {
-  if (__TACOPIE_INVALID_FD != m_fd) {
+self_pipe::~self_pipe(void) {
+  if (m_fd != __TACOPIE_INVALID_FD) {
     closesocket(m_fd);
-    m_fd = __TACOPIE_INVALID_FD;
   }
 }
 
@@ -107,4 +95,4 @@ self_pipe::clr_buffer(void) {
   (void) recvfrom(m_fd, buf, 1024, 0, &m_addr, &m_addr_len);
 }
 
-} //! tacopie
+} // namespace tacopie

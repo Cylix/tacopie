@@ -29,11 +29,8 @@ namespace tacopie {
 class self_pipe {
 public:
   //! ctor & dtor
-  self_pipe(bool bDelayedStartup = false);
+  self_pipe(void);
   ~self_pipe(void);
-
-  void startup();
-  void shutdown();
 
   //! copy ctor & assignment operator
   self_pipe(const self_pipe&) = delete;
@@ -60,4 +57,4 @@ private:
 #endif /* _WIN32 */
 };
 
-} //! tacopie
+} // namespace tacopie

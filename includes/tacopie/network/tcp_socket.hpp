@@ -111,4 +111,4 @@ private:
   type m_type;
 };
 
-} //! tacopie
+} // namespace tacopie

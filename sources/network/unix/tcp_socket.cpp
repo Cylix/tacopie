@@ -27,8 +27,10 @@
 #include <cstring>
 
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
@@ -146,7 +148,47 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
   socklen_t addr_len                 = is_unix_socket ? sizeof(server_addr_un) : sizeof(server_addr_in);
   const struct sockaddr* server_addr = is_unix_socket ? (const struct sockaddr*) &server_addr_un : (const struct sockaddr*) &server_addr_in;
 
-  if (::connect(m_fd, server_addr, addr_len) == -1) { __TACOPIE_THROW(error, "connect() failure"); }
+  if (timeout_msecs > 0) {
+    //! for timeout connection handling:
+    //!  1. set socket to non blocking
+    //!  2. connect
+    //!  3. poll select
+    //!  4. check connection status
+    if (fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) | O_NONBLOCK) == -1) {
+      close();
+      __TACOPIE_THROW(error, "connect() set non-blocking failure");
+    }
+  }
+
+  int ret = ::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr));
+  if (ret < 0 && errno != EINPROGRESS) {
+    close();
+    __TACOPIE_THROW(error, "connect() failure");
+  }
+
+  if (timeout_msecs > 0) {
+    timeval tv;
+    tv.tv_sec  = (timeout_msecs / 1000);
+    tv.tv_usec = ((timeout_msecs - (tv.tv_sec * 1000)) * 1000);
+
+    fd_set set;
+    FD_ZERO(&set);
+    FD_SET(m_fd, &set);
+
+    //! 1 means we are connected.
+    //! 0/-1 means a timeout.
+    if (select(0, NULL, &set, NULL, &tv) == 1) {
+      //! Set back to blocking mode as the user of this class is expecting
+      if (fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) & (~O_NONBLOCK)) == -1) {
+        close();
+        __TACOPIE_THROW(error, "connect() set blocking failure");
+      }
+    }
+    else {
+      close();
+      __TACOPIE_THROW(error, "connect() timed out");
+    }
+  }
 }
 
 //!

@@ -79,7 +79,7 @@ tcp_socket::recv(std::size_t size_to_read) {
 
   std::vector<char> data(size_to_read, 0);
 
-  ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), (int) size_to_read, 0);
+  ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
 
   if (rd_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "recv() failure"); }
 
@@ -95,7 +95,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  ssize_t wr_size = ::send(m_fd, data.data(), (int) size_to_write, 0);
+  ssize_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
 
   if (wr_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "send() failure"); }
 
@@ -125,64 +125,47 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
   freeaddrinfo(result);
 
   if (timeout_msecs > 0) {
-#ifdef _WIN32
-    //If timeout is passed below we set the socket to non-blocking mode so connect returns immediately.
-    //then we do a select with a timeout and close the socket if not yet connected.
-    // If mode = 0, blocking is enabled;
-    // If mode != 0, non-blocking mode is enabled.
+    //! for timeout connection handling:
+    //!  1. set socket to non blocking
+    //!  2. connect
+    //!  3. poll select
+    //!  4. check connection status
     u_long mode = 1;
-    if (0 != ioctlsocket(m_fd, FIONBIO, &mode)) {
+    if (ioctlsocket(m_fd, FIONBIO, &mode) != 0) {
+      close();
       __TACOPIE_THROW(error, "connect() set non-blocking failure");
     }
-#else
-    if (-1 == fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) | O_NONBLOCK)) { __TACOPIE_THROW(error, "connect() set non-blocking failure"); }
-#endif
   }
 
   int ret = ::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr));
-#ifdef _WIN32
   if (ret == -1 && WSAGetLastError() != WSAEWOULDBLOCK) {
+    close();
     __TACOPIE_THROW(error, "connect() failure");
   }
-#else
-  if (ret < 0 && errno != EINPROGRESS) { __TACOPIE_THROW(error, "connect() failure"); }
-#endif
 
-  //If timeout specified then wait for ability to write which signals a connection has been made.
   if (timeout_msecs > 0) {
     timeval tv;
-    tv.tv_sec  = (timeout_msecs / 1000);                        //Find whole number of seconds
-    tv.tv_usec = ((timeout_msecs - (tv.tv_sec * 1000)) * 1000); //Remainder in usecs
+    tv.tv_sec  = (timeout_msecs / 1000);
+    tv.tv_usec = ((timeout_msecs - (tv.tv_sec * 1000)) * 1000);
+
     FD_SET set;
     FD_ZERO(&set);
-#pragma warning(push)
-#pragma warning(disable : 4127) //Ignore conditional expression is constant warning from FD_SET macro bug.
     FD_SET(m_fd, &set);
-#pragma warning(pop)
 
-    int select_ret = 0;
-    if ((select_ret = select(0, NULL, &set, NULL, &tv)) == -1) {
-      closesocket(m_fd);
-      m_fd = __TACOPIE_INVALID_FD;
-      __TACOPIE_THROW(error, "connect() set timeout failure");
-    }
-
-    if (select_ret == 1) //1 means we are connected.  0 means a timeout.
-    {
-      //Set back to blocking mode as the user of this class is expecting...
+    //! 1 means we are connected.
+    //! 0 means a timeout.
+    if (select(0, NULL, &set, NULL, &tv) == 1) {
+      //! Set back to blocking mode as the user of this class is expecting
       u_long mode = 0;
-      if (0 != ioctlsocket(m_fd, FIONBIO, &mode)) {
-        closesocket(m_fd);
-        m_fd = __TACOPIE_INVALID_FD;
+      if (ioctlsocket(m_fd, FIONBIO, &mode) != 0) {
+        close();
         __TACOPIE_THROW(error, "connect() set blocking failure");
       }
-      return;
     }
-
-    //We didn't connect in the timeout specified so just close the socket in case it connects later on.
-    closesocket(m_fd);
-    m_fd = __TACOPIE_INVALID_FD;
-    __TACOPIE_THROW(error, "connect() timed out");
+    else {
+      close();
+      __TACOPIE_THROW(error, "connect() timed out");
+    }
   }
 }
 
@@ -217,7 +200,7 @@ tcp_socket::listen(std::size_t max_connection_queue) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  if (::listen(m_fd, (int) max_connection_queue) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
+  if (::listen(m_fd, max_connection_queue) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
 }
 
 tcp_socket

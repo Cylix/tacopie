@@ -28,22 +28,22 @@
 
 namespace tacopie {
 
-void
-self_pipe::startup() {}
-void
-self_pipe::shutdown() {}
-
 //!
 //! ctor & dtor
 //!
-self_pipe::self_pipe(bool bDelayedStartup)
+self_pipe::self_pipe(void)
 : m_fds{__TACOPIE_INVALID_FD, __TACOPIE_INVALID_FD} {
   if (pipe(m_fds) == -1) { __TACOPIE_THROW(error, "pipe() failure"); }
 }
 
 self_pipe::~self_pipe(void) {
-  close(m_fds[0]);
-  close(m_fds[1]);
+  if (m_fds[0] != __TACOPIE_INVALID_FD) {
+    close(m_fds[0]);
+  }
+
+  if (m_fds[1] != __TACOPIE_INVALID_FD) {
+    close(m_fds[1]);
+  }
 }
 
 //!

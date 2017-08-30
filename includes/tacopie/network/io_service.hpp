@@ -50,15 +50,12 @@ namespace tacopie {
 class io_service {
 public:
   //! ctor & dtor
-  io_service(std::size_t nb_threads = __TACOPIE_IO_SERVICE_NB_WORKERS, bool bDelayedStart = false);
+  io_service(std::size_t nb_threads = __TACOPIE_IO_SERVICE_NB_WORKERS);
   ~io_service(void);
 
   //! copy ctor & assignment operator
   io_service(const io_service&) = delete;
   io_service& operator=(const io_service&) = delete;
-
-  void startup(void);
-  void shutdown(void);
 
 public:
   //! callback handler typedef
@@ -143,4 +140,4 @@ private:
 const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers = 2);
 void set_default_io_service(const std::shared_ptr<io_service>&);
 
-} //! tacopie
+} // namespace tacopie
