@@ -23,7 +23,6 @@
 #include <tacopie/error.hpp>
 #include <tacopie/logger.hpp>
 #include <tacopie/network/io_service.hpp>
-#include <cpp_redis/redis_error.hpp>
 
 #include <fcntl.h>
 
