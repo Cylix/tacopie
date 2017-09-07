@@ -26,7 +26,12 @@
 #include <cpp_redis/redis_error.hpp>
 
 #include <fcntl.h>
+
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <unistd.h>
+#endif /* _WIN32 */
 
 namespace tacopie {
 
@@ -59,7 +64,11 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 //!
 
 io_service::io_service(std::size_t nb_threads)
+#ifdef _WIN32
 : m_should_stop(ATOMIC_VAR_INIT(false))
+#else
+: m_should_stop(false)
+#endif /* _WIN32 */
 , m_callback_workers(nb_threads) {
   __TACOPIE_LOG(debug, "create io_service");
 
@@ -165,6 +174,7 @@ io_service::process_rd_event(const fd_t& fd, tracked_socket& socket) {
 
     if (it == m_tracked_sockets.end()) { return; }
 
+    auto& socket                    = it->second;
     socket.is_executing_rd_callback = false;
 
     if (socket.marked_for_untrack && !socket.is_executing_wr_callback) {
@@ -194,6 +204,7 @@ io_service::process_wr_event(const fd_t& fd, tracked_socket& socket) {
 
     if (it == m_tracked_sockets.end()) { return; }
 
+    auto& socket                    = it->second;
     socket.is_executing_wr_callback = false;
 
     if (socket.marked_for_untrack && !socket.is_executing_rd_callback) {
@@ -263,11 +274,6 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
   track_info.wr_callback        = wr_callback;
   track_info.marked_for_untrack = false;
 
-  //Make sure we clear these because we might be in a read callback when we
-  //detect the socket failure and reconnect with reused socket handle
-  track_info.is_executing_rd_callback = false;
-  track_info.is_executing_wr_callback = false;
-
   m_notifier.notify();
 }
 
@@ -332,11 +338,6 @@ io_service::wait_for_removal(const tcp_socket& socket) {
 
     return m_tracked_sockets.find(socket.get_fd()) == m_tracked_sockets.end();
   });
-}
-
-void
-io_service::run_async_task(const utils::thread_pool::task_t& task) {
-  m_callback_workers.add_task(task);
 }
 
 } // namespace tacopie

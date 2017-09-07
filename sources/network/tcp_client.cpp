@@ -43,7 +43,7 @@ tcp_client::~tcp_client(void) {
 
 //!
 //! custom ctor
-//! build socket from existing socket
+//! build client from existing socket
 //!
 
 tcp_client::tcp_client(tcp_socket&& socket)
@@ -110,11 +110,7 @@ tcp_client::disconnect(bool wait_for_removal) {
 void
 tcp_client::call_disconnection_handler(void) {
   if (m_disconnection_handler) {
-    __TACOPIE_LOG(debug, "queued async disconnect handler");
-    m_io_service->run_async_task([=] {
-      __TACOPIE_LOG(debug, "calling disconnect handler");
-      m_disconnection_handler();
-    });
+    m_disconnection_handler();
   }
 }
 
