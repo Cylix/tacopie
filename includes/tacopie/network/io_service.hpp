@@ -72,9 +72,6 @@ public:
   //! basically wait until all pending callbacks are executed
   void wait_for_removal(const tcp_socket& socket);
 
-  //! Launch asyncrounous task
-  void run_async_task(const utils::thread_pool::task_t& task);
-
 private:
   //! struct tracked_socket
   //! contains information about what a current socket is tracking
@@ -137,7 +134,7 @@ private:
 };
 
 //! default io_service getter & setter
-const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers = 2);
+const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers = 1);
 void set_default_io_service(const std::shared_ptr<io_service>&);
 
 } // namespace tacopie

@@ -39,6 +39,10 @@
 #include <unistd.h>
 #endif /* _WIN32 */
 
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif /* SOCKET_ERROR */
+
 namespace tacopie {
 
 //!
@@ -90,7 +94,7 @@ tcp_socket::recv(std::size_t size_to_read) {
 
   ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
 
-  if (rd_size == -1) { __TACOPIE_THROW(error, "recv() failure"); }
+  if (rd_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "recv() failure"); }
 
   if (rd_size == 0) { __TACOPIE_THROW(warn, "nothing to read, socket has been closed by remote host"); }
 
@@ -106,7 +110,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
 
   ssize_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
 
-  if (wr_size == -1) { __TACOPIE_THROW(error, "send() failure"); }
+  if (wr_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "send() failure"); }
 
   return wr_size;
 }
@@ -120,7 +124,7 @@ tcp_socket::listen(std::size_t max_connection_queue) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  if (::listen(m_fd, max_connection_queue) == -1) { __TACOPIE_THROW(debug, "listen() failure"); }
+  if (::listen(m_fd, max_connection_queue) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
 }
 
 tcp_socket

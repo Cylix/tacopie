@@ -133,29 +133,6 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   if (::bind(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == SOCKET_ERROR) { __TACOPIE_THROW(error, "bind() failure"); }
 }
 
-void
-tcp_socket::listen(std::size_t max_connection_queue) {
-  create_socket_if_necessary();
-  check_or_set_type(type::SERVER);
-
-  if (::listen(m_fd, max_connection_queue) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
-}
-
-tcp_socket
-tcp_socket::accept(void) {
-  create_socket_if_necessary();
-  check_or_set_type(type::SERVER);
-
-  struct sockaddr_in client_info;
-  socklen_t client_info_struct_size = sizeof(client_info);
-
-  fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
-
-  if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
-
-  return {client_fd, inet_ntoa(client_info.sin_addr), client_info.sin_port, type::CLIENT};
-}
-
 //!
 //! general socket operations
 //!
