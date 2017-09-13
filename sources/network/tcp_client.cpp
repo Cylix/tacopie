@@ -95,13 +95,40 @@ void
 tcp_client::disconnect(bool wait_for_removal) {
   if (!is_connected()) { return; }
 
+  //! update state
   m_is_connected = false;
 
+  //! clear all pending requests
+  clear_read_requests();
+  clear_write_requests();
+
+  //! remove socket from io service and wait for removal if necessary
   m_io_service->untrack(m_socket);
   if (wait_for_removal) { m_io_service->wait_for_removal(m_socket); }
+
+  //! close the socket
   m_socket.close();
 
   __TACOPIE_LOG(info, "tcp_client disconnected");
+}
+
+//!
+//! Clear pending requests
+//!
+void
+tcp_client::clear_read_requests(void) {
+  std::lock_guard<std::mutex> lock(m_read_requests_mtx);
+
+  std::queue<read_request> empty;
+  std::swap(m_read_requests, empty);
+}
+
+void
+tcp_client::clear_write_requests(void) {
+  std::lock_guard<std::mutex> lock(m_write_requests_mtx);
+
+  std::queue<write_request> empty;
+  std::swap(m_write_requests, empty);
 }
 
 //!

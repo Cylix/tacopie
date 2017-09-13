@@ -126,6 +126,11 @@ private:
   void on_write_available(fd_t fd);
 
 private:
+  //! Clear pending requests
+  void clear_read_requests(void);
+  void clear_write_requests(void);
+
+private:
   //! process read & write operations when available
   async_read_callback_t process_read(read_result& result);
   async_write_callback_t process_write(write_result& result);
