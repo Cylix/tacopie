@@ -1,0 +1,289 @@
+\hypertarget{classtacopie_1_1io__service}{}\section{tacopie\+:\+:io\+\_\+service Class Reference}
+\label{classtacopie_1_1io__service}\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+
+
+{\ttfamily \#include $<$io\+\_\+service.\+hpp$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::function$<$ void(\hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t})$>$ \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}{io\+\_\+service} (std\+::size\+\_\+t nb\+\_\+threads=\hyperlink{io__service_8hpp_a822f465d034836ecbc765ad422eec064}{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS})
+\item 
+\hyperlink{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}{$\sim$io\+\_\+service} (void)
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\hyperlink{classtacopie_1_1io__service_ad5da7503d8fec083c6d28455ec9e21c7}{io\+\_\+service} (const \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \&)=delete
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \& \hyperlink{classtacopie_1_1io__service_a980652008516b38357d405c16eda07fa}{operator=} (const \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \&)=delete
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+void \hyperlink{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}{track} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&rd\+\_\+callback=nullptr, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&wr\+\_\+callback=nullptr)
+\begin{DoxyCompactList}\small\item\em track \& untrack socket \end{DoxyCompactList}\item 
+void \hyperlink{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}{set\+\_\+rd\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}{set\+\_\+wr\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}{untrack} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket)
+\item 
+void \hyperlink{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}{wait\+\_\+for\+\_\+removal} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtacopie_1_1io__service_a03813e0e91d70d367f9fb0ff0d86d3dd}{poll} (void)
+\item 
+int \hyperlink{classtacopie_1_1io__service_a7311358423dddd6a9d17c61b2c365ff8}{init\+\_\+poll\+\_\+fds\+\_\+info} (void)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a90a2ab7b6bbaf10bbc0607ce371cc806}{process\+\_\+events} (void)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a65c3ef9fa1473708b81b05029f6861f9}{process\+\_\+rd\+\_\+event} (const \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t} \&fd, \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} \&socket)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a55e334cdf75187b9296c03447e32a63f}{process\+\_\+wr\+\_\+event} (const \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t} \&fd, \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} \&socket)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unordered\+\_\+map$<$ \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t}, \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} $>$ \hyperlink{classtacopie_1_1io__service_a49c9b0b992a1fe203975029f8557ad1a}{m\+\_\+tracked\+\_\+sockets}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{classtacopie_1_1io__service_a8d73334fcd84e31ccaada49f326d3463}{m\+\_\+should\+\_\+stop}
+\item 
+std\+::thread \hyperlink{classtacopie_1_1io__service_a882b2211bae06c87cdf6e9c04d2cb783}{m\+\_\+poll\+\_\+worker}
+\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool}{utils\+::thread\+\_\+pool} \hyperlink{classtacopie_1_1io__service_ace8ecb6c752a0adb3b2fec1c92cf1161}{m\+\_\+callback\+\_\+workers}
+\item 
+std\+::mutex \hyperlink{classtacopie_1_1io__service_af73671e872d70c6e7d1c856185b5ddd6}{m\+\_\+tracked\+\_\+sockets\+\_\+mtx}
+\item 
+std\+::vector$<$ \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t} $>$ \hyperlink{classtacopie_1_1io__service_a5a505f908c39c88e19f092c603f29261}{m\+\_\+polled\+\_\+fds}
+\item 
+fd\+\_\+set \hyperlink{classtacopie_1_1io__service_a1d4388ceffa22976892ac5de95936f58}{m\+\_\+rd\+\_\+set}
+\item 
+fd\+\_\+set \hyperlink{classtacopie_1_1io__service_afca4de707285a1a373751e7e10b413ff}{m\+\_\+wr\+\_\+set}
+\item 
+std\+::condition\+\_\+variable \hyperlink{classtacopie_1_1io__service_ab48cce92a369604bf3409ebbbd6d345d}{m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar}
+\item 
+\hyperlink{classtacopie_1_1self__pipe}{tacopie\+::self\+\_\+pipe} \hyperlink{classtacopie_1_1io__service_ae8a17523ba4719b0e799d1c5d665e69f}{m\+\_\+notifier}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+service that operates IO Handling. It polls sockets for input and output, processes read and write operations and calls the appropriate callbacks. 
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}\label{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!event\+\_\+callback\+\_\+t@{event\+\_\+callback\+\_\+t}}
+\index{event\+\_\+callback\+\_\+t@{event\+\_\+callback\+\_\+t}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{event\+\_\+callback\+\_\+t}{event\_callback\_t}}
+{\footnotesize\ttfamily typedef std\+::function$<$void(\hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t})$>$ \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{tacopie\+::io\+\_\+service\+::event\+\_\+callback\+\_\+t}}
+
+callback handler typedef called on new socket event if register to \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}\label{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!io\+\_\+service@{io\+\_\+service}}
+\index{io\+\_\+service@{io\+\_\+service}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{io\+\_\+service()}{io\_service()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::io\+\_\+service (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads = {\ttfamily \hyperlink{io__service_8hpp_a822f465d034836ecbc765ad422eec064}{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS}} }\end{DoxyParamCaption})}
+
+ctor
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+\_\+threads} & defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}\label{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!````~io\+\_\+service@{$\sim$io\+\_\+service}}
+\index{````~io\+\_\+service@{$\sim$io\+\_\+service}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{$\sim$io\+\_\+service()}{~io\_service()}}
+{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::$\sim$io\+\_\+service (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+dtor 
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_ad5da7503d8fec083c6d28455ec9e21c7}\label{classtacopie_1_1io__service_ad5da7503d8fec083c6d28455ec9e21c7}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!io\+\_\+service@{io\+\_\+service}}
+\index{io\+\_\+service@{io\+\_\+service}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{io\+\_\+service()}{io\_service()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::io\+\_\+service (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+copy ctor 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a7311358423dddd6a9d17c61b2c365ff8}\label{classtacopie_1_1io__service_a7311358423dddd6a9d17c61b2c365ff8}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!init\+\_\+poll\+\_\+fds\+\_\+info@{init\+\_\+poll\+\_\+fds\+\_\+info}}
+\index{init\+\_\+poll\+\_\+fds\+\_\+info@{init\+\_\+poll\+\_\+fds\+\_\+info}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{init\+\_\+poll\+\_\+fds\+\_\+info()}{init\_poll\_fds\_info()}}
+{\footnotesize\ttfamily int tacopie\+::io\+\_\+service\+::init\+\_\+poll\+\_\+fds\+\_\+info (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+init m\+\_\+poll\+\_\+fds\+\_\+info simply initialize m\+\_\+polled\+\_\+fds variable based on m\+\_\+tracked\+\_\+sockets information
+
+\begin{DoxyReturn}{Returns}
+maximum fd value polled 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a980652008516b38357d405c16eda07fa}\label{classtacopie_1_1io__service_a980652008516b38357d405c16eda07fa}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!operator=@{operator=}}
+\index{operator=@{operator=}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1io__service}{io\+\_\+service}\& tacopie\+::io\+\_\+service\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+assignment operator 
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_a03813e0e91d70d367f9fb0ff0d86d3dd}\label{classtacopie_1_1io__service_a03813e0e91d70d367f9fb0ff0d86d3dd}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!poll@{poll}}
+\index{poll@{poll}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{poll()}{poll()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::poll (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+poll worker function main loop of the background thread in charge of the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} in charge of polling fds \mbox{\Hypertarget{classtacopie_1_1io__service_a90a2ab7b6bbaf10bbc0607ce371cc806}\label{classtacopie_1_1io__service_a90a2ab7b6bbaf10bbc0607ce371cc806}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!process\+\_\+events@{process\+\_\+events}}
+\index{process\+\_\+events@{process\+\_\+events}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{process\+\_\+events()}{process\_events()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::process\+\_\+events (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+process poll detected events called whenever select/poll completed to check read and write availablity \mbox{\Hypertarget{classtacopie_1_1io__service_a65c3ef9fa1473708b81b05029f6861f9}\label{classtacopie_1_1io__service_a65c3ef9fa1473708b81b05029f6861f9}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!process\+\_\+rd\+\_\+event@{process\+\_\+rd\+\_\+event}}
+\index{process\+\_\+rd\+\_\+event@{process\+\_\+rd\+\_\+event}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{process\+\_\+rd\+\_\+event()}{process\_rd\_event()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::process\+\_\+rd\+\_\+event (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t} \&}]{fd,  }\item[{\hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+process read event reported by select/poll for a given socket
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & fd for which a read event has been reported \\
+\hline
+{\em socket} & \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} associated to the given fd \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a55e334cdf75187b9296c03447e32a63f}\label{classtacopie_1_1io__service_a55e334cdf75187b9296c03447e32a63f}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!process\+\_\+wr\+\_\+event@{process\+\_\+wr\+\_\+event}}
+\index{process\+\_\+wr\+\_\+event@{process\+\_\+wr\+\_\+event}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{process\+\_\+wr\+\_\+event()}{process\_wr\_event()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::process\+\_\+wr\+\_\+event (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t} \&}]{fd,  }\item[{\hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+process write event reported by select/poll for a given socket
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & fd for which a write event has been reported \\
+\hline
+{\em socket} & \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} associated to the given fd \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}\label{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!set\+\_\+rd\+\_\+callback@{set\+\_\+rd\+\_\+callback}}
+\index{set\+\_\+rd\+\_\+callback@{set\+\_\+rd\+\_\+callback}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{set\+\_\+rd\+\_\+callback()}{set\_rd\_callback()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::set\+\_\+rd\+\_\+callback (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{event\+\_\+callback }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}\label{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!set\+\_\+wr\+\_\+callback@{set\+\_\+wr\+\_\+callback}}
+\index{set\+\_\+wr\+\_\+callback@{set\+\_\+wr\+\_\+callback}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{set\+\_\+wr\+\_\+callback()}{set\_wr\_callback()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::set\+\_\+wr\+\_\+callback (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{event\+\_\+callback }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}\label{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!track@{track}}
+\index{track@{track}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{track()}{track()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::track (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{rd\+\_\+callback = {\ttfamily nullptr},  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{wr\+\_\+callback = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+track \& untrack socket 
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}\label{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!untrack@{untrack}}
+\index{untrack@{untrack}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{untrack()}{untrack()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::untrack (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}\label{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!wait\+\_\+for\+\_\+removal@{wait\+\_\+for\+\_\+removal}}
+\index{wait\+\_\+for\+\_\+removal@{wait\+\_\+for\+\_\+removal}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{wait\+\_\+for\+\_\+removal()}{wait\_for\_removal()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::wait\+\_\+for\+\_\+removal (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})}
+
+wait until the socket has been effectively removed basically wait until all pending callbacks are executed 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classtacopie_1_1io__service_ace8ecb6c752a0adb3b2fec1c92cf1161}\label{classtacopie_1_1io__service_ace8ecb6c752a0adb3b2fec1c92cf1161}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+callback\+\_\+workers@{m\+\_\+callback\+\_\+workers}}
+\index{m\+\_\+callback\+\_\+workers@{m\+\_\+callback\+\_\+workers}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+callback\+\_\+workers}{m\_callback\_workers}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1utils_1_1thread__pool}{utils\+::thread\+\_\+pool} tacopie\+::io\+\_\+service\+::m\+\_\+callback\+\_\+workers\hspace{0.3cm}{\ttfamily [private]}}
+
+callback workers \mbox{\Hypertarget{classtacopie_1_1io__service_ae8a17523ba4719b0e799d1c5d665e69f}\label{classtacopie_1_1io__service_ae8a17523ba4719b0e799d1c5d665e69f}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+notifier@{m\+\_\+notifier}}
+\index{m\+\_\+notifier@{m\+\_\+notifier}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+notifier}{m\_notifier}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1self__pipe}{tacopie\+::self\+\_\+pipe} tacopie\+::io\+\_\+service\+::m\+\_\+notifier\hspace{0.3cm}{\ttfamily [private]}}
+
+fd associated to the pipe used to wake up the poll call \mbox{\Hypertarget{classtacopie_1_1io__service_a882b2211bae06c87cdf6e9c04d2cb783}\label{classtacopie_1_1io__service_a882b2211bae06c87cdf6e9c04d2cb783}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+poll\+\_\+worker@{m\+\_\+poll\+\_\+worker}}
+\index{m\+\_\+poll\+\_\+worker@{m\+\_\+poll\+\_\+worker}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+poll\+\_\+worker}{m\_poll\_worker}}
+{\footnotesize\ttfamily std\+::thread tacopie\+::io\+\_\+service\+::m\+\_\+poll\+\_\+worker\hspace{0.3cm}{\ttfamily [private]}}
+
+poll thread \mbox{\Hypertarget{classtacopie_1_1io__service_a5a505f908c39c88e19f092c603f29261}\label{classtacopie_1_1io__service_a5a505f908c39c88e19f092c603f29261}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+polled\+\_\+fds@{m\+\_\+polled\+\_\+fds}}
+\index{m\+\_\+polled\+\_\+fds@{m\+\_\+polled\+\_\+fds}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+polled\+\_\+fds}{m\_polled\_fds}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t}$>$ tacopie\+::io\+\_\+service\+::m\+\_\+polled\+\_\+fds\hspace{0.3cm}{\ttfamily [private]}}
+
+data structure given to select (list of fds to poll) \mbox{\Hypertarget{classtacopie_1_1io__service_a1d4388ceffa22976892ac5de95936f58}\label{classtacopie_1_1io__service_a1d4388ceffa22976892ac5de95936f58}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+rd\+\_\+set@{m\+\_\+rd\+\_\+set}}
+\index{m\+\_\+rd\+\_\+set@{m\+\_\+rd\+\_\+set}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+rd\+\_\+set}{m\_rd\_set}}
+{\footnotesize\ttfamily fd\+\_\+set tacopie\+::io\+\_\+service\+::m\+\_\+rd\+\_\+set\hspace{0.3cm}{\ttfamily [private]}}
+
+data structure given to select (list of fds to poll for read) \mbox{\Hypertarget{classtacopie_1_1io__service_a8d73334fcd84e31ccaada49f326d3463}\label{classtacopie_1_1io__service_a8d73334fcd84e31ccaada49f326d3463}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}}
+\index{m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+should\+\_\+stop}{m\_should\_stop}}
+{\footnotesize\ttfamily std\+::atomic$<$bool$>$ tacopie\+::io\+\_\+service\+::m\+\_\+should\+\_\+stop\hspace{0.3cm}{\ttfamily [private]}}
+
+whether the worker should stop or not \mbox{\Hypertarget{classtacopie_1_1io__service_a49c9b0b992a1fe203975029f8557ad1a}\label{classtacopie_1_1io__service_a49c9b0b992a1fe203975029f8557ad1a}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+tracked\+\_\+sockets@{m\+\_\+tracked\+\_\+sockets}}
+\index{m\+\_\+tracked\+\_\+sockets@{m\+\_\+tracked\+\_\+sockets}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+tracked\+\_\+sockets}{m\_tracked\_sockets}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t}, \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket}$>$ tacopie\+::io\+\_\+service\+::m\+\_\+tracked\+\_\+sockets\hspace{0.3cm}{\ttfamily [private]}}
+
+tracked sockets \mbox{\Hypertarget{classtacopie_1_1io__service_af73671e872d70c6e7d1c856185b5ddd6}\label{classtacopie_1_1io__service_af73671e872d70c6e7d1c856185b5ddd6}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+tracked\+\_\+sockets\+\_\+mtx@{m\+\_\+tracked\+\_\+sockets\+\_\+mtx}}
+\index{m\+\_\+tracked\+\_\+sockets\+\_\+mtx@{m\+\_\+tracked\+\_\+sockets\+\_\+mtx}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+tracked\+\_\+sockets\+\_\+mtx}{m\_tracked\_sockets\_mtx}}
+{\footnotesize\ttfamily std\+::mutex tacopie\+::io\+\_\+service\+::m\+\_\+tracked\+\_\+sockets\+\_\+mtx\hspace{0.3cm}{\ttfamily [private]}}
+
+thread safety \mbox{\Hypertarget{classtacopie_1_1io__service_ab48cce92a369604bf3409ebbbd6d345d}\label{classtacopie_1_1io__service_ab48cce92a369604bf3409ebbbd6d345d}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar@{m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar}}
+\index{m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar@{m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar}{m\_wait\_for\_removal\_condvar}}
+{\footnotesize\ttfamily std\+::condition\+\_\+variable tacopie\+::io\+\_\+service\+::m\+\_\+wait\+\_\+for\+\_\+removal\+\_\+condvar\hspace{0.3cm}{\ttfamily [private]}}
+
+condition variable to wait on removal \mbox{\Hypertarget{classtacopie_1_1io__service_afca4de707285a1a373751e7e10b413ff}\label{classtacopie_1_1io__service_afca4de707285a1a373751e7e10b413ff}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!m\+\_\+wr\+\_\+set@{m\+\_\+wr\+\_\+set}}
+\index{m\+\_\+wr\+\_\+set@{m\+\_\+wr\+\_\+set}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{m\+\_\+wr\+\_\+set}{m\_wr\_set}}
+{\footnotesize\ttfamily fd\+\_\+set tacopie\+::io\+\_\+service\+::m\+\_\+wr\+\_\+set\hspace{0.3cm}{\ttfamily [private]}}
+
+data structure given to select (list of fds to poll for write) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/network/\hyperlink{io__service_8hpp}{io\+\_\+service.\+hpp}\end{DoxyCompactItemize}

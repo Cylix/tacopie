@@ -36,51 +36,97 @@ namespace utils {
 
 class thread_pool {
 public:
-  //! ctor & dtor
+  //!
+  //! ctor
+  //! created the worker thread that start working immediately
+  //!
+  //! \param nb_threads number of threads to start the thread pool
+  //!
   explicit thread_pool(std::size_t nb_threads);
+
+  //! dtor
   ~thread_pool(void);
 
-  //! copy ctor & assignment operator
+  //! copy ctor
   thread_pool(const thread_pool&) = delete;
+  //! assignment operator
   thread_pool& operator=(const thread_pool&) = delete;
 
 public:
+  //!
   //! task typedef
+  ///! simply a callable taking no parameter
+  //!
   typedef std::function<void()> task_t;
 
+  //!
   //! add tasks to thread pool
+  //! task is enqueued and will be executed whenever all previously executed tasked have been executed (or are currently being executed)
+  //!
+  //! \param task task to be executed by the threadpool
+  //!
   void add_task(const task_t& task);
+
+  //!
+  //! same as add_task
+  //!
+  //! \param task task to be executed by the threadpool
+  //! \return current instance
+  //!
   thread_pool& operator<<(const task_t& task);
 
+  //!
   //! stop the thread pool and wait for workers completion
+  //! if some tasks are pending, they won't be executed
+  //!
   void stop(void);
 
 public:
-  //! whether the thread_pool is running or not
+  //!
+  //! \return whether the thread_pool is running or not
+  //!
   bool is_running(void) const;
 
 private:
+  //!
   //! worker main loop
+  //!
   void run(void);
 
+  //!
   //! retrieve a new task
+  //! fetch the first element in the queue, or wait if no task are available
+  //! may return null if the threadpool is stopped
+  //!
   task_t fetch_task(void);
 
 private:
+  //!
   //! threads
+  //!
   std::vector<std::thread> m_workers;
 
+  //!
   //! whether the thread_pool should stop or not
+  //!
   std::atomic<bool> m_should_stop = ATOMIC_VAR_INIT(false);
 
+  //!
   //! tasks
+  //!
   std::queue<task_t> m_tasks;
 
-  //! thread safety
+  //!
+  //! tasks thread safety
+  //!
   std::mutex m_tasks_mtx;
+
+  //!
+  //! task condvar to sync on tasks changes
+  //!
   std::condition_variable m_tasks_condvar;
 };
 
-} //! utils
+} // namespace utils
 
-} //! tacopie
+} // namespace tacopie

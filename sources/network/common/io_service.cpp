@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
-#include <tacopie/logger.hpp>
 #include <tacopie/network/io_service.hpp>
+#include <tacopie/utils/error.hpp>
+#include <tacopie/utils/logger.hpp>
 
 #include <fcntl.h>
 

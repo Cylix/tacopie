@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
 #include <tacopie/network/self_pipe.hpp>
+#include <tacopie/utils/error.hpp>
 
 #include <fcntl.h>
 #include <unistd.h>

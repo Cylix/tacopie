@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
 #include <tacopie/network/self_pipe.hpp>
+#include <tacopie/utils/error.hpp>
 
 #include <Winsock2.h>
 
-#include <tacopie/typedefs.hpp>
+#include <tacopie/utils/typedefs.hpp>
 #include <fcntl.h>
 #include <iostream>
 namespace tacopie {

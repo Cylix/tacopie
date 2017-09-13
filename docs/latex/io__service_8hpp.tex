@@ -1,0 +1,47 @@
+\hypertarget{io__service_8hpp}{}\section{includes/tacopie/network/io\+\_\+service.hpp File Reference}
+\label{io__service_8hpp}\index{includes/tacopie/network/io\+\_\+service.\+hpp@{includes/tacopie/network/io\+\_\+service.\+hpp}}
+{\ttfamily \#include $<$atomic$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$sys/select.\+h$>$}\newline
+{\ttfamily \#include $<$tacopie/network/self\+\_\+pipe.\+hpp$>$}\newline
+{\ttfamily \#include $<$tacopie/network/tcp\+\_\+socket.\+hpp$>$}\newline
+{\ttfamily \#include $<$tacopie/utils/thread\+\_\+pool.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service}
+\item 
+struct \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetacopie}{tacopie}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{io__service_8hpp_a822f465d034836ecbc765ad422eec064}{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS}~1
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::shared\+\_\+ptr$<$ io\+\_\+service $>$ \& \hyperlink{namespacetacopie_a08584acd5790cf1f3c9af96e5a8494a6}{tacopie\+::get\+\_\+default\+\_\+io\+\_\+service} (std\+::uint32\+\_\+t num\+\_\+io\+\_\+workers=1)
+\item 
+void \hyperlink{namespacetacopie_a095c1c9a985cf34379d1fea9c030d2b9}{tacopie\+::set\+\_\+default\+\_\+io\+\_\+service} (const std\+::shared\+\_\+ptr$<$ io\+\_\+service $>$ \&service)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{io__service_8hpp_a822f465d034836ecbc765ad422eec064}\label{io__service_8hpp_a822f465d034836ecbc765ad422eec064}} 
+\index{io\+\_\+service.\+hpp@{io\+\_\+service.\+hpp}!\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS}}
+\index{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS}!io\+\_\+service.\+hpp@{io\+\_\+service.\+hpp}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS}{\_\_TACOPIE\_IO\_SERVICE\_NB\_WORKERS}}
+{\footnotesize\ttfamily \#define \+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS~1}
+

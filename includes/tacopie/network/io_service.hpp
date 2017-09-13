@@ -47,14 +47,25 @@
 
 namespace tacopie {
 
+//!
+//! service that operates IO Handling.
+//! It polls sockets for input and output, processes read and write operations and calls the appropriate callbacks.
+//!
 class io_service {
 public:
-  //! ctor & dtor
+  //!
+  //! ctor
+  //!
+  //! \param nb_threads defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value.
+  //!
   io_service(std::size_t nb_threads = __TACOPIE_IO_SERVICE_NB_WORKERS);
+
+  //! dtor
   ~io_service(void);
 
-  //! copy ctor & assignment operator
+  //! copy ctor
   io_service(const io_service&) = delete;
+  //! assignment operator
   io_service& operator=(const io_service&) = delete;
 
 public:
@@ -73,8 +84,16 @@ public:
   void wait_for_removal(const tcp_socket& socket);
 
 private:
+  //!
   //! struct tracked_socket
   //! contains information about what a current socket is tracking
+  //!  * rd_callback: callback to be executed on read availability
+  //!  * is_executing_rd_callback: whether the rd callback is currently being executed or not
+  //!  * wr_callback: callback to be executed on write availability
+  //!  * is_executing_wr_callback: whether the wr callback is currently being executed or not
+  //!  * marked_for_untrack: whether the socket is marked for being untrack (that is, will be untracked whenever all the callback completed their execution)
+  //!
+  //!
   struct tracked_socket {
     //! ctor
     tracked_socket(void)
@@ -94,47 +113,108 @@ private:
   };
 
 private:
+  //!
   //! poll worker function
+  //! main loop of the background thread in charge of the io_service in charge of polling fds
+  //!
   void poll(void);
 
+  //!
   //! init m_poll_fds_info
+  //! simply initialize m_polled_fds variable based on m_tracked_sockets information
+  //!
+  //! \return maximum fd value polled
+  //!
   int init_poll_fds_info(void);
 
+  //!
   //! process poll detected events
+  //! called whenever select/poll completed to check read and write availablity
+  //!
   void process_events(void);
+
+  //!
+  //! process read event reported by select/poll for a given socket
+  //!
+  //! \param fd fd for which a read event has been reported
+  //! \param socket tracked_socket associated to the given fd
+  //!
   void process_rd_event(const fd_t& fd, tracked_socket& socket);
+
+  //!
+  //! process write event reported by select/poll for a given socket
+  //!
+  //! \param fd fd for which a write event has been reported
+  //! \param socket tracked_socket associated to the given fd
+  //!
   void process_wr_event(const fd_t& fd, tracked_socket& socket);
 
 private:
+  //!
   //! tracked sockets
+  //!
   std::unordered_map<fd_t, tracked_socket> m_tracked_sockets;
 
+  //!
   //! whether the worker should stop or not
+  //!
   std::atomic<bool> m_should_stop;
 
+  //!
   //! poll thread
+  //!
   std::thread m_poll_worker;
 
+  //!
   //! callback workers
+  //!
   utils::thread_pool m_callback_workers;
 
+  //!
   //! thread safety
+  //!
   std::mutex m_tracked_sockets_mtx;
 
-  //! data structure given to select
+  //!
+  //! data structure given to select (list of fds to poll)
+  //!
   std::vector<fd_t> m_polled_fds;
+
+  //!
+  //! data structure given to select (list of fds to poll for read)
+  //!
   fd_set m_rd_set;
+
+  //!
+  //! data structure given to select (list of fds to poll for write)
+  //!
   fd_set m_wr_set;
 
+  //!
   //! condition variable to wait on removal
+  //!
   std::condition_variable m_wait_for_removal_condvar;
 
+  //!
   //! fd associated to the pipe used to wake up the poll call
+  //!
   tacopie::self_pipe m_notifier;
 };
 
+//!
 //! default io_service getter & setter
+//! if the default is fetched for the first time, build it, otherwise return the current instance
+//!
+//! \param num_io_workers defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value.
+//! \return shared_ptr to the default instance of the io_service
+//!
 const std::shared_ptr<io_service>& get_default_io_service(std::uint32_t num_io_workers = 1);
-void set_default_io_service(const std::shared_ptr<io_service>&);
+
+//!
+//! set the default io_service to be returned by get_default_io_service
+//!
+//! \param service the service to be used as the default io_service instance
+//!
+void set_default_io_service(const std::shared_ptr<io_service>& service);
 
 } // namespace tacopie

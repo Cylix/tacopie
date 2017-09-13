@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/logger.hpp>
+#include <tacopie/utils/logger.hpp>
 #include <tacopie/utils/thread_pool.hpp>
 
 namespace tacopie {
