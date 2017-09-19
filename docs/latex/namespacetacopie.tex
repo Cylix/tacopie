@@ -105,7 +105,7 @@ error logging convenience function used internaly to call the logger
 \subsubsection{\texorpdfstring{get\+\_\+default\+\_\+io\+\_\+service()}{get\_default\_io\_service()}}
 {\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1io__service}{io\+\_\+service}$>$\& tacopie\+::get\+\_\+default\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{std\+::uint32\+\_\+t}]{num\+\_\+io\+\_\+workers = {\ttfamily 1} }\end{DoxyParamCaption})}
 
-default \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} getter \& setter if the default is fetched for the first time, build it, otherwise return the current instance
+default \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} getter \& setter if the default is fetched for the first time, build it, otherwise return the current instance if the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} already exist, return it and reset its number of workers if necessary
 
 
 \begin{DoxyParams}{Parameters}

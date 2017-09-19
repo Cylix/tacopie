@@ -98,7 +98,7 @@ public:
   //!
   //! changing number of workers do not affect tasks to be executed and tasks currently being executed
   //!
-  //! \param num_threads number of threads
+  //! \param nb_threads number of threads
   //!
   void set_nb_threads(std::size_t nb_threads);
 

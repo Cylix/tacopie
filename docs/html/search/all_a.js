@@ -14,6 +14,7 @@ var searchData=
   ['m_5flevel',['m_level',['../classtacopie_1_1logger.html#ae694159c13994aa03bc578feca597c04',1,'tacopie::logger']]],
   ['m_5fline',['m_line',['../classtacopie_1_1tacopie__error.html#a1631d3a1ba6d610e6c6ab0ddaf70b354',1,'tacopie::tacopie_error']]],
   ['m_5fmutex',['m_mutex',['../classtacopie_1_1logger.html#ab04fda465e61bc7a84aa456bf2e399b0',1,'tacopie::logger']]],
+  ['m_5fnb_5fthreads',['m_nb_threads',['../classtacopie_1_1utils_1_1thread__pool.html#acb37b2e75b5b0ded2b3bc3174c7ba43f',1,'tacopie::utils::thread_pool']]],
   ['m_5fnotifier',['m_notifier',['../classtacopie_1_1io__service.html#ae8a17523ba4719b0e799d1c5d665e69f',1,'tacopie::io_service']]],
   ['m_5fon_5fnew_5fconnection_5fcallback',['m_on_new_connection_callback',['../classtacopie_1_1tcp__server.html#a779d20d286c32e5daff0012548afdfd0',1,'tacopie::tcp_server']]],
   ['m_5fpoll_5fworker',['m_poll_worker',['../classtacopie_1_1io__service.html#a882b2211bae06c87cdf6e9c04d2cb783',1,'tacopie::io_service']]],

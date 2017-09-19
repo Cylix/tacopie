@@ -241,7 +241,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>default <a class="el" href="classtacopie_1_1io__service.html">io_service</a> getter &amp; setter if the default is fetched for the first time, build it, otherwise return the current instance</p>
+<p>default <a class="el" href="classtacopie_1_1io__service.html">io_service</a> getter &amp; setter if the default is fetched for the first time, build it, otherwise return the current instance if the <a class="el" href="classtacopie_1_1io__service.html">io_service</a> already exist, return it and reset its number of workers if necessary</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">num_io_workers</td><td>defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value. </td></tr>

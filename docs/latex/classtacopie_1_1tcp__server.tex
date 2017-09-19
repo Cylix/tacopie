@@ -34,6 +34,8 @@ bool \hyperlink{classtacopie_1_1tcp__server_a76162141e6443953f3ad8e11c4e4d3d7}{i
 \item 
 const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \& \hyperlink{classtacopie_1_1tcp__server_a373aec294e24a52c3ef6c44920af36e2}{get\+\_\+socket} (void) const
 \item 
+const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service} $>$ \& \hyperlink{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}{get\+\_\+io\+\_\+service} (void) const
+\item 
 const std\+::list$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1tcp__client}{tacopie\+::tcp\+\_\+client} $>$ $>$ \& \hyperlink{classtacopie_1_1tcp__server_a0df81b943243ad51102c37d4944be8d7}{get\+\_\+clients} (void) const
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
@@ -116,6 +118,15 @@ copy ctor
 
 \begin{DoxyReturn}{Returns}
 the list of \hyperlink{classtacopie_1_1tcp__client}{tacopie\+::tcp\+\_\+client} connected to the server. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}\label{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}}
+\index{get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{get\+\_\+io\+\_\+service()}{get\_io\_service()}}
+{\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service}$>$\& tacopie\+::tcp\+\_\+server\+::get\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+io service monitoring this tcp connection 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classtacopie_1_1tcp__server_a39a51b9203d42babfd9c4c1a0f4cc340}\label{classtacopie_1_1tcp__server_a39a51b9203d42babfd9c4c1a0f4cc340}} 
 \index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+socket@{get\+\_\+socket}}

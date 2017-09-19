@@ -27,6 +27,8 @@ void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a450bee2b7b2cd0aa0bc3935c8
 void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}{stop} (void)
 \item 
 bool \hyperlink{classtacopie_1_1utils_1_1thread__pool_a77a647a75be188a5c5f83b922c061107}{is\+\_\+running} (void) const
+\item 
+void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}{set\+\_\+nb\+\_\+threads} (std\+::size\+\_\+t nb\+\_\+threads)
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
@@ -34,11 +36,15 @@ bool \hyperlink{classtacopie_1_1utils_1_1thread__pool_a77a647a75be188a5c5f83b922
 void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a6e4ae0994faf97d0d260c1f846ff4639}{run} (void)
 \item 
 \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \hyperlink{classtacopie_1_1utils_1_1thread__pool_a182472a7727edc7d37d2309ccbc2dea7}{fetch\+\_\+task} (void)
+\item 
+bool \hyperlink{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}{should\+\_\+stop} (void) const
 \end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::vector$<$ std\+::thread $>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a5250ed4fbe845c69e3e28cb7edf4d796}{m\+\_\+workers}
+\item 
+std\+::size\+\_\+t \hyperlink{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}{m\+\_\+nb\+\_\+threads}
 \item 
 std\+::atomic$<$ bool $>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}{m\+\_\+should\+\_\+stop} = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)
 \item 
@@ -156,7 +162,33 @@ assignment operator
 \subsubsection{\texorpdfstring{run()}{run()}}
 {\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::run (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-worker main loop \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}\label{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}} 
+worker main loop \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}\label{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!set\+\_\+nb\+\_\+threads@{set\+\_\+nb\+\_\+threads}}
+\index{set\+\_\+nb\+\_\+threads@{set\+\_\+nb\+\_\+threads}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{set\+\_\+nb\+\_\+threads()}{set\_nb\_threads()}}
+{\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::set\+\_\+nb\+\_\+threads (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads }\end{DoxyParamCaption})}
+
+reset the number of threads working in the thread pool this can be safely called at runtime and can be useful if you need to adjust the number of workers
+
+this function returns immediately, but change might be applied in the background that is, increasing number of threads will spwan new threads directly from this function (but they may take a while to start) moreover, shrinking the number of threads can only be applied in the background to make sure to not stop some threads in the middle of their task
+
+changing number of workers do not affect tasks to be executed and tasks currently being executed
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+\_\+threads} & number of threads \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}\label{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!should\+\_\+stop@{should\+\_\+stop}}
+\index{should\+\_\+stop@{should\+\_\+stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{should\+\_\+stop()}{should\_stop()}}
+{\footnotesize\ttfamily bool tacopie\+::utils\+::thread\+\_\+pool\+::should\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyReturn}{Returns}
+whether the thread should stop or not 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}\label{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}} 
 \index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!stop@{stop}}
 \index{stop@{stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
 \subsubsection{\texorpdfstring{stop()}{stop()}}
@@ -165,7 +197,13 @@ worker main loop \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a8874d
 stop the thread pool and wait for workers completion if some tasks are pending, they won\textquotesingle{}t be executed 
 
 \subsection{Member Data Documentation}
-\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}\label{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}} 
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}\label{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+nb\+\_\+threads@{m\+\_\+nb\+\_\+threads}}
+\index{m\+\_\+nb\+\_\+threads@{m\+\_\+nb\+\_\+threads}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+nb\+\_\+threads}{m\_nb\_threads}}
+{\footnotesize\ttfamily std\+::size\+\_\+t tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+nb\+\_\+threads\hspace{0.3cm}{\ttfamily [private]}}
+
+number of threads allowed \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}\label{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}} 
 \index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}}
 \index{m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
 \subsubsection{\texorpdfstring{m\+\_\+should\+\_\+stop}{m\_should\_stop}}

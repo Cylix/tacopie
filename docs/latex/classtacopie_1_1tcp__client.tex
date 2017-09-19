@@ -59,6 +59,8 @@ void \hyperlink{classtacopie_1_1tcp__client_a2304ed6d4ca0cbc74e6aa72d3e92b76a}{a
 \item 
 const \hyperlink{classtacopie_1_1tcp__socket}{tacopie\+::tcp\+\_\+socket} \& \hyperlink{classtacopie_1_1tcp__client_a9cf1f3ccf43f9a0a883a17b15e3668d6}{get\+\_\+socket} (void) const
 \item 
+const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service} $>$ \& \hyperlink{classtacopie_1_1tcp__client_aafbf0aa37cd0472778d09fb163362314}{get\+\_\+io\+\_\+service} (void) const
+\item 
 void \hyperlink{classtacopie_1_1tcp__client_a8c290d681186edb0578051c04f3c0762}{set\+\_\+on\+\_\+disconnection\+\_\+handler} (const \hyperlink{classtacopie_1_1tcp__client_aca5df52e5ee6fa673cf212532ada1453}{disconnection\+\_\+handler\+\_\+t} \&disconnection\+\_\+handler)
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
@@ -245,6 +247,15 @@ Disconnect the \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client} if it wa
 
 \begin{DoxyReturn}{Returns}
 the hostname associated with the underlying socket. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__client_aafbf0aa37cd0472778d09fb163362314}\label{classtacopie_1_1tcp__client_aafbf0aa37cd0472778d09fb163362314}} 
+\index{tacopie\+::tcp\+\_\+client@{tacopie\+::tcp\+\_\+client}!get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}}
+\index{get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}!tacopie\+::tcp\+\_\+client@{tacopie\+::tcp\+\_\+client}}
+\subsubsection{\texorpdfstring{get\+\_\+io\+\_\+service()}{get\_io\_service()}}
+{\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service}$>$\& tacopie\+::tcp\+\_\+client\+::get\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+io service monitoring this tcp connection 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classtacopie_1_1tcp__client_a3b42ae2afe6d5ee5f2f16b8bd7846f37}\label{classtacopie_1_1tcp__client_a3b42ae2afe6d5ee5f2f16b8bd7846f37}} 
 \index{tacopie\+::tcp\+\_\+client@{tacopie\+::tcp\+\_\+client}!get\+\_\+port@{get\+\_\+port}}

@@ -102,6 +102,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a980652008516b38357d405c16eda07fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtacopie_1_1io__service.html">io_service</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1io__service.html#a980652008516b38357d405c16eda07fa">operator=</a> (const <a class="el" href="classtacopie_1_1io__service.html">io_service</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a980652008516b38357d405c16eda07fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator  <a href="#a980652008516b38357d405c16eda07fa">More...</a><br /></td></tr>
 <tr class="separator:a980652008516b38357d405c16eda07fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e2b0700c0a4591f86c344df8748b3a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1io__service.html#a7e2b0700c0a4591f86c344df8748b3a5">set_nb_workers</a> (std::size_t nb_threads)</td></tr>
+<tr class="separator:a7e2b0700c0a4591f86c344df8748b3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f4c8bce3c0f6d660515b0b5eb109df8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1io__service.html#a9f4c8bce3c0f6d660515b0b5eb109df8">track</a> (const <a class="el" href="classtacopie_1_1tcp__socket.html">tcp_socket</a> &amp;socket, const <a class="el" href="classtacopie_1_1io__service.html#abb66850c32d9c724f4418d77bd04bcfd">event_callback_t</a> &amp;rd_callback=nullptr, const <a class="el" href="classtacopie_1_1io__service.html#abb66850c32d9c724f4418d77bd04bcfd">event_callback_t</a> &amp;wr_callback=nullptr)</td></tr>
 <tr class="memdesc:a9f4c8bce3c0f6d660515b0b5eb109df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">track &amp; untrack socket  <a href="#a9f4c8bce3c0f6d660515b0b5eb109df8">More...</a><br /></td></tr>
 <tr class="separator:a9f4c8bce3c0f6d660515b0b5eb109df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -435,6 +437,31 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">fd</td><td>fd for which a write event has been reported </td></tr>
     <tr><td class="paramname">socket</td><td><a class="el" href="structtacopie_1_1io__service_1_1tracked__socket.html">tracked_socket</a> associated to the given fd </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7e2b0700c0a4591f86c344df8748b3a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e2b0700c0a4591f86c344df8748b3a5">&#9670;&nbsp;</a></span>set_nb_workers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tacopie::io_service::set_nb_workers </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>nb_threads</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>reset number of <a class="el" href="classtacopie_1_1io__service.html">io_service</a> workers assigned to this <a class="el" href="classtacopie_1_1io__service.html">io_service</a> this can be safely called at runtime, even if the <a class="el" href="classtacopie_1_1io__service.html">io_service</a> is currently running it can be useful if you need to re-adjust the number of workers</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nb_threads</td><td>number of workers </td></tr>
   </table>
   </dd>
 </dl>

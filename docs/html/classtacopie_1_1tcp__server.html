@@ -111,6 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a39a51b9203d42babfd9c4c1a0f4cc340"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a373aec294e24a52c3ef6c44920af36e2"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classtacopie_1_1tcp__socket.html">tcp_socket</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1tcp__server.html#a373aec294e24a52c3ef6c44920af36e2">get_socket</a> (void) const</td></tr>
 <tr class="separator:a373aec294e24a52c3ef6c44920af36e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aace4796627b6abccccce1a541908414f"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classtacopie_1_1io__service.html">tacopie::io_service</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1tcp__server.html#aace4796627b6abccccce1a541908414f">get_io_service</a> (void) const</td></tr>
+<tr class="separator:aace4796627b6abccccce1a541908414f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0df81b943243ad51102c37d4944be8d7"><td class="memItemLeft" align="right" valign="top">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classtacopie_1_1tcp__client.html">tacopie::tcp_client</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1tcp__server.html#a0df81b943243ad51102c37d4944be8d7">get_clients</a> (void) const</td></tr>
 <tr class="separator:a0df81b943243ad51102c37d4944be8d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -241,6 +243,25 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the list of <a class="el" href="classtacopie_1_1tcp__client.html">tacopie::tcp_client</a> connected to the server. </dd></dl>
+
+</div>
+</div>
+<a id="aace4796627b6abccccce1a541908414f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aace4796627b6abccccce1a541908414f">&#9670;&nbsp;</a></span>get_io_service()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::shared_ptr&lt;<a class="el" href="classtacopie_1_1io__service.html">tacopie::io_service</a>&gt;&amp; tacopie::tcp_server::get_io_service </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>io service monitoring this tcp connection </dd></dl>
 
 </div>
 </div>

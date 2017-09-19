@@ -25,6 +25,8 @@ typedef std\+::function$<$ void(\hyperlink{namespacetacopie_acce7ad26b2d30156b1e
 \begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
 \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \& \hyperlink{classtacopie_1_1io__service_a980652008516b38357d405c16eda07fa}{operator=} (const \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} \&)=delete
 \begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+void \hyperlink{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}{set\+\_\+nb\+\_\+workers} (std\+::size\+\_\+t nb\+\_\+threads)
+\item 
 void \hyperlink{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}{track} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&rd\+\_\+callback=nullptr, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&wr\+\_\+callback=nullptr)
 \begin{DoxyCompactList}\small\item\em track \& untrack socket \end{DoxyCompactList}\item 
 void \hyperlink{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}{set\+\_\+rd\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
@@ -183,6 +185,19 @@ process write event reported by select/poll for a given socket
 {\em fd} & fd for which a write event has been reported \\
 \hline
 {\em socket} & \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} associated to the given fd \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}\label{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!set\+\_\+nb\+\_\+workers@{set\+\_\+nb\+\_\+workers}}
+\index{set\+\_\+nb\+\_\+workers@{set\+\_\+nb\+\_\+workers}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{set\+\_\+nb\+\_\+workers()}{set\_nb\_workers()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::set\+\_\+nb\+\_\+workers (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads }\end{DoxyParamCaption})}
+
+reset number of \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} workers assigned to this \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} this can be safely called at runtime, even if the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} is currently running it can be useful if you need to re-\/adjust the number of workers
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+\_\+threads} & number of workers \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}\label{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}} 
