@@ -69,6 +69,16 @@ public:
   io_service& operator=(const io_service&) = delete;
 
 public:
+  //!
+  //! reset number of io_service workers assigned to this io_service
+  //! this can be safely called at runtime, even if the io_service is currently running
+  //! it can be useful if you need to re-adjust the number of workers
+  //!
+  //! \param nb_threads number of workers
+  //!
+  void set_nb_workers(std::size_t nb_threads);
+
+public:
   //! callback handler typedef
   //! called on new socket event if register to io_service
   typedef std::function<void(fd_t)> event_callback_t;
@@ -204,6 +214,7 @@ private:
 //!
 //! default io_service getter & setter
 //! if the default is fetched for the first time, build it, otherwise return the current instance
+//! if the io_service already exist, return it and reset its number of workers if necessary
 //!
 //! \param num_io_workers defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value.
 //! \return shared_ptr to the default instance of the io_service

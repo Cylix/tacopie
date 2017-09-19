@@ -280,6 +280,14 @@ tcp_client::get_socket(void) const {
 }
 
 //!
+//! io_service getter
+//!
+const std::shared_ptr<tacopie::io_service>&
+tcp_client::get_io_service(void) const {
+  return m_io_service;
+}
+
+//!
 //! set on disconnection handler
 //!
 

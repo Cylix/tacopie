@@ -190,6 +190,12 @@ public:
 
 public:
   //!
+  //! \return io service monitoring this tcp connection
+  //!
+  const std::shared_ptr<tacopie::io_service>& get_io_service(void) const;
+
+public:
+  //!
   //! disconnection handle
   //! called whenever a disconnection occured
   //!

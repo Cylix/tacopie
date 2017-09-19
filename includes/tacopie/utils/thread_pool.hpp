@@ -87,6 +87,21 @@ public:
   //!
   bool is_running(void) const;
 
+public:
+  //!
+  //! reset the number of threads working in the thread pool
+  //! this can be safely called at runtime and can be useful if you need to adjust the number of workers
+  //!
+  //! this function returns immediately, but change might be applied in the background
+  //! that is, increasing number of threads will spwan new threads directly from this function (but they may take a while to start)
+  //! moreover, shrinking the number of threads can only be applied in the background to make sure to not stop some threads in the middle of their task
+  //!
+  //! changing number of workers do not affect tasks to be executed and tasks currently being executed
+  //!
+  //! \param num_threads number of threads
+  //!
+  void set_nb_threads(std::size_t nb_threads);
+
 private:
   //!
   //! worker main loop
@@ -100,11 +115,21 @@ private:
   //!
   task_t fetch_task(void);
 
+  //!
+  //! \return whether the thread should stop or not
+  //!
+  bool should_stop(void) const;
+
 private:
   //!
   //! threads
   //!
   std::vector<std::thread> m_workers;
+
+  //!
+  //! number of threads allowed
+  //!
+  std::size_t m_nb_threads;
 
   //!
   //! whether the thread_pool should stop or not

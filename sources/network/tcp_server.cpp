@@ -149,6 +149,14 @@ tcp_server::get_socket(void) const {
 }
 
 //!
+//! io_service getter
+//!
+const std::shared_ptr<tacopie::io_service>&
+tcp_server::get_io_service(void) const {
+  return m_io_service;
+}
+
+//!
 //! get client sockets
 //!
 

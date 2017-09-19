@@ -42,7 +42,12 @@ static std::shared_ptr<io_service> io_service_default_instance = nullptr;
 
 const std::shared_ptr<io_service>&
 get_default_io_service(std::uint32_t num_io_workers) {
-  if (io_service_default_instance == nullptr) { io_service_default_instance = std::make_shared<io_service>(num_io_workers); }
+  if (io_service_default_instance == nullptr) {
+    io_service_default_instance = std::make_shared<io_service>(num_io_workers);
+  }
+  else {
+    io_service_default_instance->set_nb_workers(num_io_workers);
+  }
 
   return io_service_default_instance;
 }
@@ -85,6 +90,14 @@ io_service::~io_service(void) {
     m_poll_worker.join();
   }
   m_callback_workers.stop();
+}
+
+//!
+//! io service workers
+//!
+void
+io_service::set_nb_workers(std::size_t nb_threads) {
+  m_callback_workers.set_nb_threads(nb_threads);
 }
 
 

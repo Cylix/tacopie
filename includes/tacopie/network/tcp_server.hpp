@@ -113,6 +113,12 @@ public:
 
 public:
   //!
+  //! \return io service monitoring this tcp connection
+  //!
+  const std::shared_ptr<tacopie::io_service>& get_io_service(void) const;
+
+public:
+  //!
   //! \return the list of tacopie::tcp_client connected to the server.
   //!
   const std::list<std::shared_ptr<tacopie::tcp_client>>& get_clients(void) const;
