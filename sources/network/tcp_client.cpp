@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
-#include <tacopie/logger.hpp>
 #include <tacopie/network/tcp_client.hpp>
+#include <tacopie/utils/error.hpp>
+#include <tacopie/utils/logger.hpp>
 
 namespace tacopie {
 
@@ -30,9 +30,11 @@ namespace tacopie {
 //! ctor & dtor
 //!
 
-tcp_client::tcp_client(void)
-: m_io_service(get_default_io_service())
-, m_disconnection_handler(nullptr) { __TACOPIE_LOG(debug, "create tcp_client"); }
+tcp_client::tcp_client(std::uint32_t num_io_workers)
+: m_disconnection_handler(nullptr) {
+  m_io_service = get_default_io_service(num_io_workers);
+  __TACOPIE_LOG(debug, "create tcp_client");
+}
 
 tcp_client::~tcp_client(void) {
   __TACOPIE_LOG(debug, "destroy tcp_client");
@@ -41,7 +43,7 @@ tcp_client::~tcp_client(void) {
 
 //!
 //! custom ctor
-//! build socket from existing socket
+//! build client from existing socket
 //!
 
 tcp_client::tcp_client(tcp_socket&& socket)
@@ -72,11 +74,11 @@ tcp_client::get_port(void) const {
 //!
 
 void
-tcp_client::connect(const std::string& host, std::uint32_t port) {
+tcp_client::connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs) {
   if (is_connected()) { __TACOPIE_THROW(warn, "tcp_client is already connected"); }
 
   try {
-    m_socket.connect(host, port);
+    m_socket.connect(host, port, timeout_msecs);
     m_io_service->track(m_socket);
   }
   catch (const tacopie_error& e) {
@@ -93,13 +95,40 @@ void
 tcp_client::disconnect(bool wait_for_removal) {
   if (!is_connected()) { return; }
 
+  //! update state
   m_is_connected = false;
 
+  //! clear all pending requests
+  clear_read_requests();
+  clear_write_requests();
+
+  //! remove socket from io service and wait for removal if necessary
   m_io_service->untrack(m_socket);
   if (wait_for_removal) { m_io_service->wait_for_removal(m_socket); }
+
+  //! close the socket
   m_socket.close();
 
   __TACOPIE_LOG(info, "tcp_client disconnected");
+}
+
+//!
+//! Clear pending requests
+//!
+void
+tcp_client::clear_read_requests(void) {
+  std::lock_guard<std::mutex> lock(m_read_requests_mtx);
+
+  std::queue<read_request> empty;
+  std::swap(m_read_requests, empty);
+}
+
+void
+tcp_client::clear_write_requests(void) {
+  std::lock_guard<std::mutex> lock(m_write_requests_mtx);
+
+  std::queue<write_request> empty;
+  std::swap(m_write_requests, empty);
 }
 
 //!
@@ -108,7 +137,6 @@ tcp_client::disconnect(bool wait_for_removal) {
 void
 tcp_client::call_disconnection_handler(void) {
   if (m_disconnection_handler) {
-    __TACOPIE_LOG(debug, "call disconnection handler");
     m_disconnection_handler();
   }
 }
@@ -249,6 +277,14 @@ tcp_client::get_socket(void) {
 const tacopie::tcp_socket&
 tcp_client::get_socket(void) const {
   return m_socket;
+}
+
+//!
+//! io_service getter
+//!
+const std::shared_ptr<tacopie::io_service>&
+tcp_client::get_io_service(void) const {
+  return m_io_service;
 }
 
 //!

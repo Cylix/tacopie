@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
 #include <tacopie/network/self_pipe.hpp>
+#include <tacopie/utils/error.hpp>
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -37,8 +37,13 @@ self_pipe::self_pipe(void)
 }
 
 self_pipe::~self_pipe(void) {
-  close(m_fds[0]);
-  close(m_fds[1]);
+  if (m_fds[0] != __TACOPIE_INVALID_FD) {
+    close(m_fds[0]);
+  }
+
+  if (m_fds[1] != __TACOPIE_INVALID_FD) {
+    close(m_fds[1]);
+  }
 }
 
 //!
@@ -71,4 +76,4 @@ self_pipe::clr_buffer(void) {
   (void) read(m_fds[0], buf, 1024);
 }
 
-} //! tacopie
+} // namespace tacopie

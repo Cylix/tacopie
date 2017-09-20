@@ -1,0 +1,240 @@
+\hypertarget{classtacopie_1_1utils_1_1thread__pool}{}\section{tacopie\+:\+:utils\+:\+:thread\+\_\+pool Class Reference}
+\label{classtacopie_1_1utils_1_1thread__pool}\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+
+
+{\ttfamily \#include $<$thread\+\_\+pool.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::function$<$ void()$>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool_aa0068f000b8ecb21b2b0a0c50f77877c}{thread\+\_\+pool} (std\+::size\+\_\+t nb\+\_\+threads)
+\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool_accddfc6fad613b0c6d407028799abfc5}{$\sim$thread\+\_\+pool} (void)
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool_a63a850c39d21058eda9d655bb7eff452}{thread\+\_\+pool} (const \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \&)=delete
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \& \hyperlink{classtacopie_1_1utils_1_1thread__pool_aa0077461da4da6ba3f4dcac029351234}{operator=} (const \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \&)=delete
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a450bee2b7b2cd0aa0bc3935c8adc9ace}{add\+\_\+task} (const \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \&task)
+\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \& \hyperlink{classtacopie_1_1utils_1_1thread__pool_afb7befd9fa5f1fbd44423fddc8cbc5d3}{operator$<$$<$} (const \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \&task)
+\item 
+void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}{stop} (void)
+\item 
+bool \hyperlink{classtacopie_1_1utils_1_1thread__pool_a77a647a75be188a5c5f83b922c061107}{is\+\_\+running} (void) const
+\item 
+void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}{set\+\_\+nb\+\_\+threads} (std\+::size\+\_\+t nb\+\_\+threads)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtacopie_1_1utils_1_1thread__pool_a6e4ae0994faf97d0d260c1f846ff4639}{run} (void)
+\item 
+\hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \hyperlink{classtacopie_1_1utils_1_1thread__pool_a182472a7727edc7d37d2309ccbc2dea7}{fetch\+\_\+task} (void)
+\item 
+bool \hyperlink{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}{should\+\_\+stop} (void) const
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::thread $>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a5250ed4fbe845c69e3e28cb7edf4d796}{m\+\_\+workers}
+\item 
+std\+::size\+\_\+t \hyperlink{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}{m\+\_\+nb\+\_\+threads}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}{m\+\_\+should\+\_\+stop} = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)
+\item 
+std\+::queue$<$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} $>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_ad00580e9ab77e128cffaf35d80223291}{m\+\_\+tasks}
+\item 
+std\+::mutex \hyperlink{classtacopie_1_1utils_1_1thread__pool_aeae956282edc4d2171ee2e408cb1189f}{m\+\_\+tasks\+\_\+mtx}
+\item 
+std\+::condition\+\_\+variable \hyperlink{classtacopie_1_1utils_1_1thread__pool_a6f5122cc6ef6429fdb778a6e6c37216b}{m\+\_\+tasks\+\_\+condvar}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}\label{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!task\+\_\+t@{task\+\_\+t}}
+\index{task\+\_\+t@{task\+\_\+t}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{task\+\_\+t}{task\_t}}
+{\footnotesize\ttfamily typedef std\+::function$<$void()$>$ \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{tacopie\+::utils\+::thread\+\_\+pool\+::task\+\_\+t}}
+
+task typedef simply a callable taking no parameter 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_aa0068f000b8ecb21b2b0a0c50f77877c}\label{classtacopie_1_1utils_1_1thread__pool_aa0068f000b8ecb21b2b0a0c50f77877c}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!thread\+\_\+pool@{thread\+\_\+pool}}
+\index{thread\+\_\+pool@{thread\+\_\+pool}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{thread\+\_\+pool()}{thread\_pool()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily tacopie\+::utils\+::thread\+\_\+pool\+::thread\+\_\+pool (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+ctor created the worker thread that start working immediately
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+\_\+threads} & number of threads to start the thread pool \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_accddfc6fad613b0c6d407028799abfc5}\label{classtacopie_1_1utils_1_1thread__pool_accddfc6fad613b0c6d407028799abfc5}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!````~thread\+\_\+pool@{$\sim$thread\+\_\+pool}}
+\index{````~thread\+\_\+pool@{$\sim$thread\+\_\+pool}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{$\sim$thread\+\_\+pool()}{~thread\_pool()}}
+{\footnotesize\ttfamily tacopie\+::utils\+::thread\+\_\+pool\+::$\sim$thread\+\_\+pool (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+dtor 
+
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a63a850c39d21058eda9d655bb7eff452}\label{classtacopie_1_1utils_1_1thread__pool_a63a850c39d21058eda9d655bb7eff452}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!thread\+\_\+pool@{thread\+\_\+pool}}
+\index{thread\+\_\+pool@{thread\+\_\+pool}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{thread\+\_\+pool()}{thread\_pool()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily tacopie\+::utils\+::thread\+\_\+pool\+::thread\+\_\+pool (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+copy ctor 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a450bee2b7b2cd0aa0bc3935c8adc9ace}\label{classtacopie_1_1utils_1_1thread__pool_a450bee2b7b2cd0aa0bc3935c8adc9ace}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!add\+\_\+task@{add\+\_\+task}}
+\index{add\+\_\+task@{add\+\_\+task}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{add\+\_\+task()}{add\_task()}}
+{\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::add\+\_\+task (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \&}]{task }\end{DoxyParamCaption})}
+
+add tasks to thread pool task is enqueued and will be executed whenever all previously executed tasked have been executed (or are currently being executed)
+
+
+\begin{DoxyParams}{Parameters}
+{\em task} & task to be executed by the threadpool \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a182472a7727edc7d37d2309ccbc2dea7}\label{classtacopie_1_1utils_1_1thread__pool_a182472a7727edc7d37d2309ccbc2dea7}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!fetch\+\_\+task@{fetch\+\_\+task}}
+\index{fetch\+\_\+task@{fetch\+\_\+task}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{fetch\+\_\+task()}{fetch\_task()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} tacopie\+::utils\+::thread\+\_\+pool\+::fetch\+\_\+task (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+retrieve a new task fetch the first element in the queue, or wait if no task are available may return null if the threadpool is stopped \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a77a647a75be188a5c5f83b922c061107}\label{classtacopie_1_1utils_1_1thread__pool_a77a647a75be188a5c5f83b922c061107}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!is\+\_\+running@{is\+\_\+running}}
+\index{is\+\_\+running@{is\+\_\+running}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{is\+\_\+running()}{is\_running()}}
+{\footnotesize\ttfamily bool tacopie\+::utils\+::thread\+\_\+pool\+::is\+\_\+running (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+whether the \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} is running or not 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_afb7befd9fa5f1fbd44423fddc8cbc5d3}\label{classtacopie_1_1utils_1_1thread__pool_afb7befd9fa5f1fbd44423fddc8cbc5d3}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool}\& tacopie\+::utils\+::thread\+\_\+pool\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t} \&}]{task }\end{DoxyParamCaption})}
+
+same as add\+\_\+task
+
+
+\begin{DoxyParams}{Parameters}
+{\em task} & task to be executed by the threadpool \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+current instance 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_aa0077461da4da6ba3f4dcac029351234}\label{classtacopie_1_1utils_1_1thread__pool_aa0077461da4da6ba3f4dcac029351234}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!operator=@{operator=}}
+\index{operator=@{operator=}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool}\& tacopie\+::utils\+::thread\+\_\+pool\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+assignment operator 
+
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a6e4ae0994faf97d0d260c1f846ff4639}\label{classtacopie_1_1utils_1_1thread__pool_a6e4ae0994faf97d0d260c1f846ff4639}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!run@{run}}
+\index{run@{run}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::run (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+worker main loop \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}\label{classtacopie_1_1utils_1_1thread__pool_a7c7ae922cedff8fa323828ebb6dea829}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!set\+\_\+nb\+\_\+threads@{set\+\_\+nb\+\_\+threads}}
+\index{set\+\_\+nb\+\_\+threads@{set\+\_\+nb\+\_\+threads}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{set\+\_\+nb\+\_\+threads()}{set\_nb\_threads()}}
+{\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::set\+\_\+nb\+\_\+threads (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads }\end{DoxyParamCaption})}
+
+reset the number of threads working in the thread pool this can be safely called at runtime and can be useful if you need to adjust the number of workers
+
+this function returns immediately, but change might be applied in the background that is, increasing number of threads will spwan new threads directly from this function (but they may take a while to start) moreover, shrinking the number of threads can only be applied in the background to make sure to not stop some threads in the middle of their task
+
+changing number of workers do not affect tasks to be executed and tasks currently being executed
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+\_\+threads} & number of threads \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}\label{classtacopie_1_1utils_1_1thread__pool_a7a4dbfe7877e2ce8a4189e6f3d3da3a9}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!should\+\_\+stop@{should\+\_\+stop}}
+\index{should\+\_\+stop@{should\+\_\+stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{should\+\_\+stop()}{should\_stop()}}
+{\footnotesize\ttfamily bool tacopie\+::utils\+::thread\+\_\+pool\+::should\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyReturn}{Returns}
+whether the thread should stop or not 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}\label{classtacopie_1_1utils_1_1thread__pool_a8874d7040d12fbe446519bc9f2bcff37}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!stop@{stop}}
+\index{stop@{stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void tacopie\+::utils\+::thread\+\_\+pool\+::stop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+stop the thread pool and wait for workers completion if some tasks are pending, they won\textquotesingle{}t be executed 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}\label{classtacopie_1_1utils_1_1thread__pool_acb37b2e75b5b0ded2b3bc3174c7ba43f}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+nb\+\_\+threads@{m\+\_\+nb\+\_\+threads}}
+\index{m\+\_\+nb\+\_\+threads@{m\+\_\+nb\+\_\+threads}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+nb\+\_\+threads}{m\_nb\_threads}}
+{\footnotesize\ttfamily std\+::size\+\_\+t tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+nb\+\_\+threads\hspace{0.3cm}{\ttfamily [private]}}
+
+number of threads allowed \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}\label{classtacopie_1_1utils_1_1thread__pool_a1463eb81724978e4c694b8409528b00a}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}}
+\index{m\+\_\+should\+\_\+stop@{m\+\_\+should\+\_\+stop}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+should\+\_\+stop}{m\_should\_stop}}
+{\footnotesize\ttfamily std\+::atomic$<$bool$>$ tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+should\+\_\+stop = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)\hspace{0.3cm}{\ttfamily [private]}}
+
+whether the \hyperlink{classtacopie_1_1utils_1_1thread__pool}{thread\+\_\+pool} should stop or not \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_ad00580e9ab77e128cffaf35d80223291}\label{classtacopie_1_1utils_1_1thread__pool_ad00580e9ab77e128cffaf35d80223291}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+tasks@{m\+\_\+tasks}}
+\index{m\+\_\+tasks@{m\+\_\+tasks}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+tasks}{m\_tasks}}
+{\footnotesize\ttfamily std\+::queue$<$\hyperlink{classtacopie_1_1utils_1_1thread__pool_a8ae8886fdeaa8e5c0abad12626a47296}{task\+\_\+t}$>$ tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+tasks\hspace{0.3cm}{\ttfamily [private]}}
+
+tasks \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a6f5122cc6ef6429fdb778a6e6c37216b}\label{classtacopie_1_1utils_1_1thread__pool_a6f5122cc6ef6429fdb778a6e6c37216b}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+tasks\+\_\+condvar@{m\+\_\+tasks\+\_\+condvar}}
+\index{m\+\_\+tasks\+\_\+condvar@{m\+\_\+tasks\+\_\+condvar}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+tasks\+\_\+condvar}{m\_tasks\_condvar}}
+{\footnotesize\ttfamily std\+::condition\+\_\+variable tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+tasks\+\_\+condvar\hspace{0.3cm}{\ttfamily [private]}}
+
+task condvar to sync on tasks changes \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_aeae956282edc4d2171ee2e408cb1189f}\label{classtacopie_1_1utils_1_1thread__pool_aeae956282edc4d2171ee2e408cb1189f}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+tasks\+\_\+mtx@{m\+\_\+tasks\+\_\+mtx}}
+\index{m\+\_\+tasks\+\_\+mtx@{m\+\_\+tasks\+\_\+mtx}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+tasks\+\_\+mtx}{m\_tasks\_mtx}}
+{\footnotesize\ttfamily std\+::mutex tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+tasks\+\_\+mtx\hspace{0.3cm}{\ttfamily [private]}}
+
+tasks thread safety \mbox{\Hypertarget{classtacopie_1_1utils_1_1thread__pool_a5250ed4fbe845c69e3e28cb7edf4d796}\label{classtacopie_1_1utils_1_1thread__pool_a5250ed4fbe845c69e3e28cb7edf4d796}} 
+\index{tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}!m\+\_\+workers@{m\+\_\+workers}}
+\index{m\+\_\+workers@{m\+\_\+workers}!tacopie\+::utils\+::thread\+\_\+pool@{tacopie\+::utils\+::thread\+\_\+pool}}
+\subsubsection{\texorpdfstring{m\+\_\+workers}{m\_workers}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::thread$>$ tacopie\+::utils\+::thread\+\_\+pool\+::m\+\_\+workers\hspace{0.3cm}{\ttfamily [private]}}
+
+threads 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/utils/\hyperlink{thread__pool_8hpp}{thread\+\_\+pool.\+hpp}\end{DoxyCompactItemize}
