@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
 #include <tacopie/network/self_pipe.hpp>
+#include <tacopie/utils/error.hpp>
 
 #include <Winsock2.h>
 
-#include <tacopie/typedefs.hpp>
+#include <tacopie/utils/typedefs.hpp>
 #include <fcntl.h>
 #include <iostream>
 namespace tacopie {
@@ -60,7 +60,9 @@ self_pipe::self_pipe(void)
 }
 
 self_pipe::~self_pipe(void) {
-  closesocket(m_fd);
+  if (m_fd != __TACOPIE_INVALID_FD) {
+    closesocket(m_fd);
+  }
 }
 
 //!
@@ -93,4 +95,4 @@ self_pipe::clr_buffer(void) {
   (void) recvfrom(m_fd, buf, 1024, 0, &m_addr, &m_addr_len);
 }
 
-} //! tacopie
+} // namespace tacopie

@@ -26,16 +26,23 @@
 #include <string>
 #include <vector>
 
-#include <tacopie/typedefs.hpp>
+#include <tacopie/utils/typedefs.hpp>
 
 namespace tacopie {
 
+//!
+//! tacopie::tcp_socket is the class providing low-level TCP socket features.
+//! The tcp_socket provides a simple but convenient abstraction to unix and windows sockets.
+//! It also provides a socket type checker to ensure that server-only operations are only processable on server sockets, and client-only operations are only processable on client sockets.
+//!
 class tcp_socket {
 public:
+  //!
   //! possible types of a TCP socket, either a client or a server
   //! type is used to prevent the used of client specific operations on a server socket (and vice-versa)
   //!
   //! UNKNOWN is used when socket type could not be determined for now
+  //!
   enum class type {
     CLIENT,
     SERVER,
@@ -43,72 +50,168 @@ public:
   };
 
 public:
-  //! ctor & dtor
+  //! ctor
   tcp_socket(void);
+  //! dtor
   ~tcp_socket(void) = default;
 
+  //!
   //! custom ctor
   //! build socket from existing file descriptor
+  //!
+  //! \param fd fd of the raw socket that will be used to init the tcp_socket object
+  //! \param host host associated to the socket
+  //! \param port port associated to the socket
+  //! \param t type of the socket (client or server)
   tcp_socket(fd_t fd, const std::string& host, std::uint32_t port, type t);
 
   //! move ctor
   tcp_socket(tcp_socket&&);
 
-  //! copy ctor & assignment operator
+  //! copy ctor
   tcp_socket(const tcp_socket&) = delete;
+  //! assignment operator
   tcp_socket& operator=(const tcp_socket&) = delete;
 
 public:
+  //!
   //! comparison operator
+  //!
+  //! \return true when the underlying sockets are the same (same file descriptor and socket type).
+  //!
   bool operator==(const tcp_socket& rhs) const;
+
+  //!
+  //! comparison operator
+  //!
+  //! \return true when the underlying sockets are different (different file descriptor or socket type).
+  //!
   bool operator!=(const tcp_socket& rhs) const;
 
 public:
-  //! client socket operations
+  //!
+  //! Read data synchronously from the underlying socket.
+  //! The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+  //!
+  //! \param size_to_read Number of bytes to read (might read less than requested)
+  //! \return Returns the read bytes
+  //!
   std::vector<char> recv(std::size_t size_to_read);
-  std::size_t send(const std::vector<char>& data, std::size_t size_to_write);
-  void connect(const std::string& host, std::uint32_t port);
 
-  //! server socket operations
+  //!
+  //! Send data synchronously to the underlying socket.
+  //! The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+  //!
+  //! \param data Buffer containing bytes to be written
+  //! \param size_to_write Number of bytes to send
+  //! \return Returns the number of bytes that were effectively sent.
+  //!
+  std::size_t send(const std::vector<char>& data, std::size_t size_to_write);
+
+  //!
+  //! Connect the socket to the remote server.
+  //! The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+  //!
+  //! \param host Hostname of the target server
+  //! \param port Port of the target server
+  //! \param timeout_msecs maximum time to connect (will block until connect succeed or timeout expire). 0 will block undefinitely. If timeout expires, connection fails
+  //!
+  void connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs = 0);
+
+  //!
+  //! Binds the socket to the given host and port.
+  //! The socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+  //!
+  //! \param host Hostname to be bind to
+  //! \param port Port to be bind to
+  //!
   void bind(const std::string& host, std::uint32_t port);
+
+  //!
+  //! Make the socket listen for incoming connections.
+  //! Socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+  //!
+  //! \param max_connection_queue Size of the queue for incoming connections to be processed by the server
+  //!
   void listen(std::size_t max_connection_queue);
+
+  //!
+  //! Accept a new incoming connection.
+  //! The socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+  //!
+  //! \return Return the tcp_socket associated to the newly accepted connection.
+  //!
   tcp_socket accept(void);
 
-  //! general socket operations
+  //!
+  //! Close the underlying socket.
+  //!
   void close(void);
 
 public:
-  //! get socket name information
+  //!
+  //! \return the hostname associated with the underlying socket.
+  //!
   const std::string& get_host(void) const;
+
+  //!
+  //! \return the port associated with the underlying socket.
+  //!
   std::uint32_t get_port(void) const;
 
-  //! get socket type
+  //!
+  //! \return the type associated with the underlying socket.
+  //!
   type get_type(void) const;
+
+  //!
   //! set type, should be used if some operations determining socket type
   //! have been done on the behalf of the tcp_socket instance
+  //!
+  //! \param t type of the socket
+  //!
   void set_type(type t);
 
+  //!
   //! direct access to the underlying fd
+  //!
+  //! \return underlying socket fd
+  //!
   fd_t get_fd(void) const;
 
 private:
+  //!
   //! create a new socket if no socket has been initialized yet
+  //!
   void create_socket_if_necessary(void);
 
+  //!
   //! check whether the current socket has an approriate type for that kind of operation
   //! if current type is UNKNOWN, update internal type with given type
+  //!
+  //! \param t expected type of our socket to process the operation
+  //!
   void check_or_set_type(type t);
 
 private:
+  //!
   //! fd associated to the socket
+  //!
   fd_t m_fd;
 
-  //! socket name information
+  //!
+  //! socket hostname information
+  //!
   std::string m_host;
+  //!
+  //! socket port information
+  //!
   std::uint32_t m_port;
 
+  //!
   //! type of the socket
+  //!
   type m_type;
 };
 
-} //! tacopie
+} // namespace tacopie

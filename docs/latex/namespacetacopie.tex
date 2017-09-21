@@ -1,0 +1,174 @@
+\hypertarget{namespacetacopie}{}\section{tacopie Namespace Reference}
+\label{namespacetacopie}\index{tacopie@{tacopie}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetacopie_1_1utils}{utils}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtacopie_1_1io__service}{io\+\_\+service}
+\item 
+class \hyperlink{classtacopie_1_1logger}{logger}
+\item 
+class \hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface}
+\item 
+class \hyperlink{classtacopie_1_1self__pipe}{self\+\_\+pipe}
+\item 
+class \hyperlink{classtacopie_1_1tacopie__error}{tacopie\+\_\+error}
+\item 
+class \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client}
+\item 
+class \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server}
+\item 
+class \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{fd\+\_\+t}
+\begin{DoxyCompactList}\small\item\em file descriptor platform type \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} $>$ \& \hyperlink{namespacetacopie_a08584acd5790cf1f3c9af96e5a8494a6}{get\+\_\+default\+\_\+io\+\_\+service} (std\+::uint32\+\_\+t num\+\_\+io\+\_\+workers=1)
+\item 
+void \hyperlink{namespacetacopie_a095c1c9a985cf34379d1fea9c030d2b9}{set\+\_\+default\+\_\+io\+\_\+service} (const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} $>$ \&service)
+\item 
+void \hyperlink{namespacetacopie_a0833874b07ad56b5ba2c7847f1e514b0}{debug} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_acaa581a9e021e4ca6a20270667ce4e21}{info} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_ac0a2f06f2f9fb6ded97b659d8573c25d}{warn} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_a48f7b277b1559f2333c1186fa629ef01}{error} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface} $>$ \hyperlink{namespacetacopie_a043624ac998613a9387aca78a7f39f41}{active\+\_\+logger}
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}\label{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}} 
+\index{tacopie@{tacopie}!fd\+\_\+t@{fd\+\_\+t}}
+\index{fd\+\_\+t@{fd\+\_\+t}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{fd\+\_\+t}{fd\_t}}
+{\footnotesize\ttfamily typedef int \hyperlink{namespacetacopie_acce7ad26b2d30156b1e6fa353f727026}{tacopie\+::fd\+\_\+t}}
+
+
+
+file descriptor platform type 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacetacopie_a0833874b07ad56b5ba2c7847f1e514b0}\label{namespacetacopie_a0833874b07ad56b5ba2c7847f1e514b0}} 
+\index{tacopie@{tacopie}!debug@{debug}}
+\index{debug@{debug}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{debug()}{debug()}}
+{\footnotesize\ttfamily void tacopie\+::debug (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})}
+
+debug logging convenience function used internaly to call the logger
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacetacopie_a48f7b277b1559f2333c1186fa629ef01}\label{namespacetacopie_a48f7b277b1559f2333c1186fa629ef01}} 
+\index{tacopie@{tacopie}!error@{error}}
+\index{error@{error}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{error()}{error()}}
+{\footnotesize\ttfamily void tacopie\+::error (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})}
+
+error logging convenience function used internaly to call the logger
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacetacopie_a08584acd5790cf1f3c9af96e5a8494a6}\label{namespacetacopie_a08584acd5790cf1f3c9af96e5a8494a6}} 
+\index{tacopie@{tacopie}!get\+\_\+default\+\_\+io\+\_\+service@{get\+\_\+default\+\_\+io\+\_\+service}}
+\index{get\+\_\+default\+\_\+io\+\_\+service@{get\+\_\+default\+\_\+io\+\_\+service}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{get\+\_\+default\+\_\+io\+\_\+service()}{get\_default\_io\_service()}}
+{\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1io__service}{io\+\_\+service}$>$\& tacopie\+::get\+\_\+default\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{std\+::uint32\+\_\+t}]{num\+\_\+io\+\_\+workers = {\ttfamily 1} }\end{DoxyParamCaption})}
+
+default \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} getter \& setter if the default is fetched for the first time, build it, otherwise return the current instance if the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} already exist, return it and reset its number of workers if necessary
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+io\+\_\+workers} & defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to the default instance of the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacetacopie_acaa581a9e021e4ca6a20270667ce4e21}\label{namespacetacopie_acaa581a9e021e4ca6a20270667ce4e21}} 
+\index{tacopie@{tacopie}!info@{info}}
+\index{info@{info}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily void tacopie\+::info (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})}
+
+info logging convenience function used internaly to call the logger
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacetacopie_a095c1c9a985cf34379d1fea9c030d2b9}\label{namespacetacopie_a095c1c9a985cf34379d1fea9c030d2b9}} 
+\index{tacopie@{tacopie}!set\+\_\+default\+\_\+io\+\_\+service@{set\+\_\+default\+\_\+io\+\_\+service}}
+\index{set\+\_\+default\+\_\+io\+\_\+service@{set\+\_\+default\+\_\+io\+\_\+service}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{set\+\_\+default\+\_\+io\+\_\+service()}{set\_default\_io\_service()}}
+{\footnotesize\ttfamily void tacopie\+::set\+\_\+default\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} $>$ \&}]{service }\end{DoxyParamCaption})}
+
+set the default \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} to be returned by get\+\_\+default\+\_\+io\+\_\+service
+
+
+\begin{DoxyParams}{Parameters}
+{\em service} & the service to be used as the default \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} instance \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacetacopie_ac0a2f06f2f9fb6ded97b659d8573c25d}\label{namespacetacopie_ac0a2f06f2f9fb6ded97b659d8573c25d}} 
+\index{tacopie@{tacopie}!warn@{warn}}
+\index{warn@{warn}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{warn()}{warn()}}
+{\footnotesize\ttfamily void tacopie\+::warn (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})}
+
+warn logging convenience function used internaly to call the logger
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{namespacetacopie_a043624ac998613a9387aca78a7f39f41}\label{namespacetacopie_a043624ac998613a9387aca78a7f39f41}} 
+\index{tacopie@{tacopie}!active\+\_\+logger@{active\+\_\+logger}}
+\index{active\+\_\+logger@{active\+\_\+logger}!tacopie@{tacopie}}
+\subsubsection{\texorpdfstring{active\+\_\+logger}{active\_logger}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface}$>$ tacopie\+::active\+\_\+logger}
+
+variable containing the current logger by default, not set (no logs) 

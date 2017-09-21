@@ -1,6 +1,26 @@
 # Changelog
 
 
+## [v3.0.0](https://github.com/Cylix/tacopie/releases/tag/3.0.0)
+### Tag
+`3.0.0`
+### Date
+September 20th, 2017
+### Changes
+* clear pending read and write requests on disconnection
+* io_service access
+* ability to modify number of io service worker at runtime
+### Additions
+* doxygen documentation
+* connection timeout if requested (for `tcp_socket` and `tcp_client`)
+* ability to change the number of `io_service` workers (or `thread_pool` threads) at runtime
+### Removals
+None.
+
+
+
+
+
 ## [v2.4.4](https://github.com/Cylix/tacopie/releases/tag/2.4.4)
 ### Tag
 `2.4.4`
