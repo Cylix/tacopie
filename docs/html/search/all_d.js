@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['poll',['poll',['../classtacopie_1_1io__service.html#a03813e0e91d70d367f9fb0ff0d86d3dd',1,'tacopie::io_service']]],
-  ['process_5fevents',['process_events',['../classtacopie_1_1io__service.html#a90a2ab7b6bbaf10bbc0607ce371cc806',1,'tacopie::io_service']]],
-  ['process_5frd_5fevent',['process_rd_event',['../classtacopie_1_1io__service.html#a65c3ef9fa1473708b81b05029f6861f9',1,'tacopie::io_service']]],
-  ['process_5fread',['process_read',['../classtacopie_1_1tcp__client.html#a40308b6a1642a79a35a2b2d9c9b9a3f7',1,'tacopie::tcp_client']]],
-  ['process_5fwr_5fevent',['process_wr_event',['../classtacopie_1_1io__service.html#a55e334cdf75187b9296c03447e32a63f',1,'tacopie::io_service']]],
-  ['process_5fwrite',['process_write',['../classtacopie_1_1tcp__client.html#afd5e43d5f44930894de10ce05268607f',1,'tacopie::tcp_client']]]
+  ['wait_5ffor_5fremoval',['wait_for_removal',['../classtacopie_1_1io__service.html#aa57db619baeaa6db0aeb22e67b895cd7',1,'tacopie::io_service']]],
+  ['warn',['warn',['../classtacopie_1_1logger__iface.html#ab96d8f6bc2e2b514c7ceec4c856f8921',1,'tacopie::logger_iface::warn()'],['../classtacopie_1_1logger.html#aa4cd2ffc3f4b9d096a35c5c2aa8e0970',1,'tacopie::logger::warn()']]],
+  ['write_5frequest',['write_request',['../structtacopie_1_1tcp__client_1_1write__request.html',1,'tacopie::tcp_client']]],
+  ['write_5fresult',['write_result',['../structtacopie_1_1tcp__client_1_1write__result.html',1,'tacopie::tcp_client']]]
 ];
