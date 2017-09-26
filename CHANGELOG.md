@@ -1,6 +1,22 @@
 # Changelog
 
 
+## [v3.0.1](https://github.com/Cylix/tacopie/releases/tag/3.0.1)
+### Tag
+`3.0.1`
+### Date
+September 26th, 2017
+### Changes
+* Fix some compilation issues on windows
+### Additions
+None.
+### Removals
+* Private, Protected and Static functions from doxygen documentation
+
+
+
+
+
 ## [v3.0.0](https://github.com/Cylix/tacopie/releases/tag/3.0.0)
 ### Tag
 `3.0.0`
