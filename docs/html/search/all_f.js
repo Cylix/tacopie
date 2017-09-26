@@ -1,19 +1,11 @@
 var searchData=
 [
-  ['self_5fpipe',['self_pipe',['../classtacopie_1_1self__pipe.html',1,'tacopie::self_pipe'],['../classtacopie_1_1self__pipe.html#add8d2c43863d1505e6851789ab5d9b97',1,'tacopie::self_pipe::self_pipe(void)'],['../classtacopie_1_1self__pipe.html#a09ffc77b89ad48bc8db6635108c68b6b',1,'tacopie::self_pipe::self_pipe(const self_pipe &amp;)=delete']]],
-  ['self_5fpipe_2ehpp',['self_pipe.hpp',['../self__pipe_8hpp.html',1,'']]],
-  ['send',['send',['../classtacopie_1_1tcp__socket.html#a36521a8f502adc665ad0fb1c53583d04',1,'tacopie::tcp_socket']]],
-  ['server',['SERVER',['../classtacopie_1_1tcp__socket.html#ad8376e85df96ab9523f5d079ed7172aba3d27c95bfdbea691b250894d96852844',1,'tacopie::tcp_socket']]],
-  ['set_5fdefault_5fio_5fservice',['set_default_io_service',['../namespacetacopie.html#a095c1c9a985cf34379d1fea9c030d2b9',1,'tacopie']]],
-  ['set_5fnb_5fthreads',['set_nb_threads',['../classtacopie_1_1utils_1_1thread__pool.html#a7c7ae922cedff8fa323828ebb6dea829',1,'tacopie::utils::thread_pool']]],
-  ['set_5fnb_5fworkers',['set_nb_workers',['../classtacopie_1_1io__service.html#a7e2b0700c0a4591f86c344df8748b3a5',1,'tacopie::io_service']]],
-  ['set_5fon_5fdisconnection_5fhandler',['set_on_disconnection_handler',['../classtacopie_1_1tcp__client.html#a8c290d681186edb0578051c04f3c0762',1,'tacopie::tcp_client']]],
-  ['set_5frd_5fcallback',['set_rd_callback',['../classtacopie_1_1io__service.html#a8094c1fec76c6821cc0c008fe524c89a',1,'tacopie::io_service']]],
-  ['set_5ftype',['set_type',['../classtacopie_1_1tcp__socket.html#a89be86ab254eec3fc16eedfba8b16fb2',1,'tacopie::tcp_socket']]],
-  ['set_5fwr_5fcallback',['set_wr_callback',['../classtacopie_1_1io__service.html#a7c4f56c7790c7ba52b09837a42aaffb1',1,'tacopie::io_service']]],
-  ['should_5fstop',['should_stop',['../classtacopie_1_1utils_1_1thread__pool.html#a7a4dbfe7877e2ce8a4189e6f3d3da3a9',1,'tacopie::utils::thread_pool']]],
-  ['size',['size',['../structtacopie_1_1tcp__client_1_1write__result.html#acee9eca954a6f1b6283c6188eead2ab1',1,'tacopie::tcp_client::write_result::size()'],['../structtacopie_1_1tcp__client_1_1read__request.html#ad8b69f61884c60596aface363ca947a3',1,'tacopie::tcp_client::read_request::size()']]],
-  ['start',['start',['../classtacopie_1_1tcp__server.html#a6cb98b50d865b32dba497273a0eca1e9',1,'tacopie::tcp_server']]],
-  ['stop',['stop',['../classtacopie_1_1tcp__server.html#abc099e162432e2218faed93fc84180fd',1,'tacopie::tcp_server::stop()'],['../classtacopie_1_1utils_1_1thread__pool.html#a8874d7040d12fbe446519bc9f2bcff37',1,'tacopie::utils::thread_pool::stop()']]],
-  ['success',['success',['../structtacopie_1_1tcp__client_1_1read__result.html#a9bb917b8d210159a95655a6f8da8e96e',1,'tacopie::tcp_client::read_result::success()'],['../structtacopie_1_1tcp__client_1_1write__result.html#a4a8d5706c83068a97c10e63c6080e6a3',1,'tacopie::tcp_client::write_result::success()']]]
+  ['_7eio_5fservice',['~io_service',['../classtacopie_1_1io__service.html#ae423d7e4b13f07fe41fb051345ffbf8d',1,'tacopie::io_service']]],
+  ['_7elogger',['~logger',['../classtacopie_1_1logger.html#af5c89b85935dbe3b4da3199247d50398',1,'tacopie::logger']]],
+  ['_7elogger_5fiface',['~logger_iface',['../classtacopie_1_1logger__iface.html#a562dcc605198ca90904ba21fa98eb6ea',1,'tacopie::logger_iface']]],
+  ['_7eself_5fpipe',['~self_pipe',['../classtacopie_1_1self__pipe.html#a10a6c4b0d67a4a14abea397a05cee54c',1,'tacopie::self_pipe']]],
+  ['_7etacopie_5ferror',['~tacopie_error',['../classtacopie_1_1tacopie__error.html#a5bf6b0967f7f4cf2b8f8d0a2ef0912b2',1,'tacopie::tacopie_error']]],
+  ['_7etcp_5fserver',['~tcp_server',['../classtacopie_1_1tcp__server.html#a7841dc528e2d3dfc94fbe9b93824da50',1,'tacopie::tcp_server']]],
+  ['_7etcp_5fsocket',['~tcp_socket',['../classtacopie_1_1tcp__socket.html#a4bd737a76a2a326be03d704f79a35282',1,'tacopie::tcp_socket']]],
+  ['_7ethread_5fpool',['~thread_pool',['../classtacopie_1_1utils_1_1thread__pool.html#accddfc6fad613b0c6d407028799abfc5',1,'tacopie::utils::thread_pool']]]
 ];

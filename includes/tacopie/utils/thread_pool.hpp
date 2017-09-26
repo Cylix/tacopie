@@ -34,6 +34,9 @@ namespace tacopie {
 
 namespace utils {
 
+//!
+//! basic thread pool used to push async tasks from the io_service
+//!
 class thread_pool {
 public:
   //!

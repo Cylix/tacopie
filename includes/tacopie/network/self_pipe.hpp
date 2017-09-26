@@ -26,6 +26,10 @@
 
 namespace tacopie {
 
+//!
+//! used to force poll to wake up
+//! simply make poll watch for read events on one side of the pipe and write to the other side
+//!
 class self_pipe {
 public:
   //! ctor
