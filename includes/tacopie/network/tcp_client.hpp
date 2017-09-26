@@ -34,6 +34,10 @@
 
 namespace tacopie {
 
+//!
+//! tacopie::tcp_server is the class providing TCP Client features.
+//! The tcp_client works entirely asynchronously
+//!
 class tcp_client {
 public:
   //! ctor & dtor
@@ -114,7 +118,13 @@ public:
   //!  * buffer: Vector containing the read bytes
   //!
   struct read_result {
+    //!
+    //! whether the operation succeeeded or not
+    //!
     bool success;
+    //!
+    //! read bytes
+    //!
     std::vector<char> buffer;
   };
 
@@ -124,7 +134,13 @@ public:
   //!  * size: Number of bytes written
   //!
   struct write_result {
+    //!
+    //! whether the operation succeeeded or not
+    //!
     bool success;
+    //!
+    //! number of bytes written
+    //!
     std::size_t size;
   };
 
@@ -148,7 +164,13 @@ public:
   //!  * async_read_callback: Callback to be called on a read operation completion, even though the operation read less bytes than requested.
   //!
   struct read_request {
+    //!
+    //! number of bytes to read
+    //!
     std::size_t size;
+    //!
+    //! callback to be executed on read operation completion
+    //!
     async_read_callback_t async_read_callback;
   };
 
@@ -158,7 +180,13 @@ public:
   //!  * async_write_callback: Callback to be called on a write operation completion, even though the operation wrote less bytes than requested.
   //!
   struct write_request {
+    //!
+    //! bytes to write
+    //!
     std::vector<char> buffer;
+    //!
+    //! callback to be executed on write operation completion
+    //!
     async_write_callback_t async_write_callback;
   };
 

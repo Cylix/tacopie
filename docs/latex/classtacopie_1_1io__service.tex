@@ -25,17 +25,13 @@ typedef std\+::function$<$ void(fd\+\_\+t)$>$ \hyperlink{classtacopie_1_1io__ser
 \begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
 void \hyperlink{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}{set\+\_\+nb\+\_\+workers} (std\+::size\+\_\+t nb\+\_\+threads)
 \item 
-\mbox{\Hypertarget{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}\label{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}} 
 void \hyperlink{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}{track} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&rd\+\_\+callback=nullptr, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&wr\+\_\+callback=nullptr)
-\begin{DoxyCompactList}\small\item\em track \& untrack socket \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}\label{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}} 
-void {\bfseries set\+\_\+rd\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
 \item 
-\mbox{\Hypertarget{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}\label{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}} 
-void {\bfseries set\+\_\+wr\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
+void \hyperlink{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}{set\+\_\+rd\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
 \item 
-\mbox{\Hypertarget{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}\label{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}} 
-void {\bfseries untrack} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket)
+void \hyperlink{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}{set\+\_\+wr\+\_\+callback} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket, const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&event\+\_\+callback)
+\item 
+void \hyperlink{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}{untrack} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket)
 \item 
 void \hyperlink{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}{wait\+\_\+for\+\_\+removal} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&socket)
 \end{DoxyCompactItemize}
@@ -83,13 +79,86 @@ reset number of \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} workers
 {\em nb\+\_\+threads} & number of workers \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}\label{classtacopie_1_1io__service_a8094c1fec76c6821cc0c008fe524c89a}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!set\+\_\+rd\+\_\+callback@{set\+\_\+rd\+\_\+callback}}
+\index{set\+\_\+rd\+\_\+callback@{set\+\_\+rd\+\_\+callback}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{set\+\_\+rd\+\_\+callback()}{set\_rd\_callback()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::set\+\_\+rd\+\_\+callback (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{event\+\_\+callback }\end{DoxyParamCaption})}
+
+update the read callback if socket is not tracked yet, track it
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to be tracked \\
+\hline
+{\em event\+\_\+callback} & callback to be executed on read event \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}\label{classtacopie_1_1io__service_a7c4f56c7790c7ba52b09837a42aaffb1}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!set\+\_\+wr\+\_\+callback@{set\+\_\+wr\+\_\+callback}}
+\index{set\+\_\+wr\+\_\+callback@{set\+\_\+wr\+\_\+callback}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{set\+\_\+wr\+\_\+callback()}{set\_wr\_callback()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::set\+\_\+wr\+\_\+callback (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{event\+\_\+callback }\end{DoxyParamCaption})}
+
+update the write callback if socket is not tracked yet, track it
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to be tracked \\
+\hline
+{\em event\+\_\+callback} & callback to be executed on write event \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}\label{classtacopie_1_1io__service_a9f4c8bce3c0f6d660515b0b5eb109df8}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!track@{track}}
+\index{track@{track}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{track()}{track()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::track (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket,  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{rd\+\_\+callback = {\ttfamily nullptr},  }\item[{const \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \&}]{wr\+\_\+callback = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+track socket add socket to \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} tracking for read/write operation socket is polled only if read or write callback is defined
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to be tracked \\
+\hline
+{\em rd\+\_\+callback} & callback to be executed on read event \\
+\hline
+{\em wr\+\_\+callback} & callback to be executed on write event \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}\label{classtacopie_1_1io__service_a9a7672f0894a0fc1a3e6c593ca6df22c}} 
+\index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!untrack@{untrack}}
+\index{untrack@{untrack}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
+\subsubsection{\texorpdfstring{untrack()}{untrack()}}
+{\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::untrack (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})}
+
+remove socket from \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} tracking socket is marked for untracking and will effectively be removed asynchronously from tracking once
+\begin{DoxyItemize}
+\item poll wakes up
+\item no callback are being executed for that socket
+\end{DoxyItemize}
+
+re-\/adding track while socket is pending for untrack is fine and will simply cancel the untrack operation
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to be untracked \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}\label{classtacopie_1_1io__service_aa57db619baeaa6db0aeb22e67b895cd7}} 
 \index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!wait\+\_\+for\+\_\+removal@{wait\+\_\+for\+\_\+removal}}
 \index{wait\+\_\+for\+\_\+removal@{wait\+\_\+for\+\_\+removal}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
 \subsubsection{\texorpdfstring{wait\+\_\+for\+\_\+removal()}{wait\_for\_removal()}}
 {\footnotesize\ttfamily void tacopie\+::io\+\_\+service\+::wait\+\_\+for\+\_\+removal (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{socket }\end{DoxyParamCaption})}
 
-wait until the socket has been effectively removed basically wait until all pending callbacks are executed 
+wait until the socket has been effectively removed basically wait until all pending callbacks are executed
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to wait for \\
+\hline
+\end{DoxyParams}
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

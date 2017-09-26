@@ -83,14 +83,53 @@ public:
   //! called on new socket event if register to io_service
   typedef std::function<void(fd_t)> event_callback_t;
 
-  //! track & untrack socket
+  //!
+  //! track socket
+  //! add socket to io_service tracking for read/write operation
+  //! socket is polled only if read or write callback is defined
+  //!
+  //! \param socket socket to be tracked
+  //! \param rd_callback callback to be executed on read event
+  //! \param wr_callback callback to be executed on write event
+  //!
   void track(const tcp_socket& socket, const event_callback_t& rd_callback = nullptr, const event_callback_t& wr_callback = nullptr);
+
+  //!
+  //! update the read callback
+  //! if socket is not tracked yet, track it
+  //!
+  //! \param socket socket to be tracked
+  //! \param event_callback callback to be executed on read event
+  //!
   void set_rd_callback(const tcp_socket& socket, const event_callback_t& event_callback);
+
+  //!
+  //! update the write callback
+  //! if socket is not tracked yet, track it
+  //!
+  //! \param socket socket to be tracked
+  //! \param event_callback callback to be executed on write event
+  //!
   void set_wr_callback(const tcp_socket& socket, const event_callback_t& event_callback);
+
+  //!
+  //! remove socket from io_service tracking
+  //! socket is marked for untracking and will effectively be removed asynchronously from tracking once
+  //!  * poll wakes up
+  //!  * no callback are being executed for that socket
+  //!
+  //! re-adding track while socket is pending for untrack is fine and will simply cancel the untrack operation
+  //!
+  //! \param socket socket to be untracked
+  //!
   void untrack(const tcp_socket& socket);
 
+  //!
   //! wait until the socket has been effectively removed
   //! basically wait until all pending callbacks are executed
+  //!
+  //! \param socket socket to wait for
+  //!
   void wait_for_removal(const tcp_socket& socket);
 
 private:

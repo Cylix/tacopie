@@ -40,7 +40,7 @@ namespace tacopie {
 
 //!
 //! tacopie::tcp_server is the class providing TCP Server features.
-//! The tcp_client works entirely asynchronously, waiting for the io_service to notify whenever a new client wished to connect.
+//! The tcp_server works entirely asynchronously, waiting for the io_service to notify whenever a new client wished to connect.
 //!
 class tcp_server {
 public:

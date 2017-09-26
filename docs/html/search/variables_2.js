@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['is_5fexecuting_5frd_5fcallback',['is_executing_rd_callback',['../structtacopie_1_1io__service_1_1tracked__socket.html#ab7f5e0dc3e34376807ba696750bbf4f0',1,'tacopie::io_service::tracked_socket']]],
-  ['is_5fexecuting_5fwr_5fcallback',['is_executing_wr_callback',['../structtacopie_1_1io__service_1_1tracked__socket.html#a017198d90760674aaa9591e7a9eb48c8',1,'tacopie::io_service::tracked_socket']]]
+  ['size',['size',['../structtacopie_1_1tcp__client_1_1write__result.html#acee9eca954a6f1b6283c6188eead2ab1',1,'tacopie::tcp_client::write_result::size()'],['../structtacopie_1_1tcp__client_1_1read__request.html#ad8b69f61884c60596aface363ca947a3',1,'tacopie::tcp_client::read_request::size()']]],
+  ['success',['success',['../structtacopie_1_1tcp__client_1_1read__result.html#a9bb917b8d210159a95655a6f8da8e96e',1,'tacopie::tcp_client::read_result::success()'],['../structtacopie_1_1tcp__client_1_1write__result.html#a4a8d5706c83068a97c10e63c6080e6a3',1,'tacopie::tcp_client::write_result::success()']]]
 ];
