@@ -65,7 +65,7 @@ main(void) {
 #endif /* _WIN32 */
 
   tacopie::tcp_client client;
-  client.connect("127.0.0.1", 3001);
+  client.connect("0:0:0:0:0:0:0:1", 3002);
   client.async_read({1024, std::bind(&on_new_message, std::ref(client), std::placeholders::_1)});
 
   signal(SIGINT, &signint_handler);

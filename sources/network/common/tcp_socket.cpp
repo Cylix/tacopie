@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
 #include <tacopie/network/tcp_server.hpp>
 #include <tacopie/utils/error.hpp>
 #include <tacopie/utils/logger.hpp>
@@ -115,6 +116,129 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   return wr_size;
 }
 
+void
+tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t timeout_msecs) {
+	//! Reset host and port
+	m_host = host;
+	m_port = port;
+
+	create_socket_if_necessary();
+	check_or_set_type(type::CLIENT);
+
+	struct sockaddr_storage ss;
+	memset(&ss, 0, sizeof(ss));
+	
+	int namelen = 0;
+	if (isIPV6())
+	{
+		ss.ss_family = AF_INET6;
+		struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+		int rc = ::inet_pton(AF_INET6, host.data(), &addr->sin6_addr);
+		if (rc < 0) {
+			__TACOPIE_THROW(error, "inet_pton() failure");
+		}
+		addr->sin6_port = htons(port);
+		namelen = sizeof(*addr);
+	}
+	else
+	{
+		ss.ss_family = AF_INET;
+		struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+		int rc = ::inet_pton(AF_INET, host.data(), &addr->sin_addr);
+		if (rc < 0) {
+			__TACOPIE_THROW(error, "inet_pton() failure");
+		}
+		addr->sin_port = htons(port);
+		namelen = sizeof(*addr);
+	}
+
+	if (timeout_msecs > 0) {
+		//! for timeout connection handling:
+		//!  1. set socket to non blocking
+		//!  2. connect
+		//!  3. poll select
+		//!  4. check connection status
+		u_long mode = 1;
+		if (ioctlsocket(m_fd, FIONBIO, &mode) != 0) {
+			close();
+			__TACOPIE_THROW(error, "connect() set non-blocking failure");
+		}
+	}
+
+	int ret = ::connect(m_fd, (const struct sockaddr*) &ss, namelen);
+	if (ret == -1 && WSAGetLastError() != WSAEWOULDBLOCK) {
+		close();
+		__TACOPIE_THROW(error, "connect() failure");
+	}
+
+	if (timeout_msecs > 0) {
+		timeval tv;
+		tv.tv_sec = (timeout_msecs / 1000);
+		tv.tv_usec = ((timeout_msecs - (tv.tv_sec * 1000)) * 1000);
+
+		FD_SET set;
+		FD_ZERO(&set);
+		FD_SET(m_fd, &set);
+
+		//! 1 means we are connected.
+		//! 0 means a timeout.
+		if (select(0, NULL, &set, NULL, &tv) == 1) {
+			//! Set back to blocking mode as the user of this class is expecting
+			u_long mode = 0;
+			if (ioctlsocket(m_fd, FIONBIO, &mode) != 0) {
+				close();
+				__TACOPIE_THROW(error, "connect() set blocking failure");
+			}
+		}
+		else {
+			close();
+			__TACOPIE_THROW(error, "connect() timed out");
+		}
+	}
+}
+
+void
+tcp_socket::bind(const std::string& host, std::uint32_t port) {
+	//! Reset host and port
+	m_host = host;
+	m_port = port;
+
+	create_socket_if_necessary();
+	check_or_set_type(type::SERVER);
+
+	struct sockaddr_storage ss;
+	memset(&ss, 0, sizeof(ss));
+
+	int namelen = 0;
+	if (isIPV6())
+	{
+		ss.ss_family = AF_INET6;
+		struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+		int rc = ::inet_pton(AF_INET6, host.data(), &addr->sin6_addr);
+		if (rc < 0) {
+			__TACOPIE_THROW(error, "inet_pton() failure");
+		}
+		addr->sin6_port = htons(port);
+		namelen = sizeof(*addr);
+	}
+	else
+	{
+		ss.ss_family = AF_INET;
+		struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+		int rc = ::inet_pton(AF_INET, host.data(), &addr->sin_addr);
+		if (rc < 0) {
+			__TACOPIE_THROW(error, "inet_pton() failure");
+		}
+		addr->sin_port = htons(port);
+		namelen = sizeof(*addr);
+	}
+
+	if (::bind(m_fd, (const struct sockaddr*) &ss, namelen) == SOCKET_ERROR)
+	{
+		__TACOPIE_THROW(error, "bind() failure");
+	}
+}
+
 //!
 //! server socket operations
 //!
@@ -132,14 +256,60 @@ tcp_socket::accept(void) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct sockaddr_in client_info;
-  socklen_t client_info_struct_size = sizeof(client_info);
-
-  fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
+  struct sockaddr_storage ss;
+  socklen_t addrlen = sizeof(ss);
+ 
+  fd_t client_fd = ::accept(m_fd, reinterpret_cast<struct sockaddr*>(&ss), &addrlen);
 
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
 
-  return {client_fd, inet_ntoa(client_info.sin_addr), client_info.sin_port, type::CLIENT};
+  std::string saddr;
+  std::uint32_t port = 0;
+  if (ss.ss_family == AF_INET) {
+	  struct sockaddr_in* addr4 = reinterpret_cast<struct sockaddr_in*>(&ss);
+	  char buf[INET_ADDRSTRLEN] = {};
+	  const char* addr = ::inet_ntop(ss.ss_family, &addr4->sin_addr, buf, INET_ADDRSTRLEN);
+	  if (addr) {
+		  saddr = addr;
+	  }
+
+	  port = ntohs(addr4->sin_port);
+  }
+  else if(ss.ss_family == AF_INET6) {
+	  struct sockaddr_in6* addr6 = reinterpret_cast<struct sockaddr_in6*>(&ss);
+	  char buf[INET6_ADDRSTRLEN] = {};
+	  const char* addr = ::inet_ntop(ss.ss_family, &addr6->sin6_addr, buf, INET6_ADDRSTRLEN);
+
+	  if (addr) {
+		  saddr = std::string("[") + addr + "]";
+	  }
+
+	  port = ntohs(addr6->sin6_port);
+  }
+  else{
+	  __TACOPIE_THROW(debug, "unknown socket family connected");
+  }
+  return {client_fd, saddr, port , type::CLIENT};
+}
+
+
+//!
+//! general socket operations
+//!
+
+void
+tcp_socket::close(void) {
+	if (m_fd != __TACOPIE_INVALID_FD) {
+		__TACOPIE_LOG(debug, "close socket");
+#ifdef H_OS_WINDOWS
+		closesocket(m_fd);
+#else
+		::close(m_fd);
+#endif
+	}
+
+	m_fd = __TACOPIE_INVALID_FD;
+	m_type = type::UNKNOWN;
 }
 
 //!
@@ -152,7 +322,17 @@ tcp_socket::create_socket_if_necessary(void) {
 
   //! new TCP socket
   //! handle case of unix sockets by checking whether the port is 0 or not
-  m_fd   = socket(m_port == 0 ? AF_UNIX : AF_INET, SOCK_STREAM, 0);
+  short family = AF_INET;
+  if (isIPV6())
+  {
+	  family = AF_INET6;
+  }
+  else if (m_port == 0)
+  {
+	  family = AF_UNIX;
+  }
+
+  m_fd   = socket(family, SOCK_STREAM, 0);
   m_type = type::UNKNOWN;
 
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }
@@ -210,6 +390,16 @@ tcp_socket::set_type(type t) {
 fd_t
 tcp_socket::get_fd(void) const {
   return m_fd;
+}
+
+bool
+tcp_socket::isIPV6()
+{
+	auto index = m_host.find(':');
+	if (index != std::string::npos) {
+		return true;
+	}
+	return false;
 }
 
 //!
