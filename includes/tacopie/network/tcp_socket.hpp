@@ -193,6 +193,11 @@ private:
   //!
   void check_or_set_type(type t);
 
+  //!
+  //! check whether the host is IPV6
+  //!
+  bool isIPV6();
+
 private:
   //!
   //! fd associated to the socket

@@ -65,7 +65,7 @@ main(void) {
 #endif /* _WIN32 */
 
   tacopie::tcp_server s;
-  s.start("127.0.0.1", 3001, [](const std::shared_ptr<tacopie::tcp_client>& client) -> bool {
+  s.start("[0:0:0:0:0:0:0:1]", 3002, [](const std::shared_ptr<tacopie::tcp_client>& client) -> bool {
     std::cout << "New client" << std::endl;
     client->async_read({1024, std::bind(&on_new_message, client, std::placeholders::_1)});
     return true;

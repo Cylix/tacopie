@@ -43,4 +43,15 @@ typedef int fd_t;
 typedef SSIZE_T ssize_t;
 #endif
 
+#if ( defined(WIN32) || defined(WIN64) || defined(_WIN32) || defined(_WIN64) )
+#   ifndef H_OS_WINDOWS
+#       define H_OS_WINDOWS
+#   endif
+#endif
+
+#if defined(__APPLE__)
+#define H_OS_MACOSX
+#endif
+
+
 } //! tacopie
