@@ -263,7 +263,7 @@ namespace tacopie {
 			strncpy(addr->sun_path, host.c_str(), sizeof(addr->sun_path) - 1);
 			namelen = sizeof(*addr);
 #else
-			__TACOPIE_THROW(error, "unix_socket connect failure");
+			__TACOPIE_THROW(error, "unix_socket bind failure");
 #endif
 		}
 
