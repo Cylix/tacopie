@@ -119,7 +119,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 ###
 # executable
 ###
-add_library(${PROJECT} STATIC ${SOURCES})
+add_library(${PROJECT} ${SOURCES})
 
 IF (WIN32)
    set_target_properties(${PROJECT}
