@@ -143,22 +143,6 @@ tcp_socket::accept(void) {
 }
 
 //!
-//! create a new socket if no socket has been initialized yet
-//!
-
-void
-tcp_socket::create_socket_if_necessary(void) {
-  if (m_fd != __TACOPIE_INVALID_FD) { return; }
-
-  //! new TCP socket
-  //! handle case of unix sockets by checking whether the port is 0 or not
-  m_fd   = socket(m_port == 0 ? AF_UNIX : AF_INET, SOCK_STREAM, 0);
-  m_type = type::UNKNOWN;
-
-  if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }
-}
-
-//!
 //! check whether the current socket has an approriate type for that kind of operation
 //! if current type is UNKNOWN, update internal type with given type
 //!
