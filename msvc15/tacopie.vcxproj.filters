@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <!-- MIT License
 
 Copyright (c) 2017 zodiac403 <zodiac403@gmx.de>
@@ -22,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -38,24 +36,48 @@ SOFTWARE.
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{8d28aa89-4337-4f27-95aa-d050f528e6e0}</UniqueIdentifier>
+      <UniqueIdentifier>{c3d90ca9-253f-43b6-a40f-fa065cc27bcf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\network">
-      <UniqueIdentifier>{04a5ca3f-d966-48fa-938c-2b38a05d6a62}</UniqueIdentifier>
+      <UniqueIdentifier>{77bcf86a-ad46-4674-96c6-bd0c9f4cdf25}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\network\windows">
-      <UniqueIdentifier>{beb1feae-89f2-4fd5-b2b4-8e7915d1a8be}</UniqueIdentifier>
+      <UniqueIdentifier>{736b7b08-b8cd-40d7-bc65-b2f3380f27ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network\common">
+      <UniqueIdentifier>{ee9af803-75ff-4ff8-b996-09ff196b0def}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tacopie">
+      <UniqueIdentifier>{579e51d2-5b11-435c-acb0-d7a4cd8e5412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tacopie\utils">
+      <UniqueIdentifier>{c6d31a34-4f49-4892-b397-d70f321fcee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tacopie\network">
+      <UniqueIdentifier>{fa0c367c-8d92-47a6-a703-76a9e5e54463}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\sources\error.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\sources\utils\error.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\sources\logger.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\sources\utils\logger.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\utils\thread_pool.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\windows\windows_self_pipe.cpp">
+      <Filter>Source Files\network\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\windows\windows_tcp_socket.cpp">
+      <Filter>Source Files\network\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\common\tcp_socket.cpp">
+      <Filter>Source Files\network\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\network\io_service.cpp">
+      <Filter>Source Files\network</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\network\tcp_client.cpp">
       <Filter>Source Files\network</Filter>
@@ -63,14 +85,39 @@ SOFTWARE.
     <ClCompile Include="..\sources\network\tcp_server.cpp">
       <Filter>Source Files\network</Filter>
     </ClCompile>
-    <ClCompile Include="..\sources\network\windows\io_service.cpp">
-      <Filter>Source Files\network\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sources\network\windows\self_pipe.cpp">
-      <Filter>Source Files\network\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sources\network\windows\tcp_socket.cpp">
-      <Filter>Source Files\network\windows</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\includes\tacopie\utils\error.hpp">
+      <Filter>Header Files\tacopie\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\utils\logger.hpp">
+      <Filter>Header Files\tacopie\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\utils\thread_pool.hpp">
+      <Filter>Header Files\tacopie\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\utils\typedefs.hpp">
+      <Filter>Header Files\tacopie\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\network\io_service.hpp">
+      <Filter>Header Files\tacopie\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\network\self_pipe.hpp">
+      <Filter>Header Files\tacopie\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\network\tcp_client.hpp">
+      <Filter>Header Files\tacopie\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\network\tcp_server.hpp">
+      <Filter>Header Files\tacopie\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\tacopie\network\tcp_socket.hpp">
+      <Filter>Header Files\tacopie\network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\includes\tacopie\tacopie">
+      <Filter>Header Files\tacopie</Filter>
+    </None>
   </ItemGroup>
 </Project>

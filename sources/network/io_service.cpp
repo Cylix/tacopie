@@ -241,7 +241,7 @@ io_service::init_poll_fds_info(void) {
   FD_ZERO(&m_rd_set);
   FD_ZERO(&m_wr_set);
 
-  int ndfs = m_notifier.get_read_fd();
+  int ndfs = (int)m_notifier.get_read_fd();
   FD_SET(m_notifier.get_read_fd(), &m_rd_set);
   m_polled_fds.push_back(m_notifier.get_read_fd());
 

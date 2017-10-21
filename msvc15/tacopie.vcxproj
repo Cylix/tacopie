@@ -40,12 +40,37 @@ SOFTWARE.
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\sources\network\common\tcp_socket.cpp" />
+    <ClCompile Include="..\sources\network\io_service.cpp" />
+    <ClCompile Include="..\sources\network\tcp_client.cpp" />
+    <ClCompile Include="..\sources\network\tcp_server.cpp" />
+    <ClCompile Include="..\sources\network\windows\windows_self_pipe.cpp" />
+    <ClCompile Include="..\sources\network\windows\windows_tcp_socket.cpp" />
+    <ClCompile Include="..\sources\utils\error.cpp" />
+    <ClCompile Include="..\sources\utils\logger.cpp" />
+    <ClCompile Include="..\sources\utils\thread_pool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\includes\tacopie\network\io_service.hpp" />
+    <ClInclude Include="..\includes\tacopie\network\self_pipe.hpp" />
+    <ClInclude Include="..\includes\tacopie\network\tcp_client.hpp" />
+    <ClInclude Include="..\includes\tacopie\network\tcp_server.hpp" />
+    <ClInclude Include="..\includes\tacopie\network\tcp_socket.hpp" />
+    <ClInclude Include="..\includes\tacopie\utils\error.hpp" />
+    <ClInclude Include="..\includes\tacopie\utils\logger.hpp" />
+    <ClInclude Include="..\includes\tacopie\utils\thread_pool.hpp" />
+    <ClInclude Include="..\includes\tacopie\utils\typedefs.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\includes\tacopie\tacopie" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5DC28D31-04A5-4509-8EE3-CF16DE77475B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>tacopie</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,7 +89,7 @@ SOFTWARE.
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -160,16 +185,6 @@ SOFTWARE.
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\sources\error.cpp" />
-    <ClCompile Include="..\sources\logger.cpp" />
-    <ClCompile Include="..\sources\network\tcp_client.cpp" />
-    <ClCompile Include="..\sources\network\tcp_server.cpp" />
-    <ClCompile Include="..\sources\network\windows\io_service.cpp" />
-    <ClCompile Include="..\sources\network\windows\self_pipe.cpp" />
-    <ClCompile Include="..\sources\network\windows\tcp_socket.cpp" />
-    <ClCompile Include="..\sources\utils\thread_pool.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
