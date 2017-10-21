@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/error.hpp>
-#include <tacopie/logger.hpp>
 #include <tacopie/network/tcp_server.hpp>
+#include <tacopie/utils/error.hpp>
+#include <tacopie/utils/logger.hpp>
 
 #include <algorithm>
 
@@ -146,6 +146,14 @@ tcp_server::get_socket(void) {
 const tcp_socket&
 tcp_server::get_socket(void) const {
   return m_socket;
+}
+
+//!
+//! io_service getter
+//!
+const std::shared_ptr<tacopie::io_service>&
+tcp_server::get_io_service(void) const {
+  return m_io_service;
 }
 
 //!

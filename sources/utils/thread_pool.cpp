@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <tacopie/logger.hpp>
+#include <tacopie/utils/logger.hpp>
 #include <tacopie/utils/thread_pool.hpp>
 
 namespace tacopie {
@@ -31,7 +31,8 @@ namespace utils {
 //! ctor & dtor
 //!
 
-thread_pool::thread_pool(std::size_t nb_threads) {
+thread_pool::thread_pool(std::size_t nb_threads)
+: m_nb_threads(nb_threads) {
   __TACOPIE_LOG(debug, "create thread_pool");
 
   for (std::size_t i = 0; i < nb_threads; ++i) { m_workers.push_back(std::thread(std::bind(&thread_pool::run, this))); }
@@ -50,12 +51,20 @@ void
 thread_pool::run(void) {
   __TACOPIE_LOG(debug, "start run() worker");
 
-  while (!m_should_stop) {
+  while (!should_stop()) {
     task_t task = fetch_task();
 
     if (task) {
       __TACOPIE_LOG(debug, "execute task");
-      task();
+
+      try {
+        task();
+      }
+      catch (const std::exception&) {
+        __TACOPIE_LOG(warn, "uncatched exception propagated up to the threadpool.")
+      }
+
+      __TACOPIE_LOG(debug, "execution complete");
     }
   }
 
@@ -89,6 +98,14 @@ thread_pool::is_running(void) const {
 }
 
 //!
+//! whether the current thread should stop or not
+//!
+bool
+thread_pool::should_stop(void) const {
+  return m_should_stop || m_workers.size() > m_nb_threads;
+}
+
+//!
 //! retrieve a new task
 //!
 
@@ -98,9 +115,9 @@ thread_pool::fetch_task(void) {
 
   __TACOPIE_LOG(debug, "waiting to fetch task");
 
-  m_tasks_condvar.wait(lock, [&] { return m_should_stop || !m_tasks.empty(); });
+  m_tasks_condvar.wait(lock, [&] { return should_stop() || !m_tasks.empty(); });
 
-  if (m_tasks.empty()) { return nullptr; }
+  if (should_stop() || m_tasks.empty()) { return nullptr; }
 
   task_t task = std::move(m_tasks.front());
   m_tasks.pop();
@@ -128,6 +145,25 @@ thread_pool::operator<<(const task_t& task) {
   return *this;
 }
 
-} //! utils
+//!
+//! adjust number of threads
+//!
+void
+thread_pool::set_nb_threads(std::size_t nb_threads) {
+  m_nb_threads = nb_threads;
 
-} //! tacopie
+  //! if we increased the number of threads, spawn them
+  if (m_workers.size() < m_nb_threads) {
+    while (m_workers.size() < m_nb_threads) {
+      m_workers.push_back(std::thread(std::bind(&thread_pool::run, this)));
+    }
+  }
+  //! otherwise, wake up threads to make them stop if necessary (until we get the right amount of threads)
+  else {
+    m_tasks_condvar.notify_all();
+  }
+}
+
+} // namespace utils
+
+} // namespace tacopie

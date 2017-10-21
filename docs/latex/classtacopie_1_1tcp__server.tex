@@ -1,0 +1,165 @@
+\hypertarget{classtacopie_1_1tcp__server}{}\section{tacopie\+:\+:tcp\+\_\+server Class Reference}
+\label{classtacopie_1_1tcp__server}\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+
+
+{\ttfamily \#include $<$tcp\+\_\+server.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::function$<$ bool(const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client} $>$ \&)$>$ \hyperlink{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a4f67a38a0764924768cbcc7cf68527bf}\label{classtacopie_1_1tcp__server_a4f67a38a0764924768cbcc7cf68527bf}} 
+\hyperlink{classtacopie_1_1tcp__server_a4f67a38a0764924768cbcc7cf68527bf}{tcp\+\_\+server} (void)
+\begin{DoxyCompactList}\small\item\em ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a7841dc528e2d3dfc94fbe9b93824da50}\label{classtacopie_1_1tcp__server_a7841dc528e2d3dfc94fbe9b93824da50}} 
+\hyperlink{classtacopie_1_1tcp__server_a7841dc528e2d3dfc94fbe9b93824da50}{$\sim$tcp\+\_\+server} (void)
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a2d9c6a2dea95a3c6a919c655d6e8e0ba}\label{classtacopie_1_1tcp__server_a2d9c6a2dea95a3c6a919c655d6e8e0ba}} 
+\hyperlink{classtacopie_1_1tcp__server_a2d9c6a2dea95a3c6a919c655d6e8e0ba}{tcp\+\_\+server} (const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&)=delete
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a7e7da4352e2e016f8d40d19bf9fee54b}\label{classtacopie_1_1tcp__server_a7e7da4352e2e016f8d40d19bf9fee54b}} 
+\hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \& \hyperlink{classtacopie_1_1tcp__server_a7e7da4352e2e016f8d40d19bf9fee54b}{operator=} (const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&)=delete
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+bool \hyperlink{classtacopie_1_1tcp__server_ab9b95a27afb405668bb4d5b1a312ceae}{operator==} (const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&rhs) const
+\item 
+bool \hyperlink{classtacopie_1_1tcp__server_aa45611b77d60b536aeaf626d1724342d}{operator!=} (const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&rhs) const
+\item 
+void \hyperlink{classtacopie_1_1tcp__server_a6cb98b50d865b32dba497273a0eca1e9}{start} (const std\+::string \&host, std\+::uint32\+\_\+t port, const \hyperlink{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t} \&callback=nullptr)
+\item 
+void \hyperlink{classtacopie_1_1tcp__server_abc099e162432e2218faed93fc84180fd}{stop} (bool wait\+\_\+for\+\_\+removal=false, bool recursive\+\_\+wait\+\_\+for\+\_\+removal=true)
+\item 
+bool \hyperlink{classtacopie_1_1tcp__server_a76162141e6443953f3ad8e11c4e4d3d7}{is\+\_\+running} (void) const
+\item 
+\hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \& \hyperlink{classtacopie_1_1tcp__server_a39a51b9203d42babfd9c4c1a0f4cc340}{get\+\_\+socket} (void)
+\item 
+const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \& \hyperlink{classtacopie_1_1tcp__server_a373aec294e24a52c3ef6c44920af36e2}{get\+\_\+socket} (void) const
+\item 
+const std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service} $>$ \& \hyperlink{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}{get\+\_\+io\+\_\+service} (void) const
+\item 
+const std\+::list$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classtacopie_1_1tcp__client}{tacopie\+::tcp\+\_\+client} $>$ $>$ \& \hyperlink{classtacopie_1_1tcp__server_a0df81b943243ad51102c37d4944be8d7}{get\+\_\+clients} (void) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classtacopie_1_1tcp__server}{tacopie\+::tcp\+\_\+server} is the class providing T\+CP Server features. The \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} works entirely asynchronously, waiting for the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} to notify whenever a new client wished to connect. 
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}\label{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t@{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t}}
+\index{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t@{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t}{on\_new\_connection\_callback\_t}}
+{\footnotesize\ttfamily typedef std\+::function$<$bool(const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client}$>$\&)$>$ \hyperlink{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}{tacopie\+::tcp\+\_\+server\+::on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t}}
+
+callback called whenever a new client is connecting to the server
+
+Takes as parameter a shared pointer to the \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client} that wishes to connect Returning true means connection is handled by \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client} wrapper and nothing will be done by \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server}. Returning false means connection is handled by \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server}, will be stored in an internal list and \hyperlink{classtacopie_1_1tcp__client}{tcp\+\_\+client} disconection\+\_\+handler overriden. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a0df81b943243ad51102c37d4944be8d7}\label{classtacopie_1_1tcp__server_a0df81b943243ad51102c37d4944be8d7}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+clients@{get\+\_\+clients}}
+\index{get\+\_\+clients@{get\+\_\+clients}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{get\+\_\+clients()}{get\_clients()}}
+{\footnotesize\ttfamily const std\+::list$<$std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1tcp__client}{tacopie\+::tcp\+\_\+client}$>$ $>$\& tacopie\+::tcp\+\_\+server\+::get\+\_\+clients (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the list of \hyperlink{classtacopie_1_1tcp__client}{tacopie\+::tcp\+\_\+client} connected to the server. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}\label{classtacopie_1_1tcp__server_aace4796627b6abccccce1a541908414f}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}}
+\index{get\+\_\+io\+\_\+service@{get\+\_\+io\+\_\+service}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{get\+\_\+io\+\_\+service()}{get\_io\_service()}}
+{\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\hyperlink{classtacopie_1_1io__service}{tacopie\+::io\+\_\+service}$>$\& tacopie\+::tcp\+\_\+server\+::get\+\_\+io\+\_\+service (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+io service monitoring this tcp connection 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a39a51b9203d42babfd9c4c1a0f4cc340}\label{classtacopie_1_1tcp__server_a39a51b9203d42babfd9c4c1a0f4cc340}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+socket@{get\+\_\+socket}}
+\index{get\+\_\+socket@{get\+\_\+socket}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{get\+\_\+socket()}{get\_socket()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket}\& tacopie\+::tcp\+\_\+server\+::get\+\_\+socket (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+the \hyperlink{classtacopie_1_1tcp__socket}{tacopie\+::tcp\+\_\+socket} associated to the server. (non-\/const version) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a373aec294e24a52c3ef6c44920af36e2}\label{classtacopie_1_1tcp__server_a373aec294e24a52c3ef6c44920af36e2}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!get\+\_\+socket@{get\+\_\+socket}}
+\index{get\+\_\+socket@{get\+\_\+socket}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{get\+\_\+socket()}{get\_socket()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket}\& tacopie\+::tcp\+\_\+server\+::get\+\_\+socket (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the \hyperlink{classtacopie_1_1tcp__socket}{tacopie\+::tcp\+\_\+socket} associated to the server. (const version) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a76162141e6443953f3ad8e11c4e4d3d7}\label{classtacopie_1_1tcp__server_a76162141e6443953f3ad8e11c4e4d3d7}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!is\+\_\+running@{is\+\_\+running}}
+\index{is\+\_\+running@{is\+\_\+running}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{is\+\_\+running()}{is\_running()}}
+{\footnotesize\ttfamily bool tacopie\+::tcp\+\_\+server\+::is\+\_\+running (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+whether the server is currently running or not 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_aa45611b77d60b536aeaf626d1724342d}\label{classtacopie_1_1tcp__server_aa45611b77d60b536aeaf626d1724342d}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool tacopie\+::tcp\+\_\+server\+::operator!= (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+comparison operator
+
+\begin{DoxyReturn}{Returns}
+true when the underlying sockets are different (different file descriptor or socket type). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_ab9b95a27afb405668bb4d5b1a312ceae}\label{classtacopie_1_1tcp__server_ab9b95a27afb405668bb4d5b1a312ceae}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!operator==@{operator==}}
+\index{operator==@{operator==}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool tacopie\+::tcp\+\_\+server\+::operator== (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+comparison operator
+
+\begin{DoxyReturn}{Returns}
+true when the underlying sockets are the same (same file descriptor and socket type). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_a6cb98b50d865b32dba497273a0eca1e9}\label{classtacopie_1_1tcp__server_a6cb98b50d865b32dba497273a0eca1e9}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!start@{start}}
+\index{start@{start}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+server\+::start (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{std\+::uint32\+\_\+t}]{port,  }\item[{const \hyperlink{classtacopie_1_1tcp__server_a103cb4e6fcab00f88a708aabd38b66ff}{on\+\_\+new\+\_\+connection\+\_\+callback\+\_\+t} \&}]{callback = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+Start the \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} at the given host and port.
+
+
+\begin{DoxyParams}{Parameters}
+{\em host} & hostname to be connected to \\
+\hline
+{\em port} & port to be connected to \\
+\hline
+{\em callback} & callback to be called on new connections (may be null, connections are then handled automatically by the \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} object) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1tcp__server_abc099e162432e2218faed93fc84180fd}\label{classtacopie_1_1tcp__server_abc099e162432e2218faed93fc84180fd}} 
+\index{tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}!stop@{stop}}
+\index{stop@{stop}!tacopie\+::tcp\+\_\+server@{tacopie\+::tcp\+\_\+server}}
+\subsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+server\+::stop (\begin{DoxyParamCaption}\item[{bool}]{wait\+\_\+for\+\_\+removal = {\ttfamily false},  }\item[{bool}]{recursive\+\_\+wait\+\_\+for\+\_\+removal = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Disconnect the \hyperlink{classtacopie_1_1tcp__server}{tcp\+\_\+server} if it was currently running.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wait\+\_\+for\+\_\+removal} & When sets to true, disconnect blocks until the underlying T\+CP server has been effectively removed from the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} and that all the underlying callbacks have completed. \\
+\hline
+{\em recursive\+\_\+wait\+\_\+for\+\_\+removal} & When sets to true and wait\+\_\+for\+\_\+removal is also set to true, blocks until all the underlying T\+CP client connected to the T\+CP server have been effectively removed from the \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} and that all the underlying callbacks have completed. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/network/tcp\+\_\+server.\+hpp\end{DoxyCompactItemize}
