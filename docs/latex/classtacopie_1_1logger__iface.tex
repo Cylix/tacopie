@@ -1,0 +1,130 @@
+\hypertarget{classtacopie_1_1logger__iface}{}\section{tacopie\+:\+:logger\+\_\+iface Class Reference}
+\label{classtacopie_1_1logger__iface}\index{tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}}
+
+
+{\ttfamily \#include $<$logger.\+hpp$>$}
+
+Inheritance diagram for tacopie\+:\+:logger\+\_\+iface\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtacopie_1_1logger__iface}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_afccf838f815d168e82e4722e2c4d0d90}\label{classtacopie_1_1logger__iface_afccf838f815d168e82e4722e2c4d0d90}} 
+\hyperlink{classtacopie_1_1logger__iface_afccf838f815d168e82e4722e2c4d0d90}{logger\+\_\+iface} (void)=default
+\begin{DoxyCompactList}\small\item\em ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_a562dcc605198ca90904ba21fa98eb6ea}\label{classtacopie_1_1logger__iface_a562dcc605198ca90904ba21fa98eb6ea}} 
+virtual \hyperlink{classtacopie_1_1logger__iface_a562dcc605198ca90904ba21fa98eb6ea}{$\sim$logger\+\_\+iface} (void)=default
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_a34fb7873b2c5e908afd2d4a0d4965ec1}\label{classtacopie_1_1logger__iface_a34fb7873b2c5e908afd2d4a0d4965ec1}} 
+\hyperlink{classtacopie_1_1logger__iface_a34fb7873b2c5e908afd2d4a0d4965ec1}{logger\+\_\+iface} (const \hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface} \&)=default
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_ac3ca89b7c5d227b8ed3a5adaa5b72527}\label{classtacopie_1_1logger__iface_ac3ca89b7c5d227b8ed3a5adaa5b72527}} 
+\hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface} \& \hyperlink{classtacopie_1_1logger__iface_ac3ca89b7c5d227b8ed3a5adaa5b72527}{operator=} (const \hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface} \&)=default
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+virtual void \hyperlink{classtacopie_1_1logger__iface_a156abb02ab852ea4033fc13f4902ee7a}{debug} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)=0
+\item 
+virtual void \hyperlink{classtacopie_1_1logger__iface_af176525bca036944f75bad6469860929}{info} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)=0
+\item 
+virtual void \hyperlink{classtacopie_1_1logger__iface_ab96d8f6bc2e2b514c7ceec4c856f8921}{warn} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)=0
+\item 
+virtual void \hyperlink{classtacopie_1_1logger__iface_a18f9c02fc19be4b9900ac9fb1a361624}{error} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)=0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classtacopie_1_1logger__iface}{logger\+\_\+iface} should be inherited by any class intended to be used for logging 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_a156abb02ab852ea4033fc13f4902ee7a}\label{classtacopie_1_1logger__iface_a156abb02ab852ea4033fc13f4902ee7a}} 
+\index{tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}!debug@{debug}}
+\index{debug@{debug}!tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}}
+\subsubsection{\texorpdfstring{debug()}{debug()}}
+{\footnotesize\ttfamily virtual void tacopie\+::logger\+\_\+iface\+::debug (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+debug logging
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtacopie_1_1logger_aff31bbc7d3fdbbe60a2331fe24ec76ff}{tacopie\+::logger}.
+
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_a18f9c02fc19be4b9900ac9fb1a361624}\label{classtacopie_1_1logger__iface_a18f9c02fc19be4b9900ac9fb1a361624}} 
+\index{tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}!error@{error}}
+\index{error@{error}!tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}}
+\subsubsection{\texorpdfstring{error()}{error()}}
+{\footnotesize\ttfamily virtual void tacopie\+::logger\+\_\+iface\+::error (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+error logging
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtacopie_1_1logger_a3fe1be02ac2f4e4fe44a0bdaf8359546}{tacopie\+::logger}.
+
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_af176525bca036944f75bad6469860929}\label{classtacopie_1_1logger__iface_af176525bca036944f75bad6469860929}} 
+\index{tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}!info@{info}}
+\index{info@{info}!tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}}
+\subsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily virtual void tacopie\+::logger\+\_\+iface\+::info (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+info logging
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtacopie_1_1logger_a5089c5a6127586d4f2ea3a69a0bf6570}{tacopie\+::logger}.
+
+\mbox{\Hypertarget{classtacopie_1_1logger__iface_ab96d8f6bc2e2b514c7ceec4c856f8921}\label{classtacopie_1_1logger__iface_ab96d8f6bc2e2b514c7ceec4c856f8921}} 
+\index{tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}!warn@{warn}}
+\index{warn@{warn}!tacopie\+::logger\+\_\+iface@{tacopie\+::logger\+\_\+iface}}
+\subsubsection{\texorpdfstring{warn()}{warn()}}
+{\footnotesize\ttfamily virtual void tacopie\+::logger\+\_\+iface\+::warn (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg,  }\item[{const std\+::string \&}]{file,  }\item[{std\+::size\+\_\+t}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+warn logging
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & message to be logged \\
+\hline
+{\em file} & file from which the message is coming \\
+\hline
+{\em line} & line in the file of the message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtacopie_1_1logger_aa4cd2ffc3f4b9d096a35c5c2aa8e0970}{tacopie\+::logger}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/utils/logger.\+hpp\end{DoxyCompactItemize}

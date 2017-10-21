@@ -34,53 +34,127 @@ namespace tacopie {
 
 namespace utils {
 
+//!
+//! basic thread pool used to push async tasks from the io_service
+//!
 class thread_pool {
 public:
-  //! ctor & dtor
+  //!
+  //! ctor
+  //! created the worker thread that start working immediately
+  //!
+  //! \param nb_threads number of threads to start the thread pool
+  //!
   explicit thread_pool(std::size_t nb_threads);
+
+  //! dtor
   ~thread_pool(void);
 
-  //! copy ctor & assignment operator
+  //! copy ctor
   thread_pool(const thread_pool&) = delete;
+  //! assignment operator
   thread_pool& operator=(const thread_pool&) = delete;
 
 public:
+  //!
   //! task typedef
+  ///! simply a callable taking no parameter
+  //!
   typedef std::function<void()> task_t;
 
+  //!
   //! add tasks to thread pool
+  //! task is enqueued and will be executed whenever all previously executed tasked have been executed (or are currently being executed)
+  //!
+  //! \param task task to be executed by the threadpool
+  //!
   void add_task(const task_t& task);
+
+  //!
+  //! same as add_task
+  //!
+  //! \param task task to be executed by the threadpool
+  //! \return current instance
+  //!
   thread_pool& operator<<(const task_t& task);
 
+  //!
   //! stop the thread pool and wait for workers completion
+  //! if some tasks are pending, they won't be executed
+  //!
   void stop(void);
 
 public:
-  //! whether the thread_pool is running or not
+  //!
+  //! \return whether the thread_pool is running or not
+  //!
   bool is_running(void) const;
 
+public:
+  //!
+  //! reset the number of threads working in the thread pool
+  //! this can be safely called at runtime and can be useful if you need to adjust the number of workers
+  //!
+  //! this function returns immediately, but change might be applied in the background
+  //! that is, increasing number of threads will spwan new threads directly from this function (but they may take a while to start)
+  //! moreover, shrinking the number of threads can only be applied in the background to make sure to not stop some threads in the middle of their task
+  //!
+  //! changing number of workers do not affect tasks to be executed and tasks currently being executed
+  //!
+  //! \param nb_threads number of threads
+  //!
+  void set_nb_threads(std::size_t nb_threads);
+
 private:
+  //!
   //! worker main loop
+  //!
   void run(void);
 
+  //!
   //! retrieve a new task
+  //! fetch the first element in the queue, or wait if no task are available
+  //! may return null if the threadpool is stopped
+  //!
   task_t fetch_task(void);
 
+  //!
+  //! \return whether the thread should stop or not
+  //!
+  bool should_stop(void) const;
+
 private:
+  //!
   //! threads
+  //!
   std::vector<std::thread> m_workers;
 
+  //!
+  //! number of threads allowed
+  //!
+  std::size_t m_nb_threads;
+
+  //!
   //! whether the thread_pool should stop or not
+  //!
   std::atomic<bool> m_should_stop = ATOMIC_VAR_INIT(false);
 
+  //!
   //! tasks
+  //!
   std::queue<task_t> m_tasks;
 
-  //! thread safety
+  //!
+  //! tasks thread safety
+  //!
   std::mutex m_tasks_mtx;
+
+  //!
+  //! task condvar to sync on tasks changes
+  //!
   std::condition_variable m_tasks_condvar;
 };
 
-} //! utils
+} // namespace utils
 
-} //! tacopie
+} // namespace tacopie

@@ -22,39 +22,69 @@
 
 #pragma once
 
-#include <tacopie/typedefs.hpp>
+#include <tacopie/utils/typedefs.hpp>
 
 namespace tacopie {
 
+//!
+//! used to force poll to wake up
+//! simply make poll watch for read events on one side of the pipe and write to the other side
+//!
 class self_pipe {
 public:
-  //! ctor & dtor
+  //! ctor
   self_pipe(void);
+  //! dtor
   ~self_pipe(void);
 
-  //! copy ctor & assignment operator
+  //! copy ctor
   self_pipe(const self_pipe&) = delete;
+  //! assignment operator
   self_pipe& operator=(const self_pipe&) = delete;
 
 public:
-  //! get rd/wr fds
+  //!
+  //! \return the read fd of the pipe
+  //!
   fd_t get_read_fd(void) const;
+
+  //!
+  //! \return the write fd of the pipe
+  //!
   fd_t get_write_fd(void) const;
 
-  //! notify
+  //!
+  //! notify the self pipe (basically write to the pipe)
+  //!
   void notify(void);
 
-  //! clr buffer
+  //!
+  //! clear the pipe (basically read from the pipe)
+  //!
   void clr_buffer(void);
 
 private:
 #ifdef _WIN32
+  //!
+  //! socket fd
+  //!
   fd_t m_fd;
+
+  //!
+  //! socket information
+  //!
   struct sockaddr m_addr;
+
+  //!
+  //! socket information (addr len)
+  //!
   int m_addr_len;
 #else
+  //!
+  //! pipe file descriptors
+  //!
   fd_t m_fds[2];
 #endif /* _WIN32 */
 };
 
-} //! tacopie
+} // namespace tacopie

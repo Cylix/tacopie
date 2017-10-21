@@ -1,0 +1,41 @@
+\hypertarget{error_8hpp}{}\section{includes/tacopie/utils/error.hpp File Reference}
+\label{error_8hpp}\index{includes/tacopie/utils/error.\+hpp@{includes/tacopie/utils/error.\+hpp}}
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$tacopie/utils/logger.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtacopie_1_1tacopie__error}{tacopie\+::tacopie\+\_\+error}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetacopie}{tacopie}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{error_8hpp_aacdfb7799f2e2e2f57d6f1392ff3220a}{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW}(level,  what)
+\begin{DoxyCompactList}\small\item\em macro for convenience \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{error_8hpp_aacdfb7799f2e2e2f57d6f1392ff3220a}\label{error_8hpp_aacdfb7799f2e2e2f57d6f1392ff3220a}} 
+\index{error.\+hpp@{error.\+hpp}!\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW}}
+\index{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW}!error.\+hpp@{error.\+hpp}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW}{\_\_TACOPIE\_THROW}}
+{\footnotesize\ttfamily \#define \+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+T\+H\+R\+OW(\begin{DoxyParamCaption}\item[{}]{level,  }\item[{}]{what }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{                                                           \(\backslash\)
+    \_\_TACOPIE\_LOG(level, (what));                             \(\backslash\)
+    throw \hyperlink{classtacopie_1_1tacopie__error}{tacopie::tacopie\_error}((what), \_\_FILE\_\_, \_\_LINE\_\_); \(\backslash\)
+  \}
+\end{DoxyCode}
+
+
+macro for convenience 
+

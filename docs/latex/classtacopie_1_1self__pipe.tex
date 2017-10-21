@@ -1,0 +1,70 @@
+\hypertarget{classtacopie_1_1self__pipe}{}\section{tacopie\+:\+:self\+\_\+pipe Class Reference}
+\label{classtacopie_1_1self__pipe}\index{tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}}
+
+
+{\ttfamily \#include $<$self\+\_\+pipe.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_add8d2c43863d1505e6851789ab5d9b97}\label{classtacopie_1_1self__pipe_add8d2c43863d1505e6851789ab5d9b97}} 
+\hyperlink{classtacopie_1_1self__pipe_add8d2c43863d1505e6851789ab5d9b97}{self\+\_\+pipe} (void)
+\begin{DoxyCompactList}\small\item\em ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_a10a6c4b0d67a4a14abea397a05cee54c}\label{classtacopie_1_1self__pipe_a10a6c4b0d67a4a14abea397a05cee54c}} 
+\hyperlink{classtacopie_1_1self__pipe_a10a6c4b0d67a4a14abea397a05cee54c}{$\sim$self\+\_\+pipe} (void)
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_a09ffc77b89ad48bc8db6635108c68b6b}\label{classtacopie_1_1self__pipe_a09ffc77b89ad48bc8db6635108c68b6b}} 
+\hyperlink{classtacopie_1_1self__pipe_a09ffc77b89ad48bc8db6635108c68b6b}{self\+\_\+pipe} (const \hyperlink{classtacopie_1_1self__pipe}{self\+\_\+pipe} \&)=delete
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_a14e0fa3a880b6c9559c087eac480c518}\label{classtacopie_1_1self__pipe_a14e0fa3a880b6c9559c087eac480c518}} 
+\hyperlink{classtacopie_1_1self__pipe}{self\+\_\+pipe} \& \hyperlink{classtacopie_1_1self__pipe_a14e0fa3a880b6c9559c087eac480c518}{operator=} (const \hyperlink{classtacopie_1_1self__pipe}{self\+\_\+pipe} \&)=delete
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+fd\+\_\+t \hyperlink{classtacopie_1_1self__pipe_a301b416f5f8236a383065b381385b88c}{get\+\_\+read\+\_\+fd} (void) const
+\item 
+fd\+\_\+t \hyperlink{classtacopie_1_1self__pipe_ab36a4deb45bb408988f26315aedc0d74}{get\+\_\+write\+\_\+fd} (void) const
+\item 
+void \hyperlink{classtacopie_1_1self__pipe_ade9e0e3d19b8d4d22977935a578d508e}{notify} (void)
+\item 
+void \hyperlink{classtacopie_1_1self__pipe_a4f55a34bd882d59bdcc73b87222ba3d8}{clr\+\_\+buffer} (void)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+used to force poll to wake up simply make poll watch for read events on one side of the pipe and write to the other side 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_a4f55a34bd882d59bdcc73b87222ba3d8}\label{classtacopie_1_1self__pipe_a4f55a34bd882d59bdcc73b87222ba3d8}} 
+\index{tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}!clr\+\_\+buffer@{clr\+\_\+buffer}}
+\index{clr\+\_\+buffer@{clr\+\_\+buffer}!tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}}
+\subsubsection{\texorpdfstring{clr\+\_\+buffer()}{clr\_buffer()}}
+{\footnotesize\ttfamily void tacopie\+::self\+\_\+pipe\+::clr\+\_\+buffer (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+clear the pipe (basically read from the pipe) \mbox{\Hypertarget{classtacopie_1_1self__pipe_a301b416f5f8236a383065b381385b88c}\label{classtacopie_1_1self__pipe_a301b416f5f8236a383065b381385b88c}} 
+\index{tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}!get\+\_\+read\+\_\+fd@{get\+\_\+read\+\_\+fd}}
+\index{get\+\_\+read\+\_\+fd@{get\+\_\+read\+\_\+fd}!tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}}
+\subsubsection{\texorpdfstring{get\+\_\+read\+\_\+fd()}{get\_read\_fd()}}
+{\footnotesize\ttfamily fd\+\_\+t tacopie\+::self\+\_\+pipe\+::get\+\_\+read\+\_\+fd (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the read fd of the pipe 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_ab36a4deb45bb408988f26315aedc0d74}\label{classtacopie_1_1self__pipe_ab36a4deb45bb408988f26315aedc0d74}} 
+\index{tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}!get\+\_\+write\+\_\+fd@{get\+\_\+write\+\_\+fd}}
+\index{get\+\_\+write\+\_\+fd@{get\+\_\+write\+\_\+fd}!tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}}
+\subsubsection{\texorpdfstring{get\+\_\+write\+\_\+fd()}{get\_write\_fd()}}
+{\footnotesize\ttfamily fd\+\_\+t tacopie\+::self\+\_\+pipe\+::get\+\_\+write\+\_\+fd (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the write fd of the pipe 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1self__pipe_ade9e0e3d19b8d4d22977935a578d508e}\label{classtacopie_1_1self__pipe_ade9e0e3d19b8d4d22977935a578d508e}} 
+\index{tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}!notify@{notify}}
+\index{notify@{notify}!tacopie\+::self\+\_\+pipe@{tacopie\+::self\+\_\+pipe}}
+\subsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily void tacopie\+::self\+\_\+pipe\+::notify (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+notify the self pipe (basically write to the pipe) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/network/self\+\_\+pipe.\+hpp\end{DoxyCompactItemize}

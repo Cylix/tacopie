@@ -1,0 +1,93 @@
+\hypertarget{structtacopie_1_1io__service_1_1tracked__socket}{}\section{tacopie\+:\+:io\+\_\+service\+:\+:tracked\+\_\+socket Struct Reference}
+\label{structtacopie_1_1io__service_1_1tracked__socket}\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structtacopie_1_1io__service_1_1tracked__socket_aa2bb26f180847ad15e09f303a2adc9ee}{tracked\+\_\+socket} (void)
+\begin{DoxyCompactList}\small\item\em ctor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \hyperlink{structtacopie_1_1io__service_1_1tracked__socket_a4e44d4d8132f5272de80e83156d44fc6}{rd\+\_\+callback}
+\begin{DoxyCompactList}\small\item\em rd event \end{DoxyCompactList}\item 
+std\+::atomic$<$ bool $>$ \hyperlink{structtacopie_1_1io__service_1_1tracked__socket_ab7f5e0dc3e34376807ba696750bbf4f0}{is\+\_\+executing\+\_\+rd\+\_\+callback} = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)
+\item 
+\hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} \hyperlink{structtacopie_1_1io__service_1_1tracked__socket_ae46fc6ee7102027316eceff64116ba9d}{wr\+\_\+callback}
+\begin{DoxyCompactList}\small\item\em wr event \end{DoxyCompactList}\item 
+std\+::atomic$<$ bool $>$ \hyperlink{structtacopie_1_1io__service_1_1tracked__socket_a017198d90760674aaa9591e7a9eb48c8}{is\+\_\+executing\+\_\+wr\+\_\+callback} = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{structtacopie_1_1io__service_1_1tracked__socket_ac72d2fbf2c0e314c7ea02afd2c081dcd}{marked\+\_\+for\+\_\+untrack} = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)
+\begin{DoxyCompactList}\small\item\em marked for untrack \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+struct \hyperlink{structtacopie_1_1io__service_1_1tracked__socket}{tracked\+\_\+socket} contains information about what a current socket is tracking
+\begin{DoxyItemize}
+\item rd\+\_\+callback\+: callback to be executed on read availability
+\item is\+\_\+executing\+\_\+rd\+\_\+callback\+: whether the rd callback is currently being executed or not
+\item wr\+\_\+callback\+: callback to be executed on write availability
+\item is\+\_\+executing\+\_\+wr\+\_\+callback\+: whether the wr callback is currently being executed or not
+\item marked\+\_\+for\+\_\+untrack\+: whether the socket is marked for being untrack (that is, will be untracked whenever all the callback completed their execution) 
+\end{DoxyItemize}
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_aa2bb26f180847ad15e09f303a2adc9ee}\label{structtacopie_1_1io__service_1_1tracked__socket_aa2bb26f180847ad15e09f303a2adc9ee}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!tracked\+\_\+socket@{tracked\+\_\+socket}}
+\index{tracked\+\_\+socket@{tracked\+\_\+socket}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{tracked\+\_\+socket()}{tracked\_socket()}}
+{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::tracked\+\_\+socket (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+ctor 
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_ab7f5e0dc3e34376807ba696750bbf4f0}\label{structtacopie_1_1io__service_1_1tracked__socket_ab7f5e0dc3e34376807ba696750bbf4f0}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!is\+\_\+executing\+\_\+rd\+\_\+callback@{is\+\_\+executing\+\_\+rd\+\_\+callback}}
+\index{is\+\_\+executing\+\_\+rd\+\_\+callback@{is\+\_\+executing\+\_\+rd\+\_\+callback}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{is\+\_\+executing\+\_\+rd\+\_\+callback}{is\_executing\_rd\_callback}}
+{\footnotesize\ttfamily std\+::atomic$<$bool$>$ tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::is\+\_\+executing\+\_\+rd\+\_\+callback = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)}
+
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_a017198d90760674aaa9591e7a9eb48c8}\label{structtacopie_1_1io__service_1_1tracked__socket_a017198d90760674aaa9591e7a9eb48c8}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!is\+\_\+executing\+\_\+wr\+\_\+callback@{is\+\_\+executing\+\_\+wr\+\_\+callback}}
+\index{is\+\_\+executing\+\_\+wr\+\_\+callback@{is\+\_\+executing\+\_\+wr\+\_\+callback}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{is\+\_\+executing\+\_\+wr\+\_\+callback}{is\_executing\_wr\_callback}}
+{\footnotesize\ttfamily std\+::atomic$<$bool$>$ tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::is\+\_\+executing\+\_\+wr\+\_\+callback = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)}
+
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_ac72d2fbf2c0e314c7ea02afd2c081dcd}\label{structtacopie_1_1io__service_1_1tracked__socket_ac72d2fbf2c0e314c7ea02afd2c081dcd}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!marked\+\_\+for\+\_\+untrack@{marked\+\_\+for\+\_\+untrack}}
+\index{marked\+\_\+for\+\_\+untrack@{marked\+\_\+for\+\_\+untrack}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{marked\+\_\+for\+\_\+untrack}{marked\_for\_untrack}}
+{\footnotesize\ttfamily std\+::atomic$<$bool$>$ tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::marked\+\_\+for\+\_\+untrack = A\+T\+O\+M\+I\+C\+\_\+\+V\+A\+R\+\_\+\+I\+N\+IT(false)}
+
+
+
+marked for untrack 
+
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_a4e44d4d8132f5272de80e83156d44fc6}\label{structtacopie_1_1io__service_1_1tracked__socket_a4e44d4d8132f5272de80e83156d44fc6}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!rd\+\_\+callback@{rd\+\_\+callback}}
+\index{rd\+\_\+callback@{rd\+\_\+callback}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{rd\+\_\+callback}{rd\_callback}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::rd\+\_\+callback}
+
+
+
+rd event 
+
+\mbox{\Hypertarget{structtacopie_1_1io__service_1_1tracked__socket_ae46fc6ee7102027316eceff64116ba9d}\label{structtacopie_1_1io__service_1_1tracked__socket_ae46fc6ee7102027316eceff64116ba9d}} 
+\index{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}!wr\+\_\+callback@{wr\+\_\+callback}}
+\index{wr\+\_\+callback@{wr\+\_\+callback}!tacopie\+::io\+\_\+service\+::tracked\+\_\+socket@{tacopie\+::io\+\_\+service\+::tracked\+\_\+socket}}
+\subsubsection{\texorpdfstring{wr\+\_\+callback}{wr\_callback}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1io__service_abb66850c32d9c724f4418d77bd04bcfd}{event\+\_\+callback\+\_\+t} tacopie\+::io\+\_\+service\+::tracked\+\_\+socket\+::wr\+\_\+callback}
+
+
+
+wr event 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/network/\hyperlink{io__service_8hpp}{io\+\_\+service.\+hpp}\end{DoxyCompactItemize}

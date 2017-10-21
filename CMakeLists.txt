@@ -89,12 +89,12 @@ include_directories(${TACOPIE_INCLUDES})
 ###
 # sources
 ###
-set(SRC_DIRS "sources" "sources/network" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
+set(SRC_DIRS "sources" "sources/network" "sources/network/common" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
 
 IF (WIN32)
-  set(SRC_DIRS ${SRC_DIRS} "sources/network/windows" "includes/tacopie/network/windows")
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/windows")
 ELSE ()
-  set(SRC_DIRS ${SRC_DIRS} "sources/network/unix" "includes/tacopie/network/unix")
+  set(SRC_DIRS ${SRC_DIRS} "sources/network/unix")
 ENDIF (WIN32)
 
 foreach(dir ${SRC_DIRS})
@@ -119,7 +119,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 ###
 # executable
 ###
-add_library(${PROJECT} STATIC ${SOURCES})
+add_library(${PROJECT} ${SOURCES})
 
 IF (WIN32)
    set_target_properties(${PROJECT}

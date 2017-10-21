@@ -3,7 +3,7 @@
 </p>
 
 # Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie)
-`tacopie` is a TCP Client & Server C++11 library.
+`tacopie` is a multi-platform TCP Client & Server C++11 library.
 
 ## Requirement
 `tacopie` has **no dependency**. Its only requirement is `C++11`.
@@ -31,6 +31,9 @@ client.async_read({ 1024, [&] (tacopie::tcp_client::read_result& res) {
 
 ## Wiki
 A [Wiki](https://github.com/Cylix/tacopie/wiki) is available and provides full documentation for the library as well as [installation explanations](https://github.com/Cylix/tacopie/wiki/Installation).
+
+# Doxygen
+A [Doxygen documentation](https://cylix.github.io/tacopie/html/index.html) is available and provides full API documentation for the library.
 
 ## License
 `tacopie` is under [MIT License](LICENSE).

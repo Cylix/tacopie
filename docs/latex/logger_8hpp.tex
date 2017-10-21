@@ -1,0 +1,48 @@
+\hypertarget{logger_8hpp}{}\section{includes/tacopie/utils/logger.hpp File Reference}
+\label{logger_8hpp}\index{includes/tacopie/utils/logger.\+hpp@{includes/tacopie/utils/logger.\+hpp}}
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtacopie_1_1logger__iface}{tacopie\+::logger\+\_\+iface}
+\item 
+class \hyperlink{classtacopie_1_1logger}{tacopie\+::logger}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetacopie}{tacopie}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{logger_8hpp_a845e651e4529d5322a7cebc54a923bce}{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG}(level,  msg)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacetacopie_a0833874b07ad56b5ba2c7847f1e514b0}{tacopie\+::debug} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_acaa581a9e021e4ca6a20270667ce4e21}{tacopie\+::info} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_ac0a2f06f2f9fb6ded97b659d8573c25d}{tacopie\+::warn} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\item 
+void \hyperlink{namespacetacopie_a48f7b277b1559f2333c1186fa629ef01}{tacopie\+::error} (const std\+::string \&msg, const std\+::string \&file, std\+::size\+\_\+t line)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ logger\+\_\+iface $>$ \hyperlink{namespacetacopie_a043624ac998613a9387aca78a7f39f41}{tacopie\+::active\+\_\+logger}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{logger_8hpp_a845e651e4529d5322a7cebc54a923bce}\label{logger_8hpp_a845e651e4529d5322a7cebc54a923bce}} 
+\index{logger.\+hpp@{logger.\+hpp}!\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG}}
+\index{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG@{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG}!logger.\+hpp@{logger.\+hpp}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG}{\_\_TACOPIE\_LOG}}
+{\footnotesize\ttfamily \#define \+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+L\+OG(\begin{DoxyParamCaption}\item[{}]{level,  }\item[{}]{msg }\end{DoxyParamCaption})}
+
+convenience macro to log with file and line information 

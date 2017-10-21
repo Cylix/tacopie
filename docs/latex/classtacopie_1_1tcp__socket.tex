@@ -1,0 +1,275 @@
+\hypertarget{classtacopie_1_1tcp__socket}{}\section{tacopie\+:\+:tcp\+\_\+socket Class Reference}
+\label{classtacopie_1_1tcp__socket}\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+
+
+{\ttfamily \#include $<$tcp\+\_\+socket.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type} \{ {\bfseries C\+L\+I\+E\+NT}, 
+{\bfseries S\+E\+R\+V\+ER}, 
+{\bfseries U\+N\+K\+N\+O\+WN}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a88ed1cadb0263591c4d31805e0a1a001}\label{classtacopie_1_1tcp__socket_a88ed1cadb0263591c4d31805e0a1a001}} 
+\hyperlink{classtacopie_1_1tcp__socket_a88ed1cadb0263591c4d31805e0a1a001}{tcp\+\_\+socket} (void)
+\begin{DoxyCompactList}\small\item\em ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a4bd737a76a2a326be03d704f79a35282}\label{classtacopie_1_1tcp__socket_a4bd737a76a2a326be03d704f79a35282}} 
+\hyperlink{classtacopie_1_1tcp__socket_a4bd737a76a2a326be03d704f79a35282}{$\sim$tcp\+\_\+socket} (void)=default
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\hyperlink{classtacopie_1_1tcp__socket_a191ffa48e0753ad4ec87d4d3a4a97822}{tcp\+\_\+socket} (fd\+\_\+t fd, const std\+::string \&host, std\+::uint32\+\_\+t port, \hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type} t)
+\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a64f69cd1c185b523b543d4ea53cee1a2}\label{classtacopie_1_1tcp__socket_a64f69cd1c185b523b543d4ea53cee1a2}} 
+\hyperlink{classtacopie_1_1tcp__socket_a64f69cd1c185b523b543d4ea53cee1a2}{tcp\+\_\+socket} (\hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&\&)
+\begin{DoxyCompactList}\small\item\em move ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a5ae1a5b0f9713ef256164afdbeb1c193}\label{classtacopie_1_1tcp__socket_a5ae1a5b0f9713ef256164afdbeb1c193}} 
+\hyperlink{classtacopie_1_1tcp__socket_a5ae1a5b0f9713ef256164afdbeb1c193}{tcp\+\_\+socket} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&)=delete
+\begin{DoxyCompactList}\small\item\em copy ctor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_aae3234c92bd36d5a614e44472d42bbf4}\label{classtacopie_1_1tcp__socket_aae3234c92bd36d5a614e44472d42bbf4}} 
+\hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \& \hyperlink{classtacopie_1_1tcp__socket_aae3234c92bd36d5a614e44472d42bbf4}{operator=} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&)=delete
+\begin{DoxyCompactList}\small\item\em assignment operator \end{DoxyCompactList}\item 
+bool \hyperlink{classtacopie_1_1tcp__socket_a69fde61058ab72d88ce48f557d8216cf}{operator==} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&rhs) const
+\item 
+bool \hyperlink{classtacopie_1_1tcp__socket_a76f69612969374b5aa542378d37ee398}{operator!=} (const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&rhs) const
+\item 
+std\+::vector$<$ char $>$ \hyperlink{classtacopie_1_1tcp__socket_a0d6d30258a902d12b3c2c62644756685}{recv} (std\+::size\+\_\+t size\+\_\+to\+\_\+read)
+\item 
+std\+::size\+\_\+t \hyperlink{classtacopie_1_1tcp__socket_a36521a8f502adc665ad0fb1c53583d04}{send} (const std\+::vector$<$ char $>$ \&data, std\+::size\+\_\+t size\+\_\+to\+\_\+write)
+\item 
+void \hyperlink{classtacopie_1_1tcp__socket_a6748c78312763dca6b8be05c4c8c3419}{connect} (const std\+::string \&host, std\+::uint32\+\_\+t port, std\+::uint32\+\_\+t timeout\+\_\+msecs=0)
+\item 
+void \hyperlink{classtacopie_1_1tcp__socket_a910a183d7c45483f1cdacd10a1896155}{bind} (const std\+::string \&host, std\+::uint32\+\_\+t port)
+\item 
+void \hyperlink{classtacopie_1_1tcp__socket_af0957ded2a84fb06d940cba98df477fb}{listen} (std\+::size\+\_\+t max\+\_\+connection\+\_\+queue)
+\item 
+\hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \hyperlink{classtacopie_1_1tcp__socket_af5113c9332f83643cdaaf15c3f137760}{accept} (void)
+\item 
+void \hyperlink{classtacopie_1_1tcp__socket_ad5a30b17b1dad9f0ff40305e246a9213}{close} (void)
+\item 
+const std\+::string \& \hyperlink{classtacopie_1_1tcp__socket_ad294565f9a0fa52639ecfbf133eecd59}{get\+\_\+host} (void) const
+\item 
+std\+::uint32\+\_\+t \hyperlink{classtacopie_1_1tcp__socket_a5276fdc687ac3c5089a05e3e2d9de4fb}{get\+\_\+port} (void) const
+\item 
+\hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type} \hyperlink{classtacopie_1_1tcp__socket_a4f663be51b845520505bc20a88b411ee}{get\+\_\+type} (void) const
+\item 
+void \hyperlink{classtacopie_1_1tcp__socket_a89be86ab254eec3fc16eedfba8b16fb2}{set\+\_\+type} (\hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type} t)
+\item 
+fd\+\_\+t \hyperlink{classtacopie_1_1tcp__socket_a4fd367a1802ed6ae7fa0e33fc07ed255}{get\+\_\+fd} (void) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classtacopie_1_1tcp__socket}{tacopie\+::tcp\+\_\+socket} is the class providing low-\/level T\+CP socket features. The \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} provides a simple but convenient abstraction to unix and windows sockets. It also provides a socket type checker to ensure that server-\/only operations are only processable on server sockets, and client-\/only operations are only processable on client sockets. 
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}\label{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!type@{type}}
+\index{type@{type}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily enum \hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{tacopie\+::tcp\+\_\+socket\+::type}\hspace{0.3cm}{\ttfamily [strong]}}
+
+possible types of a T\+CP socket, either a client or a server type is used to prevent the used of client specific operations on a server socket (and vice-\/versa)
+
+U\+N\+K\+N\+O\+WN is used when socket type could not be determined for now 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a191ffa48e0753ad4ec87d4d3a4a97822}\label{classtacopie_1_1tcp__socket_a191ffa48e0753ad4ec87d4d3a4a97822}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!tcp\+\_\+socket@{tcp\+\_\+socket}}
+\index{tcp\+\_\+socket@{tcp\+\_\+socket}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{tcp\+\_\+socket()}{tcp\_socket()}}
+{\footnotesize\ttfamily tacopie\+::tcp\+\_\+socket\+::tcp\+\_\+socket (\begin{DoxyParamCaption}\item[{fd\+\_\+t}]{fd,  }\item[{const std\+::string \&}]{host,  }\item[{std\+::uint32\+\_\+t}]{port,  }\item[{\hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type}}]{t }\end{DoxyParamCaption})}
+
+custom ctor build socket from existing file descriptor
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & fd of the raw socket that will be used to init the \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} object \\
+\hline
+{\em host} & host associated to the socket \\
+\hline
+{\em port} & port associated to the socket \\
+\hline
+{\em t} & type of the socket (client or server) \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_af5113c9332f83643cdaaf15c3f137760}\label{classtacopie_1_1tcp__socket_af5113c9332f83643cdaaf15c3f137760}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!accept@{accept}}
+\index{accept@{accept}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{accept()}{accept()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} tacopie\+::tcp\+\_\+socket\+::accept (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Accept a new incoming connection. The socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+
+\begin{DoxyReturn}{Returns}
+Return the \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} associated to the newly accepted connection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a910a183d7c45483f1cdacd10a1896155}\label{classtacopie_1_1tcp__socket_a910a183d7c45483f1cdacd10a1896155}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!bind@{bind}}
+\index{bind@{bind}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{bind()}{bind()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+socket\+::bind (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{std\+::uint32\+\_\+t}]{port }\end{DoxyParamCaption})}
+
+Binds the socket to the given host and port. The socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+
+
+\begin{DoxyParams}{Parameters}
+{\em host} & Hostname to be bind to \\
+\hline
+{\em port} & Port to be bind to \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_ad5a30b17b1dad9f0ff40305e246a9213}\label{classtacopie_1_1tcp__socket_ad5a30b17b1dad9f0ff40305e246a9213}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!close@{close}}
+\index{close@{close}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+socket\+::close (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Close the underlying socket. \mbox{\Hypertarget{classtacopie_1_1tcp__socket_a6748c78312763dca6b8be05c4c8c3419}\label{classtacopie_1_1tcp__socket_a6748c78312763dca6b8be05c4c8c3419}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!connect@{connect}}
+\index{connect@{connect}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+socket\+::connect (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{std\+::uint32\+\_\+t}]{port,  }\item[{std\+::uint32\+\_\+t}]{timeout\+\_\+msecs = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Connect the socket to the remote server. The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+
+
+\begin{DoxyParams}{Parameters}
+{\em host} & Hostname of the target server \\
+\hline
+{\em port} & Port of the target server \\
+\hline
+{\em timeout\+\_\+msecs} & maximum time to connect (will block until connect succeed or timeout expire). 0 will block undefinitely. If timeout expires, connection fails \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a4fd367a1802ed6ae7fa0e33fc07ed255}\label{classtacopie_1_1tcp__socket_a4fd367a1802ed6ae7fa0e33fc07ed255}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!get\+\_\+fd@{get\+\_\+fd}}
+\index{get\+\_\+fd@{get\+\_\+fd}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{get\+\_\+fd()}{get\_fd()}}
+{\footnotesize\ttfamily fd\+\_\+t tacopie\+::tcp\+\_\+socket\+::get\+\_\+fd (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+direct access to the underlying fd
+
+\begin{DoxyReturn}{Returns}
+underlying socket fd 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_ad294565f9a0fa52639ecfbf133eecd59}\label{classtacopie_1_1tcp__socket_ad294565f9a0fa52639ecfbf133eecd59}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!get\+\_\+host@{get\+\_\+host}}
+\index{get\+\_\+host@{get\+\_\+host}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{get\+\_\+host()}{get\_host()}}
+{\footnotesize\ttfamily const std\+::string\& tacopie\+::tcp\+\_\+socket\+::get\+\_\+host (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the hostname associated with the underlying socket. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a5276fdc687ac3c5089a05e3e2d9de4fb}\label{classtacopie_1_1tcp__socket_a5276fdc687ac3c5089a05e3e2d9de4fb}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!get\+\_\+port@{get\+\_\+port}}
+\index{get\+\_\+port@{get\+\_\+port}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{get\+\_\+port()}{get\_port()}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t tacopie\+::tcp\+\_\+socket\+::get\+\_\+port (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the port associated with the underlying socket. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a4f663be51b845520505bc20a88b411ee}\label{classtacopie_1_1tcp__socket_a4f663be51b845520505bc20a88b411ee}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!get\+\_\+type@{get\+\_\+type}}
+\index{get\+\_\+type@{get\+\_\+type}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{get\+\_\+type()}{get\_type()}}
+{\footnotesize\ttfamily \hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type} tacopie\+::tcp\+\_\+socket\+::get\+\_\+type (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the type associated with the underlying socket. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_af0957ded2a84fb06d940cba98df477fb}\label{classtacopie_1_1tcp__socket_af0957ded2a84fb06d940cba98df477fb}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!listen@{listen}}
+\index{listen@{listen}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{listen()}{listen()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+socket\+::listen (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{max\+\_\+connection\+\_\+queue }\end{DoxyParamCaption})}
+
+Make the socket listen for incoming connections. Socket must be of type server to process this operation. If the type of the socket is unknown, the socket type will be set to server.
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+\_\+connection\+\_\+queue} & Size of the queue for incoming connections to be processed by the server \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a76f69612969374b5aa542378d37ee398}\label{classtacopie_1_1tcp__socket_a76f69612969374b5aa542378d37ee398}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool tacopie\+::tcp\+\_\+socket\+::operator!= (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+comparison operator
+
+\begin{DoxyReturn}{Returns}
+true when the underlying sockets are different (different file descriptor or socket type). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a69fde61058ab72d88ce48f557d8216cf}\label{classtacopie_1_1tcp__socket_a69fde61058ab72d88ce48f557d8216cf}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!operator==@{operator==}}
+\index{operator==@{operator==}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool tacopie\+::tcp\+\_\+socket\+::operator== (\begin{DoxyParamCaption}\item[{const \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+comparison operator
+
+\begin{DoxyReturn}{Returns}
+true when the underlying sockets are the same (same file descriptor and socket type). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a0d6d30258a902d12b3c2c62644756685}\label{classtacopie_1_1tcp__socket_a0d6d30258a902d12b3c2c62644756685}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!recv@{recv}}
+\index{recv@{recv}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{recv()}{recv()}}
+{\footnotesize\ttfamily std\+::vector$<$char$>$ tacopie\+::tcp\+\_\+socket\+::recv (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{size\+\_\+to\+\_\+read }\end{DoxyParamCaption})}
+
+Read data synchronously from the underlying socket. The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size\+\_\+to\+\_\+read} & Number of bytes to read (might read less than requested) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the read bytes 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a36521a8f502adc665ad0fb1c53583d04}\label{classtacopie_1_1tcp__socket_a36521a8f502adc665ad0fb1c53583d04}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!send@{send}}
+\index{send@{send}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily std\+::size\+\_\+t tacopie\+::tcp\+\_\+socket\+::send (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ char $>$ \&}]{data,  }\item[{std\+::size\+\_\+t}]{size\+\_\+to\+\_\+write }\end{DoxyParamCaption})}
+
+Send data synchronously to the underlying socket. The socket must be of type client to process this operation. If the type of the socket is unknown, the socket type will be set to client.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Buffer containing bytes to be written \\
+\hline
+{\em size\+\_\+to\+\_\+write} & Number of bytes to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the number of bytes that were effectively sent. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classtacopie_1_1tcp__socket_a89be86ab254eec3fc16eedfba8b16fb2}\label{classtacopie_1_1tcp__socket_a89be86ab254eec3fc16eedfba8b16fb2}} 
+\index{tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}!set\+\_\+type@{set\+\_\+type}}
+\index{set\+\_\+type@{set\+\_\+type}!tacopie\+::tcp\+\_\+socket@{tacopie\+::tcp\+\_\+socket}}
+\subsubsection{\texorpdfstring{set\+\_\+type()}{set\_type()}}
+{\footnotesize\ttfamily void tacopie\+::tcp\+\_\+socket\+::set\+\_\+type (\begin{DoxyParamCaption}\item[{\hyperlink{classtacopie_1_1tcp__socket_ad8376e85df96ab9523f5d079ed7172ab}{type}}]{t }\end{DoxyParamCaption})}
+
+set type, should be used if some operations determining socket type have been done on the behalf of the \hyperlink{classtacopie_1_1tcp__socket}{tcp\+\_\+socket} instance
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & type of the socket \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+includes/tacopie/network/tcp\+\_\+socket.\+hpp\end{DoxyCompactItemize}
