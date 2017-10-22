@@ -44,8 +44,10 @@
 #endif /* SOCKET_ERROR */
 
 #if _WIN32
+/* for Windows, convert buffer size to `int` */
 #define LENGTH(size) static_cast<int>(size)
 #else
+/* for Unix, keep buffer size as `size_t` */
 #define LENGTH(size) size
 #endif /* _WIN32 */
 
