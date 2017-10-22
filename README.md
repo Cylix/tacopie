@@ -2,7 +2,7 @@
    <img src="https://raw.githubusercontent.com/Cylix/tacopie/master/assets/images/tacopie_logo.jpg"/>
 </p>
 
-# Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie)
+# Taco Pie [![Build Status](https://travis-ci.org/Cylix/tacopie.svg?branch=master)](https://travis-ci.org/Cylix/tacopie) [![Build status](https://ci.appveyor.com/api/projects/status/lvy4ovvr87c5jvgn?svg=true)](https://ci.appveyor.com/project/Cylix/tacopie)
 `tacopie` is a multi-platform TCP Client & Server C++11 library.
 
 ## Requirement
