@@ -148,11 +148,7 @@ tcp_socket::accept(void) {
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
   char* ipAdress = address_to_string(client_info.sin_addr);
 
-return {
-  client_fd, 
-  ipAdress,
-  client_info.sin_port, 
-  type::CLIENT};
+return {client_fd, ipAdress, client_info.sin_port, type::CLIENT};
 }
 
 char*
