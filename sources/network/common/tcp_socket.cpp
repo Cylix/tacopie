@@ -146,19 +146,19 @@ tcp_socket::accept(void) {
   fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
 
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
-  char* ipAdress = address_to_string(client_info.sin_addr);
+  char* ipAdress = address_to_string(client_info);
 
 return {client_fd, ipAdress, client_info.sin_port, type::CLIENT};
 }
 
 char*
-tcp_socket::address_to_string(IN_ADDR adress) {
+tcp_socket::address_to_string(sockaddr_in client_info) {
 #if _WIN32
 #pragma warning ( push )
 #pragma warning ( disable: 4996 ) // `inet_ntoa` is deprecated as it does not support IPv6
 #endif /* _WIN32 */
 
-  return inet_ntoa(adress);
+  return inet_ntoa(client_info.sin_addr);
 
 #if _WIN32
 #pragma warning ( pop )

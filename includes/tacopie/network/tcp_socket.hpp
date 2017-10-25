@@ -183,7 +183,7 @@ private:
     //!
     //! convert an (IPv4) network address into an ASCII string.
     //!
-  static char* address_to_string(IN_ADDR in_addr);
+  static char* address_to_string(sockaddr_in client_info);
 
 private:
   //!
