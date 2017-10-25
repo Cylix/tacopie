@@ -180,6 +180,12 @@ public:
   fd_t get_fd(void) const;
 
 private:
+    //!
+    //! convert an (IPv4) network address into an ASCII string.
+    //!
+  static char* address_to_string(sockaddr_in client_info);
+
+private:
   //!
   //! create a new socket if no socket has been initialized yet
   //!

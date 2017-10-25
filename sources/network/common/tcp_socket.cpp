@@ -43,6 +43,14 @@
 #define SOCKET_ERROR -1
 #endif /* SOCKET_ERROR */
 
+#if _WIN32
+/* for Windows, convert buffer size to `int` */
+#define __TACOPIE_LENGTH(size) static_cast<int>(size)
+#else
+/* for Unix, keep buffer size as `size_t` */
+#define LENGTH(size) size
+#endif /* _WIN32 */
+
 namespace tacopie {
 
 //!
@@ -92,7 +100,7 @@ tcp_socket::recv(std::size_t size_to_read) {
 
   std::vector<char> data(size_to_read, 0);
 
-  ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), size_to_read, 0);
+  ssize_t rd_size = ::recv(m_fd, const_cast<char*>(data.data()), __TACOPIE_LENGTH(size_to_read), 0);
 
   if (rd_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "recv() failure"); }
 
@@ -108,7 +116,7 @@ tcp_socket::send(const std::vector<char>& data, std::size_t size_to_write) {
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  ssize_t wr_size = ::send(m_fd, data.data(), size_to_write, 0);
+  ssize_t wr_size = ::send(m_fd, data.data(), __TACOPIE_LENGTH(size_to_write), 0);
 
   if (wr_size == SOCKET_ERROR) { __TACOPIE_THROW(error, "send() failure"); }
 
@@ -124,7 +132,7 @@ tcp_socket::listen(std::size_t max_connection_queue) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  if (::listen(m_fd, max_connection_queue) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
+  if (::listen(m_fd, __TACOPIE_LENGTH(max_connection_queue)) == SOCKET_ERROR) { __TACOPIE_THROW(debug, "listen() failure"); }
 }
 
 tcp_socket
@@ -138,12 +146,27 @@ tcp_socket::accept(void) {
   fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
 
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
+  char* ipAdress = address_to_string(client_info);
 
-  return {client_fd, inet_ntoa(client_info.sin_addr), client_info.sin_port, type::CLIENT};
+return {client_fd, ipAdress, client_info.sin_port, type::CLIENT};
+}
+
+char*
+tcp_socket::address_to_string(sockaddr_in client_info) {
+#if _WIN32
+#pragma warning ( push )
+#pragma warning ( disable: 4996 ) // `inet_ntoa` is deprecated as it does not support IPv6
+#endif /* _WIN32 */
+
+  return inet_ntoa(client_info.sin_addr);
+
+#if _WIN32
+#pragma warning ( pop )
+#endif /* _WIN32 */
 }
 
 //!
-//! check whether the current socket has an approriate type for that kind of operation
+//! check whether the current socket has an appropriate type for that kind of operation
 //! if current type is UNKNOWN, update internal type with given type
 //!
 
