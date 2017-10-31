@@ -30,6 +30,7 @@ target
 *.exe
 *.out
 *.app
+.vs/
 *.sln
 *.vcxproj
 *.suo
