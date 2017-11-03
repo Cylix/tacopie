@@ -1,6 +1,22 @@
 # Changelog
 
 
+## [v3.1.0](https://github.com/Cylix/tacopie/releases/tag/3.1.0)
+### Tag
+`3.1.0`
+### Date
+November 2nd, 2017
+### Changes
+* Improvement: For windows, if port is 0, use the default AF_INET windows API behavior (bind to first port available). Behavior on unix is unchanged (is unix socket).
+* CMake fix: Remove explicit STATIC in add_library call so dynamic libraries can be built with -DBUILD_SHARED_LIBS=ON
+### Additions
+* Visual Studio C++ solution
+### Removals
+None
+
+
+
+
 ## [v3.0.1](https://github.com/Cylix/tacopie/releases/tag/3.0.1)
 ### Tag
 `3.0.1`
