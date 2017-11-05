@@ -40,10 +40,23 @@ namespace tacopie {
 
 static std::shared_ptr<io_service> io_service_default_instance = nullptr;
 
+#ifdef _WIN32
+static DWORD current_pid = 0;
+#define getpid GetCurrentProcessId
+#else
+static pid_t current_pid = 0;
+#endif
+
 const std::shared_ptr<io_service>&
 get_default_io_service(std::uint32_t num_io_workers) {
-  if (io_service_default_instance == nullptr) {
+  //! pid needs to be checked too in case of a fork
+  //!
+  //! indeed, is default io service instance is created before fork
+  //! then, after the fork, both process will use the same instance
+  //! this will create issues when process will start to issue socket with the same fd number
+  if (io_service_default_instance == nullptr || getpid() != current_pid) {
     io_service_default_instance = std::make_shared<io_service>(num_io_workers);
+    current_pid                 = getpid();
   }
   else {
     io_service_default_instance->set_nb_workers(num_io_workers);
