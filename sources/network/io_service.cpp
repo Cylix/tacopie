@@ -40,23 +40,10 @@ namespace tacopie {
 
 static std::shared_ptr<io_service> io_service_default_instance = nullptr;
 
-#ifdef _WIN32
-static DWORD current_pid = 0;
-#define getpid GetCurrentProcessId
-#else
-static pid_t current_pid = 0;
-#endif
-
 const std::shared_ptr<io_service>&
 get_default_io_service(std::uint32_t num_io_workers) {
-  //! pid needs to be checked too in case of a fork
-  //!
-  //! indeed, is default io service instance is created before fork
-  //! then, after the fork, both process will use the same instance
-  //! this will create issues when process will start to issue socket with the same fd number
-  if (io_service_default_instance == nullptr || getpid() != current_pid) {
+  if (io_service_default_instance == nullptr) {
     io_service_default_instance = std::make_shared<io_service>(num_io_workers);
-    current_pid                 = getpid();
   }
   else {
     io_service_default_instance->set_nb_workers(num_io_workers);
@@ -67,13 +54,8 @@ get_default_io_service(std::uint32_t num_io_workers) {
 
 void
 set_default_io_service(const std::shared_ptr<io_service>& service) {
-  if (service) {
-    __TACOPIE_LOG(debug, "setting new default_io_service");
-    io_service_default_instance = service;
-  }
-  else {
-    __TACOPIE_LOG(warn, "setting new default_io_service failed because the service is null");
-  }
+  __TACOPIE_LOG(debug, "setting new default_io_service");
+  io_service_default_instance = service;
 }
 
 //!
@@ -254,7 +236,7 @@ io_service::init_poll_fds_info(void) {
   FD_ZERO(&m_rd_set);
   FD_ZERO(&m_wr_set);
 
-  int ndfs = (int)m_notifier.get_read_fd();
+  int ndfs = (int) m_notifier.get_read_fd();
   FD_SET(m_notifier.get_read_fd(), &m_rd_set);
   m_polled_fds.push_back(m_notifier.get_read_fd());
 
