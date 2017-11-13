@@ -107,7 +107,7 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
 
     //! 1 means we are connected.
     //! 0/-1 means a timeout.
-    if (select(0, NULL, &set, NULL, &tv) == 1) {
+    if (select(m_fd + 1, NULL, &set, NULL, &tv) == 1) {
       //! Set back to blocking mode as the user of this class is expecting
       if (fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) & (~O_NONBLOCK)) == -1) {
         close();
