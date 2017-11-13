@@ -89,6 +89,14 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
       __TACOPIE_THROW(error, "connect() set non-blocking failure");
     }
   }
+  else {
+    //! For no timeout case, still make sure that the socket is in blocking mode
+    //! As reported in #32, this might not be the case on some OS
+    if (fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) & (~O_NONBLOCK)) == -1) {
+      close();
+      __TACOPIE_THROW(error, "connect() set blocking failure");
+    }
+  }
 
   int ret = ::connect(m_fd, server_addr, addr_len);
   if (ret < 0 && errno != EINPROGRESS) {
@@ -108,6 +116,14 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
     //! 1 means we are connected.
     //! 0/-1 means a timeout.
     if (select(m_fd + 1, NULL, &set, NULL, &tv) == 1) {
+      //! Make sure there are no async connection errors
+      int err       = 0;
+      socklen_t len = sizeof(len);
+      if (getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &err, &len) == -1 || err != 0) {
+        close();
+        __TACOPIE_THROW(error, "connect() failure");
+      }
+
       //! Set back to blocking mode as the user of this class is expecting
       if (fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL, 0) & (~O_NONBLOCK)) == -1) {
         close();
