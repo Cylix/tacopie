@@ -195,7 +195,7 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
     freeaddrinfo(result);
   }
 
-  if (::bind(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
+  if (::bind(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "bind() failure"); }
 }
 
 //!
