@@ -47,15 +47,34 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  struct sockaddr_un server_addr_un;
-  struct sockaddr_in server_addr_in;
+  struct sockaddr_storage ss;
+  socklen_t addr_len;
+
+  //! 0-init addr info struct
+  std::memset(&ss, 0, sizeof(ss));
 
   //! Handle case of unix sockets if port is 0
   bool is_unix_socket = m_port == 0;
   if (is_unix_socket) {
-    std::memset(&server_addr_un, 0, sizeof(server_addr_un));
-    server_addr_un.sun_family = AF_UNIX;
-    strncpy(server_addr_un.sun_path, host.c_str(), sizeof(server_addr_un.sun_path) - 1);
+    //! init sockaddr_un struct
+    struct sockaddr_un* addr = reinterpret_cast<struct sockaddr_un*>(&ss);
+    //! host
+    strncpy(addr->sun_path, host.c_str(), sizeof(addr->sun_path) - 1);
+    //! Remaining fields
+    ss.ss_family = AF_UNIX;
+    addr_len     = sizeof(*addr);
+  }
+  else if (is_ipv6()) {
+    //! init sockaddr_in6 struct
+    struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+    //! convert addr
+    if (::inet_pton(AF_INET6, host.data(), &addr->sin6_addr) < 0) {
+      __TACOPIE_THROW(error, "inet_pton() failure");
+    }
+    //! remaining fields
+    ss.ss_family    = AF_INET6;
+    addr->sin6_port = htons(port);
+    addr_len        = sizeof(*addr);
   }
   else {
     struct addrinfo* result = nullptr;
@@ -65,18 +84,20 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_family   = AF_INET;
 
+    //! resolve DNS
     if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
 
-    std::memset(&server_addr_in, 0, sizeof(server_addr_in));
-    server_addr_in.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-    server_addr_in.sin_port   = htons(port);
-    server_addr_in.sin_family = AF_INET;
+    //! init sockaddr_in struct
+    struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+    //! host
+    addr->sin_addr = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    //! Remaining fields
+    addr->sin_port = htons(port);
+    ss.ss_family   = AF_INET;
+    addr_len       = sizeof(*addr);
 
     freeaddrinfo(result);
   }
-
-  socklen_t addr_len                 = is_unix_socket ? sizeof(server_addr_un) : sizeof(server_addr_in);
-  const struct sockaddr* server_addr = is_unix_socket ? (const struct sockaddr*) &server_addr_un : (const struct sockaddr*) &server_addr_in;
 
   if (timeout_msecs > 0) {
     //! for timeout connection handling:
@@ -98,7 +119,7 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
     }
   }
 
-  int ret = ::connect(m_fd, server_addr, addr_len);
+  int ret = ::connect(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len);
   if (ret < 0 && errno != EINPROGRESS) {
     close();
     __TACOPIE_THROW(error, "connect() failure");
@@ -150,35 +171,56 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct sockaddr_un server_addr_un;
-  struct sockaddr_in server_addr_in;
+  struct sockaddr_storage ss;
+  socklen_t addr_len;
+
+  //! 0-init addr info struct
+  std::memset(&ss, 0, sizeof(ss));
 
   //! Handle case of unix sockets if port is 0
   bool is_unix_socket = m_port == 0;
   if (is_unix_socket) {
-    std::memset(&server_addr_un, 0, sizeof(server_addr_un));
-    server_addr_un.sun_family = AF_UNIX;
-    strncpy(server_addr_un.sun_path, host.c_str(), sizeof(server_addr_un.sun_path) - 1);
+    //! init sockaddr_un struct
+    struct sockaddr_un* addr = reinterpret_cast<struct sockaddr_un*>(&ss);
+    //! host
+    strncpy(addr->sun_path, host.c_str(), sizeof(addr->sun_path) - 1);
+    //! remaining fields
+    ss.ss_family = AF_UNIX;
+    addr_len     = sizeof(*addr);
+  }
+  else if (is_ipv6()) {
+    //! init sockaddr_in6 struct
+    struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+    //! convert addr
+    if (::inet_pton(AF_INET6, host.data(), &addr->sin6_addr) < 0) {
+      __TACOPIE_THROW(error, "inet_pton() failure");
+    }
+    //! remaining fields
+    addr->sin6_port = htons(port);
+    ss.ss_family    = AF_INET6;
+    addr_len        = sizeof(*addr);
   }
   else {
     struct addrinfo* result = nullptr;
 
+    //! dns resolution
     if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
       __TACOPIE_THROW(error, "getaddrinfo() failure");
     }
 
-    std::memset(&server_addr_in, 0, sizeof(server_addr_in));
-    server_addr_in.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-    server_addr_in.sin_port   = htons(port);
-    server_addr_in.sin_family = AF_INET;
+    //! init sockaddr_in struct
+    struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+    //! addr
+    addr->sin_addr = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    //! remaining fields
+    addr->sin_port = htons(port);
+    ss.ss_family   = AF_INET;
+    addr_len       = sizeof(*addr);
 
     freeaddrinfo(result);
   }
 
-  socklen_t addr_len                 = is_unix_socket ? sizeof(server_addr_un) : sizeof(server_addr_in);
-  const struct sockaddr* server_addr = is_unix_socket ? (const struct sockaddr*) &server_addr_un : (const struct sockaddr*) &server_addr_in;
-
-  if (::bind(m_fd, server_addr, addr_len) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
+  if (::bind(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len) == -1) { __TACOPIE_THROW(error, "bind() failure"); }
 }
 
 //!
@@ -205,7 +247,19 @@ tcp_socket::create_socket_if_necessary(void) {
 
   //! new TCP socket
   //! handle case of unix sockets by checking whether the port is 0 or not
-  m_fd   = socket(m_port == 0 ? AF_UNIX : AF_INET, SOCK_STREAM, 0);
+  //! also handle ipv6 addr
+  short family;
+  if (m_port == 0) {
+    family = AF_UNIX;
+  }
+  else if (is_ipv6()) {
+    family = AF_INET6;
+  }
+  else {
+    family = AF_INET;
+  }
+
+  m_fd   = socket(family, SOCK_STREAM, 0);
   m_type = type::UNKNOWN;
 
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }

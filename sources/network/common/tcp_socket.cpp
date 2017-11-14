@@ -44,11 +44,11 @@
 #endif /* SOCKET_ERROR */
 
 #if _WIN32
-#define __TACOPIE_LENGTH(size) static_cast<int>(size)   // for Windows, convert buffer size to `int`
-#pragma warning ( disable: 4996 )                       // for Windows, `inet_ntoa` is deprecated as it does not support IPv6
+#define __TACOPIE_LENGTH(size) static_cast<int>(size) // for Windows, convert buffer size to `int`
+#pragma warning(disable : 4996)                       // for Windows, `inet_ntoa` is deprecated as it does not support IPv6
 #else
-#define __TACOPIE_LENGTH(size) size                     // for Unix, keep buffer size as `size_t`
-#endif /* _WIN32 */
+#define __TACOPIE_LENGTH(size) size // for Unix, keep buffer size as `size_t`
+#endif                              /* _WIN32 */
 
 namespace tacopie {
 
@@ -139,14 +139,42 @@ tcp_socket::accept(void) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct sockaddr_in client_info;
-  socklen_t client_info_struct_size = sizeof(client_info);
+  struct sockaddr_storage ss;
+  socklen_t addrlen = sizeof(ss);
 
-  fd_t client_fd = ::accept(m_fd, (struct sockaddr*) &client_info, &client_info_struct_size);
+  fd_t client_fd = ::accept(m_fd, reinterpret_cast<struct sockaddr*>(&ss), &addrlen);
 
   if (client_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "accept() failure"); }
 
-  return {client_fd, inet_ntoa(client_info.sin_addr), client_info.sin_port, type::CLIENT};
+  //! now determine host and port based on socket type
+  std::string saddr;
+  std::uint32_t port;
+
+  //! ipv6
+  if (ss.ss_family == AF_INET6) {
+    struct sockaddr_in6* addr6 = reinterpret_cast<struct sockaddr_in6*>(&ss);
+    char buf[INET6_ADDRSTRLEN] = {};
+    const char* addr           = ::inet_ntop(ss.ss_family, &addr6->sin6_addr, buf, INET6_ADDRSTRLEN);
+
+    if (addr) {
+      saddr = std::string("[") + addr + "]";
+    }
+
+    port = ntohs(addr6->sin6_port);
+  }
+  //! ipv4
+  else {
+    struct sockaddr_in* addr4 = reinterpret_cast<struct sockaddr_in*>(&ss);
+    char buf[INET_ADDRSTRLEN] = {};
+    const char* addr          = ::inet_ntop(ss.ss_family, &addr4->sin_addr, buf, INET_ADDRSTRLEN);
+
+    if (addr) {
+      saddr = addr;
+    }
+
+    port = ntohs(addr4->sin_port);
+  }
+  return {client_fd, saddr, port, type::CLIENT};
 }
 
 //!
@@ -201,6 +229,15 @@ tcp_socket::set_type(type t) {
 fd_t
 tcp_socket::get_fd(void) const {
   return m_fd;
+}
+
+//!
+//! ipv6 checking
+//!
+
+bool
+tcp_socket::is_ipv6(void) const {
+  return m_host.find(':') != std::string::npos;
 }
 
 //!

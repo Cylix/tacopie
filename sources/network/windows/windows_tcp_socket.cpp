@@ -41,22 +41,46 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
   create_socket_if_necessary();
   check_or_set_type(type::CLIENT);
 
-  struct addrinfo* result = nullptr;
-  struct addrinfo hints;
+  struct sockaddr_storage ss;
+  socklen_t addr_len;
 
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_socktype = SOCK_STREAM;
-  hints.ai_family   = AF_INET;
+  //! 0-init addr info struct
+  std::memset(&ss, 0, sizeof(ss));
 
-  if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
+  if (is_ipv6()) {
+    //! init sockaddr_in6 struct
+    struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+    //! convert addr
+    if (::inet_pton(AF_INET6, host.data(), &addr->sin6_addr) < 0) {
+      __TACOPIE_THROW(error, "inet_pton() failure");
+    }
+    //! remaining fields
+    ss.ss_family    = AF_INET6;
+    addr->sin6_port = htons(port);
+    addr_len        = sizeof(*addr);
+  }
+  else {
+    struct addrinfo* result = nullptr;
+    struct addrinfo hints;
 
-  struct sockaddr_in server_addr;
-  std::memset(&server_addr, 0, sizeof(server_addr));
-  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-  server_addr.sin_port   = htons(port);
-  server_addr.sin_family = AF_INET;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family   = AF_INET;
 
-  freeaddrinfo(result);
+    //! resolve DNS
+    if (getaddrinfo(host.c_str(), nullptr, &hints, &result) != 0) { __TACOPIE_THROW(error, "getaddrinfo() failure"); }
+
+    //! init sockaddr_in struct
+    struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+    //! host
+    addr->sin_addr = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    //! Remaining fields
+    addr->sin_port = htons(port);
+    ss.ss_family   = AF_INET;
+    addr_len       = sizeof(*addr);
+
+    freeaddrinfo(result);
+  }
 
   if (timeout_msecs > 0) {
     //! for timeout connection handling:
@@ -80,7 +104,7 @@ tcp_socket::connect(const std::string& host, std::uint32_t port, std::uint32_t t
     }
   }
 
-  int ret = ::connect(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr));
+  int ret = ::connect(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len);
   if (ret == -1 && WSAGetLastError() != WSAEWOULDBLOCK) {
     close();
     __TACOPIE_THROW(error, "connect() failure");
@@ -133,21 +157,45 @@ tcp_socket::bind(const std::string& host, std::uint32_t port) {
   create_socket_if_necessary();
   check_or_set_type(type::SERVER);
 
-  struct addrinfo* result = nullptr;
+  struct sockaddr_storage ss;
+  socklen_t addr_len;
 
-  if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
-    __TACOPIE_THROW(error, "getaddrinfo() failure");
+  //! 0-init addr info struct
+  std::memset(&ss, 0, sizeof(ss));
+
+  if (is_ipv6()) {
+    //! init sockaddr_in6 struct
+    struct sockaddr_in6* addr = reinterpret_cast<struct sockaddr_in6*>(&ss);
+    //! convert addr
+    if (::inet_pton(AF_INET6, host.data(), &addr->sin6_addr) < 0) {
+      __TACOPIE_THROW(error, "inet_pton() failure");
+    }
+    //! remaining fields
+    addr->sin6_port = htons(port);
+    ss.ss_family    = AF_INET6;
+    addr_len        = sizeof(*addr);
+  }
+  else {
+    struct addrinfo* result = nullptr;
+
+    //! dns resolution
+    if (getaddrinfo(host.c_str(), nullptr, nullptr, &result) != 0) {
+      __TACOPIE_THROW(error, "getaddrinfo() failure");
+    }
+
+    //! init sockaddr_in struct
+    struct sockaddr_in* addr = reinterpret_cast<struct sockaddr_in*>(&ss);
+    //! addr
+    addr->sin_addr = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
+    //! remaining fields
+    addr->sin_port = htons(port);
+    ss.ss_family   = AF_INET;
+    addr_len       = sizeof(*addr);
+
+    freeaddrinfo(result);
   }
 
-  struct sockaddr_in server_addr;
-  std::memset(&server_addr, 0, sizeof(server_addr));
-  server_addr.sin_addr   = ((struct sockaddr_in*) (result->ai_addr))->sin_addr;
-  server_addr.sin_port   = htons(port);
-  server_addr.sin_family = AF_INET;
-
-  freeaddrinfo(result);
-
-  if (::bind(m_fd, (const struct sockaddr*) &server_addr, sizeof(server_addr)) == SOCKET_ERROR) { __TACOPIE_THROW(error, "bind() failure"); }
+  if (::bind(m_fd, reinterpret_cast<const struct sockaddr*>(&ss), addr_len) == SOCKET_ERROR) { __TACOPIE_THROW(error, "bind() failure"); }
 }
 
 //!
@@ -173,7 +221,15 @@ tcp_socket::create_socket_if_necessary(void) {
   if (m_fd != __TACOPIE_INVALID_FD) { return; }
 
   //! new TCP socket
-  m_fd   = socket(AF_INET, SOCK_STREAM, 0);
+  //! handle ipv6 addr
+  short family;
+  if (is_ipv6()) {
+    family = AF_INET6;
+  }
+  else {
+    family = AF_INET;
+  }
+  m_fd   = socket(family, SOCK_STREAM, 0);
   m_type = type::UNKNOWN;
 
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "tcp_socket::create_socket_if_necessary: socket() failure"); }

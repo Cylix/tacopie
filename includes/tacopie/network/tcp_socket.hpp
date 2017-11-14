@@ -179,6 +179,12 @@ public:
   //!
   fd_t get_fd(void) const;
 
+public:
+  //!
+  //! \return whether the host is IPV6
+  //!
+  bool is_ipv6(void) const;
+
 private:
   //!
   //! create a new socket if no socket has been initialized yet
