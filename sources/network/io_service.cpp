@@ -41,12 +41,9 @@ namespace tacopie {
 static std::shared_ptr<io_service> io_service_default_instance = nullptr;
 
 const std::shared_ptr<io_service>&
-get_default_io_service(std::uint32_t num_io_workers) {
+get_default_io_service(void) {
   if (io_service_default_instance == nullptr) {
-    io_service_default_instance = std::make_shared<io_service>(num_io_workers);
-  }
-  else {
-    io_service_default_instance->set_nb_workers(num_io_workers);
+    io_service_default_instance = std::make_shared<io_service>();
   }
 
   return io_service_default_instance;
@@ -62,13 +59,13 @@ set_default_io_service(const std::shared_ptr<io_service>& service) {
 //! ctor & dtor
 //!
 
-io_service::io_service(std::size_t nb_threads)
+io_service::io_service(void)
 #ifdef _WIN32
 : m_should_stop(ATOMIC_VAR_INIT(false))
 #else
 : m_should_stop(false)
 #endif /* _WIN32 */
-, m_callback_workers(nb_threads) {
+, m_callback_workers(__TACOPIE_IO_SERVICE_NB_WORKERS) {
   __TACOPIE_LOG(debug, "create io_service");
 
   //! Start worker after everything has been initialized
@@ -276,10 +273,12 @@ io_service::track(const tcp_socket& socket, const event_callback_t& rd_callback,
 
   __TACOPIE_LOG(debug, "track new socket");
 
-  auto& track_info              = m_tracked_sockets[socket.get_fd()];
-  track_info.rd_callback        = rd_callback;
-  track_info.wr_callback        = wr_callback;
-  track_info.marked_for_untrack = false;
+  auto& track_info                    = m_tracked_sockets[socket.get_fd()];
+  track_info.rd_callback              = rd_callback;
+  track_info.wr_callback              = wr_callback;
+  track_info.marked_for_untrack       = false;
+  track_info.is_executing_rd_callback = false;
+  track_info.is_executing_wr_callback = false;
 
   m_notifier.notify();
 }
