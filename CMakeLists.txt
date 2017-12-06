@@ -120,6 +120,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # executable
 ###
 add_library(${PROJECT} ${SOURCES})
+set_property(TARGET ${PROJECT} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 IF (WIN32)
    set_target_properties(${PROJECT}
