@@ -38,6 +38,14 @@ namespace tacopie {
 //!
 self_pipe::self_pipe(void)
 : m_fd(__TACOPIE_INVALID_FD) {
+  #ifdef _WIN32
+	WORD sockVersion = MAKEWORD(2, 2);
+	WSADATA data;
+	if (WSAStartup(sockVersion, &data) != 0)
+	{
+		__TACOPIE_THROW(error, "WSAStartup socket()");
+	}
+#endif
   //! Create a server
   m_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
   if (m_fd == __TACOPIE_INVALID_FD) { __TACOPIE_THROW(error, "fail socket()"); }
