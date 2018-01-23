@@ -144,7 +144,7 @@ thread_pool::add_task(const task_t& task) {
   __TACOPIE_LOG(debug, "add task to thread_pool");
 
   m_tasks.push(task);
-  m_tasks_condvar.notify_all();
+  m_tasks_condvar.notify_one();
 }
 
 thread_pool&
