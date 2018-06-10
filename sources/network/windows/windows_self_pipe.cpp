@@ -26,7 +26,7 @@
 #include <tacopie/network/self_pipe.hpp>
 #include <tacopie/utils/error.hpp>
 
-#include <Winsock2.h>
+#include <winsock2.h>
 
 #include <tacopie/utils/typedefs.hpp>
 #include <fcntl.h>
