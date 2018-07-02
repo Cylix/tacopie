@@ -41,7 +41,7 @@ namespace tacopie {
 class tcp_client {
 public:
   //! ctor & dtor
-  tcp_client(std::uint32_t num_io_workers = 1);
+  tcp_client(void);
   ~tcp_client(void);
 
   //!
