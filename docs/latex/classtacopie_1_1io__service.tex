@@ -12,7 +12,7 @@ typedef std\+::function$<$ void(fd\+\_\+t)$>$ \hyperlink{classtacopie_1_1io__ser
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}{io\+\_\+service} (std\+::size\+\_\+t nb\+\_\+threads=\+\_\+\+\_\+\+T\+A\+C\+O\+P\+I\+E\+\_\+\+I\+O\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+N\+B\+\_\+\+W\+O\+R\+K\+E\+RS)
+\hyperlink{classtacopie_1_1io__service_a4cd4a873cb4457cdc28bd2d00665d15a}{io\+\_\+service} (void)
 \item 
 \mbox{\Hypertarget{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}\label{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}} 
 \hyperlink{classtacopie_1_1io__service_ae423d7e4b13f07fe41fb051345ffbf8d}{$\sim$io\+\_\+service} (void)
@@ -50,20 +50,13 @@ service that operates IO Handling. It polls sockets for input and output, proces
 callback handler typedef called on new socket event if register to \hyperlink{classtacopie_1_1io__service}{io\+\_\+service} 
 
 \subsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}\label{classtacopie_1_1io__service_a62edde9b62571610413d99d075df8102}} 
+\mbox{\Hypertarget{classtacopie_1_1io__service_a4cd4a873cb4457cdc28bd2d00665d15a}\label{classtacopie_1_1io__service_a4cd4a873cb4457cdc28bd2d00665d15a}} 
 \index{tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}!io\+\_\+service@{io\+\_\+service}}
 \index{io\+\_\+service@{io\+\_\+service}!tacopie\+::io\+\_\+service@{tacopie\+::io\+\_\+service}}
 \subsubsection{\texorpdfstring{io\+\_\+service()}{io\_service()}}
-{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::io\+\_\+service (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{nb\+\_\+threads = {\ttfamily \+\_\+\+\_\+TACOPIE\+\_\+IO\+\_\+SERVICE\+\_\+NB\+\_\+WORKERS} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily tacopie\+::io\+\_\+service\+::io\+\_\+service (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-ctor
-
-
-\begin{DoxyParams}{Parameters}
-{\em nb\+\_\+threads} & defines the number of background threads that will be used to process read and write callbacks. This must be a strictly positive value. \\
-\hline
-\end{DoxyParams}
-
+ctor 
 
 \subsection{Member Function Documentation}
 \mbox{\Hypertarget{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}\label{classtacopie_1_1io__service_a7e2b0700c0a4591f86c344df8748b3a5}} 

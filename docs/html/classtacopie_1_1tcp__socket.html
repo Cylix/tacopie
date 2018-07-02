@@ -136,6 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a89be86ab254eec3fc16eedfba8b16fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd367a1802ed6ae7fa0e33fc07ed255"><td class="memItemLeft" align="right" valign="top">fd_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1tcp__socket.html#a4fd367a1802ed6ae7fa0e33fc07ed255">get_fd</a> (void) const</td></tr>
 <tr class="separator:a4fd367a1802ed6ae7fa0e33fc07ed255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9933c767572b03fbb4b5ced4bd1fc4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtacopie_1_1tcp__socket.html#a6d9933c767572b03fbb4b5ced4bd1fc4">is_ipv6</a> (void) const</td></tr>
+<tr class="separator:a6d9933c767572b03fbb4b5ced4bd1fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classtacopie_1_1tcp__socket.html">tacopie::tcp_socket</a> is the class providing low-level TCP socket features. The <a class="el" href="classtacopie_1_1tcp__socket.html">tcp_socket</a> provides a simple but convenient abstraction to unix and windows sockets. It also provides a socket type checker to ensure that server-only operations are only processable on server sockets, and client-only operations are only processable on client sockets. </p>
@@ -408,6 +410,25 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the type associated with the underlying socket. </dd></dl>
+
+</div>
+</div>
+<a id="a6d9933c767572b03fbb4b5ced4bd1fc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9933c767572b03fbb4b5ced4bd1fc4">&#9670;&nbsp;</a></span>is_ipv6()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool tacopie::tcp_socket::is_ipv6 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>whether the host is IPV6 </dd></dl>
 
 </div>
 </div>

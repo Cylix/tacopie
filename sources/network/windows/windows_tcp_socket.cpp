@@ -20,6 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+//! guard for bulk content integration depending on how user integrates the library
+#ifdef _WIN32
+
+//! force link with ws2_32.lib
+//! some user of the lib forgot to link with it #34
+#pragma comment(lib, "ws2_32.lib")
+
 #include <tacopie/network/tcp_server.hpp>
 #include <tacopie/utils/error.hpp>
 #include <tacopie/utils/logger.hpp>
@@ -27,8 +34,8 @@
 
 #include <cstring>
 
-#include <Winsock2.h>
-#include <Ws2tcpip.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
 namespace tacopie {
 
@@ -236,3 +243,5 @@ tcp_socket::create_socket_if_necessary(void) {
 }
 
 } // namespace tacopie
+
+#endif /* _WIN32 */
