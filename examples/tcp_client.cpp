@@ -77,7 +77,16 @@ on_new_message(tacopie::tcp_client& client, const tacopie::tcp_client::read_resu
 int
 main(void) {
 	tacopie::tcp_client client;
-	client.connect("localhost", 3001);
+	try
+	{
+		client.connect("localhost", 3001);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "connect error:" << e.what() << std::endl;
+		return 0;
+	}
+	
 	client.async_read({ 1024, std::bind(&on_new_message, std::ref(client), std::placeholders::_1) });
 
 	std::string str = "hello world!";
