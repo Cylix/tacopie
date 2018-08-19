@@ -46,3 +46,6 @@ CMakeCache.txt
 CMakeFiles/
 Release/
 Debug/
+
+# bazel
+bazel-*

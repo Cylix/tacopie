@@ -1,0 +1,6 @@
+build --cxxopt='--std=c++14'
+build --cxxopt='-Wall'
+build --cxxopt='-Wextra'
+# Disable logging by default.
+build --cxxopt='-D__TACOPIE_LOGGING_ENABLED=0'
+build:opt --cxxopt='-O3'
