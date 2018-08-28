@@ -1,0 +1,9 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: @PROJECT_NAME@
+Description: tacopie is a multi-platform TCP Client & Server C++11 library.
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -ltacopie
+Cflags: -I${includedir}
