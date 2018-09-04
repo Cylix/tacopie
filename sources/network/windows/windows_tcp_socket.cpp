@@ -34,8 +34,22 @@
 
 #include <cstring>
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#ifdef __GNUC__
+#   include <Ws2tcpip.h>	   // Mingw / gcc on windows
+   #define _WIN32_WINNT 0x0501
+   #include <winsock2.h>
+   #   include <Ws2tcpip.h>
+   extern "C" {
+   WINSOCK_API_LINKAGE  INT WSAAPI inet_pton( INT Family, PCSTR pszAddrString, PVOID pAddrBuf);
+   WINSOCK_API_LINKAGE  PCSTR WSAAPI inet_ntop(INT  Family, PVOID pAddr, PSTR pStringBuf, size_t StringBufSize);
+   }
+
+ #else
+   // Windows...
+   #include <winsock2.h>
+   #include <In6addr.h>
+   #include <Ws2tcpip.h>
+#endif
 
 namespace tacopie {
 
