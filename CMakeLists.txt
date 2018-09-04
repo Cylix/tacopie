@@ -44,7 +44,7 @@ project(${PROJECT} CXX)
 ###
 # compilation options
 ###
-IF (WIN32)
+IF (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2 /bigobj")
 
   # was causing conflics with gtest build
@@ -70,7 +70,7 @@ IF (WIN32)
   add_definitions(-DWIN32_LEAN_AND_MEAN)
 ELSE ()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
-ENDIF (WIN32)
+ENDIF (MSVC)
 
 
 ###
