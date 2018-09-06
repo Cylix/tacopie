@@ -63,7 +63,7 @@ self_pipe::get_write_fd(void) const {
 }
 
 template <typename T1>
-constexpr void
+void
 ___ignore_unused(T1 const&) {}
 
 //!
