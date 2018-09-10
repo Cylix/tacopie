@@ -62,12 +62,16 @@ self_pipe::get_write_fd(void) const {
   return m_fds[1];
 }
 
+template <typename T1>
+void
+___ignore_unused(T1 const&) {}
+
 //!
 //! notify
 //!
 void
 self_pipe::notify(void) {
-  (void) write(m_fds[1], "a", 1);
+  ___ignore_unused(write(m_fds[1], "a", 1));
 }
 
 //!
@@ -76,7 +80,7 @@ self_pipe::notify(void) {
 void
 self_pipe::clr_buffer(void) {
   char buf[1024];
-  (void) read(m_fds[0], buf, 1024);
+  ___ignore_unused(read(m_fds[0], buf, 1024));
 }
 
 } // namespace tacopie
